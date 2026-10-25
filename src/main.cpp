@@ -7,7 +7,6 @@ constexpr int SCREEN_HEIGHT = 200;
 uint32_t FrameBuffer[SCREEN_WIDTH * SCREEN_HEIGHT];
 
 BITMAPINFO BitmapInfo = {};
-
 bool Running = true;
 
 void DrawPixel(int x, int y, uint32_t color) {
@@ -23,9 +22,9 @@ void Clear(uint32_t color) {
     }
 }
 
-void DrawRect(int x, int y, int w, int h, uint32_t color) {
-    for (int py = 0; py < h; py++) {
-        for (int px = 0; px < w; px++) {
+void DrawRect(int x, int y, int width, int height, uint32_t color) {
+    for (int py = 0; py < height; py++) {
+        for (int px = 0; px < width; px++) {
             DrawPixel(x + px, y + py, color);
         }
         
@@ -47,8 +46,8 @@ void Render(HWND hwnd) {
     RECT rect;
     GetClientRect(hwnd, &rect);
 
-    const int width = rect.right - rect.left;
-    const int height = rect.bottom - rect.top;
+    int width = rect.right - rect.left;
+    int height = rect.bottom - rect.top;
 
     StretchDIBits(dc, 0, 0, width, height, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, FrameBuffer, &BitmapInfo, DIB_RGB_COLORS, SRCCOPY);
 
@@ -73,7 +72,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
     wc.hInstance = hInstance;
     wc.lpszClassName = ClassName;
 
-    RegisterClassA(&wc);
+    if (!RegisterClassA(&wc)) {
+        MessageBoxA(nullptr, "Erreur RegisterClassA", "Azure Engine", MB_OK | MB_ICONERROR);
+        return -1;
+    }
 
     BitmapInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
     BitmapInfo.bmiHeader.biWidth = SCREEN_WIDTH;
@@ -84,9 +86,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
 
     HWND hwnd = CreateWindowExA(0, ClassName, "Azure Engine", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 800, 600, nullptr, nullptr, hInstance, nullptr);
 
+    if (!hwnd) {
+        MessageBoxA(nullptr, "Erreur CreateWindowExA", "Azure Engine", MB_OK | MB_ICONERROR);
+        return -1;
+    }
+    
     ShowWindow(hwnd, nCmdShow);
 
-    MSG msg;
+    MSG msg = {};
 
     while (Running) {
         while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
