@@ -1,18 +1,38 @@
 #include <windows.h>
 #include <cstdint>
 
+//====================================================
+// Configuration
+//====================================================
+
 constexpr int SCREEN_WIDTH = 320;
 constexpr int SCREEN_HEIGHT = 200;
+
+//====================================================
+// Variables globales
+//====================================================
+bool Running = true;
+
+bool Keys[256] = {};
+
+int PlayerX = 100;
+int PlayerY = 100;
 
 uint32_t FrameBuffer[SCREEN_WIDTH * SCREEN_HEIGHT];
 
 BITMAPINFO BitmapInfo = {};
-bool Running = true;
+
+//====================================================
+// Dessin
+//====================================================
 
 void DrawPixel(int x, int y, uint32_t color) {
-    if (x < 0 || x >= SCREEN_WIDTH || y < 0 || y >= SCREEN_HEIGHT) {
+    if (x < 0 || x >= SCREEN_WIDTH)
         return;
-    }
+    
+    if (y < 0 || y >= SCREEN_HEIGHT )
+        return;
+    
     FrameBuffer[y * SCREEN_WIDTH + x] = color;
 }
 
@@ -32,30 +52,58 @@ void DrawRect(int x, int y, int width, int height, uint32_t color) {
     
 }
 
-void Update() {
+//====================================================
+// Jeu
+//====================================================
 
+void Update() {
+    const int Speed = 2;
+
+    if (Keys[VK_LEFT])
+        PlayerX -= Speed;
+
+    if (Keys[VK_RIGHT])
+        PlayerX += Speed;
+
+    if (Keys[VK_UP])
+        PlayerY -= Speed;
+
+    if (Keys[VK_DOWN])
+        PlayerY += Speed;
 }
 
 void Render(HWND hwnd) {
     Clear(0x00102030);
 
-    DrawRect(100, 60, 120, 80, 0x00FF0000);
+    DrawRect(PlayerX, PlayerY, 32, 32, 0x0000FF00);
 
     HDC dc = GetDC(hwnd);
 
     RECT rect;
     GetClientRect(hwnd, &rect);
 
-    int width = rect.right - rect.left;
-    int height = rect.bottom - rect.top;
+    int windowWidth = rect.right - rect.left;
+    int windowHeight = rect.bottom - rect.top;
 
-    StretchDIBits(dc, 0, 0, width, height, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, FrameBuffer, &BitmapInfo, DIB_RGB_COLORS, SRCCOPY);
+    StretchDIBits(dc, 0, 0, windowWidth, windowHeight, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, FrameBuffer, &BitmapInfo, DIB_RGB_COLORS, SRCCOPY);
 
     ReleaseDC(hwnd, dc);
 }
 
+//====================================================
+// Fenêtre
+//====================================================
+
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     switch (msg) {
+        case WM_KEYDOWN:
+            Keys[wParam] = true;
+            return 0;
+
+        case WM_KEYUP:
+            Keys[wParam] = false;
+            return 0;
+
         case WM_DESTROY:
             Running = false;
             PostQuitMessage(0);
@@ -64,7 +112,18 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
+//====================================================
+// Point d'entrée
+//====================================================
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
+    BitmapInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+    BitmapInfo.bmiHeader.biWidth = SCREEN_WIDTH;
+    BitmapInfo.bmiHeader.biHeight = -SCREEN_HEIGHT;
+    BitmapInfo.bmiHeader.biPlanes = 1;
+    BitmapInfo.bmiHeader.biBitCount = 32;
+    BitmapInfo.bmiHeader.biCompression = BI_RGB;
+    
     const char* ClassName = "AzureEngineWindow";
 
     WNDCLASSA wc = {};
@@ -72,25 +131,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
     wc.hInstance = hInstance;
     wc.lpszClassName = ClassName;
 
-    if (!RegisterClassA(&wc)) {
-        MessageBoxA(nullptr, "Erreur RegisterClassA", "Azure Engine", MB_OK | MB_ICONERROR);
-        return -1;
-    }
-
-    BitmapInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-    BitmapInfo.bmiHeader.biWidth = SCREEN_WIDTH;
-    BitmapInfo.bmiHeader.biHeight = -SCREEN_HEIGHT;
-    BitmapInfo.bmiHeader.biPlanes = 1;
-    BitmapInfo.bmiHeader.biBitCount = 32;
-    BitmapInfo.bmiHeader.biCompression = BI_RGB;
+    RegisterClassA(&wc);
 
     HWND hwnd = CreateWindowExA(0, ClassName, "Azure Engine", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 800, 600, nullptr, nullptr, hInstance, nullptr);
 
-    if (!hwnd) {
-        MessageBoxA(nullptr, "Erreur CreateWindowExA", "Azure Engine", MB_OK | MB_ICONERROR);
-        return -1;
-    }
-    
     ShowWindow(hwnd, nCmdShow);
 
     MSG msg = {};
@@ -103,6 +147,5 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
         Update();
         Render(hwnd);
     }
-    
     return 0;
 }
