@@ -9,23 +9,21 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
-    const char* ClassName = "AzureEngineWindow";
-
-    WNDCLASSA wc = {};
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int) {
+    WNDCLASSW wc = {};
     wc.lpfnWndProc = WindowProc;
     wc.hInstance = hInstance;
-    wc.lpszClassName = ClassName;
+    wc.lpszClassName = L"AzureWindow";
 
-    if (!RegisterClassA(&wc)) {
-        MessageBoxA(nullptr, "Failed to register window class", "Azure Engine", MB_OK | MB_ICONERROR);
+    if (!RegisterClassW(&wc)) {
+        MessageBoxW(nullptr, L"Failed to register window class", L"Azure Engine", MB_OK | MB_ICONERROR);
         return -1;
     }
 
-    HWND hwnd = CreateWindowExA(
+    HWND window = CreateWindowExW(
         0,
-        ClassName,
-        "Azure Engine",
+        L"AzureWindow",
+        L"Azure Engine",
         WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT,
         CW_USEDEFAULT,
@@ -37,25 +35,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
         nullptr
     );
 
-    if (!hwnd) {
-        MessageBoxA(nullptr, "Erreur CreateWindowExA", "Azure Engine", MB_OK | MB_ICONERROR);
+    if (!window) {
+        MessageBoxW(nullptr, L"Failed to create window", L"Azure Engine", MB_OK | MB_ICONERROR);
         return -1;
     }
 
-    ShowWindow(hwnd, nCmdShow);
+    ShowWindow(window, SW_SHOW);
 
     MSG msg = {};
-    bool running = true;
-
-    while (running) {
-        while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
-            if (msg.message == WM_QUIT) {
-                running = false;
-            }
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-        }
+    while (GetMessageW(&msg, nullptr, 0, 0) > 0) {
+        TranslateMessage(&msg);
+        DispatchMessageW(&msg);
     }
 
-    return (int)msg.wParam;
+    return static_cast<int>(msg.wParam);
 }
