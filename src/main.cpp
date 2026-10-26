@@ -19,12 +19,17 @@ int PlayerX = 100;
 int PlayerY = 100;
 
 uint32_t FrameBuffer[SCREEN_WIDTH * SCREEN_HEIGHT];
+uint32_t PlayerSpritePixels[16 * 16];
 
 BITMAPINFO BitmapInfo = {};
 
 //====================================================
 // Dessin
 //====================================================
+
+const uint32_t PlayerSpritePixels[16 * 16] = {
+    // 16x16 rouge
+};
 
 void DrawPixel(int x, int y, uint32_t color) {
     if (x < 0 || x >= SCREEN_WIDTH)
@@ -75,7 +80,7 @@ void Update() {
 void Render(HWND hwnd) {
     Clear(0x00102030);
 
-    DrawRect(PlayerX, PlayerY, 32, 32, 0x0000FF00);
+    DrawSprite(PlayerX, PlayerY, PlayerSpritePixels, 16, 16);
 
     HDC dc = GetDC(hwnd);
 
@@ -90,6 +95,17 @@ void Render(HWND hwnd) {
     ReleaseDC(hwnd, dc);
 }
 
+void DrawSprite(int x, int y, const uint32_t* pixels, int width, int height) {
+    for (int py = 0; py < height; py++) {
+        for (int px = 0; px < width; px++) {
+            uint32_t color = pixels[py * width + px];
+            if (color != 0xFFFF00FF) {
+                DrawPixel(x + px, y + py, color);
+            }   
+        }
+    }
+}
+
 //====================================================
 // Fenêtre
 //====================================================
@@ -97,11 +113,11 @@ void Render(HWND hwnd) {
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
     switch (msg) {
         case WM_KEYDOWN:
-            Keys[wParam] = true;
+            Keys[wParam & 255] = true;
             return 0;
 
         case WM_KEYUP:
-            Keys[wParam] = false;
+            Keys[wParam & 255] = false;
             return 0;
 
         case WM_DESTROY:
@@ -117,12 +133,20 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 //====================================================
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
+    // Initialisation du framebuffer
+
     BitmapInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
     BitmapInfo.bmiHeader.biWidth = SCREEN_WIDTH;
     BitmapInfo.bmiHeader.biHeight = -SCREEN_HEIGHT;
     BitmapInfo.bmiHeader.biPlanes = 1;
     BitmapInfo.bmiHeader.biBitCount = 32;
     BitmapInfo.bmiHeader.biCompression = BI_RGB;
+
+     // Initialisation du sprite joueur
+
+    for (int i = 0; i < 16 * 16; i++) {
+        PlayerSpritePixels[i] = 0x0000FF00;
+    }
     
     const char* ClassName = "AzureEngineWindow";
 
