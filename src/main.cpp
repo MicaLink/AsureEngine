@@ -27,10 +27,6 @@ BITMAPINFO BitmapInfo = {};
 // Dessin
 //====================================================
 
-const uint32_t PlayerSpritePixels[16 * 16] = {
-    // 16x16 rouge
-};
-
 void DrawPixel(int x, int y, uint32_t color) {
     if (x < 0 || x >= SCREEN_WIDTH)
         return;
@@ -51,10 +47,20 @@ void DrawRect(int x, int y, int width, int height, uint32_t color) {
     for (int py = 0; py < height; py++) {
         for (int px = 0; px < width; px++) {
             DrawPixel(x + px, y + py, color);
-        }
-        
+        }   
     }
-    
+}
+
+
+void DrawSprite(int x, int y, const uint32_t* pixels, int width, int height) {
+    for (int py = 0; py < height; py++) {
+        for (int px = 0; px < width; px++) {
+            uint32_t color = pixels[py * width + px];
+            if (color != 0xFFFF00FF) {
+                DrawPixel(x + px, y + py, color);
+            }   
+        }
+    }
 }
 
 //====================================================
@@ -93,17 +99,6 @@ void Render(HWND hwnd) {
     StretchDIBits(dc, 0, 0, windowWidth, windowHeight, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, FrameBuffer, &BitmapInfo, DIB_RGB_COLORS, SRCCOPY);
 
     ReleaseDC(hwnd, dc);
-}
-
-void DrawSprite(int x, int y, const uint32_t* pixels, int width, int height) {
-    for (int py = 0; py < height; py++) {
-        for (int px = 0; px < width; px++) {
-            uint32_t color = pixels[py * width + px];
-            if (color != 0xFFFF00FF) {
-                DrawPixel(x + px, y + py, color);
-            }   
-        }
-    }
 }
 
 //====================================================
