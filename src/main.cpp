@@ -8,6 +8,18 @@
 constexpr int SCREEN_WIDTH = 320;
 constexpr int SCREEN_HEIGHT = 200;
 
+constexpr uint32_t TRANSPARENT_COLOR = 0xFFFF00FF;
+
+//====================================================
+// Structures
+//====================================================
+
+struct Sprite {
+    int Width;
+    int Height;
+    const uint32_t* Pixels;
+};
+
 //====================================================
 // Variables globales
 //====================================================
@@ -19,9 +31,27 @@ int PlayerX = 100;
 int PlayerY = 100;
 
 uint32_t FrameBuffer[SCREEN_WIDTH * SCREEN_HEIGHT];
-uint32_t PlayerSpritePixels[16 * 16];
 
 BITMAPINFO BitmapInfo = {};
+
+//====================================================
+// Sprite du héros
+//====================================================
+
+uint32_t HeroPixels[64] = {
+    0xFFFF00FF,0xFFFF00FF,0x0000FF00,0x0000FF00,0x0000FF00,0x0000FF00,0xFFFF00FF,0xFFFF00FF,
+    0xFFFF00FF,0x0000FF00,0x0000FF00,0x0000FF00,0x0000FF00,0x0000FF00,0x0000FF00,0xFFFF00FF,
+    0x0000FF00,0x0000FF00,0x00FFFFFF,0x0000FF00,0x0000FF00,0x00FFFFFF,0x0000FF00,0x0000FF00,
+    0x0000FF00,0x0000FF00,0x00000000,0x0000FF00,0x0000FF00,0x00000000,0x0000FF00,0x0000FF00,
+    0x0000FF00,0x0000FF00,0x0000FF00,0x0000FF00,0x0000FF00,0x0000FF00,0x0000FF00,0x0000FF00,
+    0xFFFF00FF,0x0000FF00,0x0000FF00,0x00FF0000,0x00FF0000,0x0000FF00,0x0000FF00,0xFFFF00FF,
+    0xFFFF00FF,0x0000FF00,0x0000FF00,0xFFFF0000,0xFFFF0000,0x0000FF00,0x0000FF00,0xFFFF00FF,
+    0xFFFF00FF,0xFFFF00FF,0x0000FF00,0xFFFF00FF,0xFFFF00FF,0x0000FF00,0xFFFF00FF,0xFFFF00FF
+};
+
+Sprite Hero = {8, 8, HeroPixels};
+
+
 
 //====================================================
 // Dessin
@@ -52,23 +82,23 @@ void DrawRect(int x, int y, int width, int height, uint32_t color) {
 }
 
 
-void DrawSprite(int x, int y, const uint32_t* pixels, int width, int height) {
-    for (int py = 0; py < height; py++) {
-        for (int px = 0; px < width; px++) {
-            uint32_t color = pixels[py * width + px];
-            if (color != 0xFFFF00FF) {
-                DrawPixel(x + px, y + py, color);
+void DrawSprite(int x, int y, const Sprite& sprite) {
+    for (int sy = 0; sy < sprite.Height; sy++) {
+        for (int sx = 0; sx < sprite.Width; sx++) {
+            uint32_t color = sprite.Pixels[sy * sprite.Width + sx];
+            if (color != TRANSPARENT_COLOR) {
+                DrawPixel(x + sx, y + sy, color);
             }   
         }
     }
 }
 
 //====================================================
-// Jeu
+// Logique du jeu
 //====================================================
 
 void Update() {
-    const int Speed = 2;
+    constexpr int Speed = 2;
 
     if (Keys[VK_LEFT])
         PlayerX -= Speed;
@@ -83,18 +113,22 @@ void Update() {
         PlayerY += Speed;
 }
 
+//====================================================
+// Rendu
+//====================================================
+
 void Render(HWND hwnd) {
     Clear(0x00102030);
 
-    DrawSprite(PlayerX, PlayerY, PlayerSpritePixels, 16, 16);
+    DrawSprite(PlayerX, PlayerY, Hero);
 
     HDC dc = GetDC(hwnd);
 
-    RECT rect;
-    GetClientRect(hwnd, &rect);
+    RECT clientRect;
+    GetClientRect(hwnd, &clientRect);
 
-    int windowWidth = rect.right - rect.left;
-    int windowHeight = rect.bottom - rect.top;
+    int windowWidth = clientRect.right - clientRect.left;
+    int windowHeight = clientRect.bottom - clientRect.top;
 
     StretchDIBits(dc, 0, 0, windowWidth, windowHeight, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, FrameBuffer, &BitmapInfo, DIB_RGB_COLORS, SRCCOPY);
 
@@ -102,7 +136,7 @@ void Render(HWND hwnd) {
 }
 
 //====================================================
-// Fenêtre
+// Procédure de fenêtre
 //====================================================
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
@@ -136,21 +170,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
     BitmapInfo.bmiHeader.biPlanes = 1;
     BitmapInfo.bmiHeader.biBitCount = 32;
     BitmapInfo.bmiHeader.biCompression = BI_RGB;
-
-     // Initialisation du sprite joueur
-
-    for (int i = 0; i < 16 * 16; i++) {
-        PlayerSpritePixels[i] = 0x0000FF00;
-    }
     
     const char* ClassName = "AzureEngineWindow";
 
-    WNDCLASSA wc = {};
-    wc.lpfnWndProc = WindowProc;
-    wc.hInstance = hInstance;
-    wc.lpszClassName = ClassName;
+    WNDCLASSA windowClass = {};
+    windowClass.lpfnWndProc = WindowProc;
+    windowClass.hInstance = hInstance;
+    windowClass.lpszClassName = ClassName;
 
-    RegisterClassA(&wc);
+    RegisterClassA(&windowClass);
 
     HWND hwnd = CreateWindowExA(0, ClassName, "Azure Engine", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 800, 600, nullptr, nullptr, hInstance, nullptr);
 
