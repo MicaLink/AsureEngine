@@ -1,5 +1,6 @@
 #include <windows.h>
 #include <cstdint>
+#include <cstdio>
 
 //====================================================
 // Configuration
@@ -24,11 +25,13 @@ struct Sprite {
 // Variables globales
 //====================================================
 bool Running = true;
-
 bool Keys[256] = {};
 
 int PlayerX = 100;
 int PlayerY = 100;
+
+float DeltaTime = 0.0f;
+float FPS = 0.0f;
 
 uint32_t FrameBuffer[SCREEN_WIDTH * SCREEN_HEIGHT];
 
@@ -51,10 +54,8 @@ uint32_t HeroPixels[64] = {
 
 Sprite Hero = {8, 8, HeroPixels};
 
-
-
 //====================================================
-// Dessin
+// Dessin bas niveau
 //====================================================
 
 void DrawPixel(int x, int y, uint32_t color) {
@@ -81,7 +82,6 @@ void DrawRect(int x, int y, int width, int height, uint32_t color) {
     }
 }
 
-
 void DrawSprite(int x, int y, const Sprite& sprite) {
     for (int sy = 0; sy < sprite.Height; sy++) {
         for (int sx = 0; sx < sprite.Width; sx++) {
@@ -98,19 +98,33 @@ void DrawSprite(int x, int y, const Sprite& sprite) {
 //====================================================
 
 void Update() {
-    constexpr int Speed = 2;
+    constexpr float Speed = 120.0f;
 
     if (Keys[VK_LEFT])
-        PlayerX -= Speed;
+        PlayerX -= static_cast<int>(Speed * DeltaTime);
 
     if (Keys[VK_RIGHT])
-        PlayerX += Speed;
+        PlayerX += static_cast<int>(Speed * DeltaTime);
 
     if (Keys[VK_UP])
-        PlayerY -= Speed;
+        PlayerY -= static_cast<int>(Speed * DeltaTime);
 
     if (Keys[VK_DOWN])
-        PlayerY += Speed;
+        PlayerY += static_cast<int>(Speed * DeltaTime);
+
+    // Llimites écran
+
+    if (PlayerX < 0)
+        PlayerX = 0;
+    
+    if (PlayerY < 0)
+        PlayerY = 0;
+
+    if (PlayerX > SCREEN_WIDTH - Hero.Width)
+        PlayerX = SCREEN_WIDTH - Hero.Width;
+
+    if (PlayerY > SCREEN_HEIGHT - Hero.Height)
+        PlayerY = SCREEN_HEIGHT - Hero.Height;
 }
 
 //====================================================
@@ -136,7 +150,7 @@ void Render(HWND hwnd) {
 }
 
 //====================================================
-// Procédure de fenêtre
+// Fenêtre Win32
 //====================================================
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
@@ -162,8 +176,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 //====================================================
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
-    // Initialisation du framebuffer
-
     BitmapInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
     BitmapInfo.bmiHeader.biWidth = SCREEN_WIDTH;
     BitmapInfo.bmiHeader.biHeight = -SCREEN_HEIGHT;
@@ -174,6 +186,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
     const char* ClassName = "AzureEngineWindow";
 
     WNDCLASSA windowClass = {};
+
     windowClass.lpfnWndProc = WindowProc;
     windowClass.hInstance = hInstance;
     windowClass.lpszClassName = ClassName;
@@ -184,9 +197,31 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
 
     ShowWindow(hwnd, nCmdShow);
 
+    LARGE_INTEGER Frequency;
+    LARGE_INTEGER LastCounter;
+
+    QueryPerformanceFrequency(&Frequency);
+    QueryPerformanceCounter(&LastCounter);
+
     MSG msg = {};
 
     while (Running) {
+        LARGE_INTEGER CurrentCounter;
+        QueryPerformanceCounter(&CurrentCounter);
+
+        DeltaTime = static_cast<float>(CurrentCounter.QuadPart - LastCounter.QuadPart) / static_cast<float>(Frequency.QuadPart);
+
+        LastCounter = CurrentCounter;
+
+        if (DeltaTime > 0.0f)
+            FPS = 1.0 / DeltaTime;
+
+        char Title[256];
+
+        sprintf_s(Title, "Azure Engine - FPS %.0f", FPS);
+
+        SetWindowTextA(hwnd, Title);
+
         while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
