@@ -5,7 +5,7 @@
             "name": "Launch Azure",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Azure.exe",
+            "program": "${workspaceFolder}/src/main.exe",
             "cwd": "${workspaceFolder}"
         }
     ]
