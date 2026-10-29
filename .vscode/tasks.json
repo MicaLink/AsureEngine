@@ -8,7 +8,7 @@
             "args": [
                 "/EHsc",
                 "/nologo",
-                "src\\main.cpp",
+                "src\\*.cpp",
                 "/Fe:build\\AzureEngine.exe",
                 "/link",
                 "user32.lib",

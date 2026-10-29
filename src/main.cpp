@@ -6,6 +6,8 @@
 #include <Windows.h>
 #include <cstdio>
 
+#include "Timer.h"
+
 //-----------------------------------------------------
 // Variables globales
 //-----------------------------------------------------
@@ -19,8 +21,8 @@ static float g_FPS = 0.0f;
 // Procédure de fenêtre
 //-----------------------------------------------------
 
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-    switch (uMsg) {
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
+    switch (message) {
         case WM_CLOSE:
             g_Running = false;
             DestroyWindow(hwnd);
@@ -31,7 +33,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
             return 0;
     }
 
-    return DefWindowProc(hwnd, uMsg, wParam, lParam);
+    return DefWindowProc(hwnd, message, wParam, lParam);
 }
 
 //-----------------------------------------------------
@@ -44,14 +46,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
     // Classe de fenêtre
     //-------------------------------------------------
 
-    WNDCLASSA wc {};
+    WNDCLASSA windowClass {};
 
-    wc.lpfnWndProc = WindowProc;
-    wc.hInstance = hInstance;
-    wc.lpszClassName = "AzureEngineWindow";
+    windowClass.lpfnWndProc = WindowProc;
+    windowClass.hInstance = hInstance;
+    windowClass.lpszClassName = "AzureEngineWindow";
 
-    if (!RegisterClassA(&wc)) {
-        MessageBoxA(nullptr, "Impossible d'enregistrer la classe de fenetre.", "Erreur", MB_OK | MB_ICONERROR);
+    if (!RegisterClassA(&windowClass)) {
+        MessageBoxA(nullptr, "Impossible d'enregistrer la classe.", "Erreur", MB_OK | MB_ICONERROR);
         return -1;
     }
 
@@ -62,7 +64,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
     HWND window = CreateWindowExA(0, "AzureEngineWindow", "Azure Engine", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 1280, 720, nullptr, nullptr, hInstance, nullptr);
 
     if (!window) {
-        MessageBoxA(nullptr, "Impossible de créer la fenetre.", "Erreur", MB_OK | MB_ICONERROR);
+        MessageBoxA(nullptr, "Impossible de créer la fenêtre.", "Erreur", MB_OK | MB_ICONERROR);
         return -1;
     }
 
@@ -70,14 +72,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
     UpdateWindow(window);
 
     //-------------------------------------------------
-    // Timer haute précision
+    // Timer
     //-------------------------------------------------
 
-    LARGE_INTEGER frequency;
-    LARGE_INTEGER lastCounter;
-
-    QueryPerformanceFrequency(&frequency);
-    QueryPerformanceCounter(&lastCounter);
+    Timer timer;
+    timer.Initialize();
 
     //-------------------------------------------------
     // Boucle principale
@@ -86,31 +85,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
     MSG message = {};
 
     while (g_Running) {
-
-        //---------------------------------------------
-        // Temps
-        //---------------------------------------------
-
-        LARGE_INTEGER currentCounter;
-        QueryPerformanceCounter(&currentCounter);
-
-        g_DeltaTime = static_cast<float>(currentCounter.QuadPart - lastCounter.QuadPart) / static_cast<float>(frequency.QuadPart);
-
-        lastCounter = currentCounter;
-
-        if (g_DeltaTime > 0.0f) {
-            g_FPS = 1.0f / g_DeltaTime;
-        }
-        
-        //---------------------------------------------
-        // Titre fenêtre
-        //---------------------------------------------
-
-        char title[256];
-
-        sprintf_s(title, "Azure Engine | FPS : %.0f", g_FPS);
-
-        SetWindowTextA(window, title);
 
         //---------------------------------------------
         // Messages Windows
@@ -125,15 +99,24 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
             DispatchMessage(&message);
         }
 
+        //---------------------------------------------
+        // Temps
+        //---------------------------------------------
+
+        timer.Update();
+
+        g_DeltaTime = timer.GetDeltaTime();
+        g_FPS = timer.GetFPS();
+        
         //-------------------------------------------------
         // UPDATE
         //-------------------------------------------------
 
         // TODO :
         // Input
-        // Physique
+        // Gameplay
         // Audio
-        // IA
+        // Scripts
 
         //-------------------------------------------------
         // RENDER
@@ -141,15 +124,25 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
 
         HDC dc = GetDC(window);
 
-        RECT rect;
-        GetClientRect(window, &rect);
+        RECT clientRect;
+        GetClientRect(window, &clientRect);
 
-        FillRect(dc, &rect, (HBRUSH)GetStockObject(BLACK_BRUSH));
+        FillRect(dc, &clientRect, (HBRUSH)GetStockObject(BLACK_BRUSH));
 
         ReleaseDC(window, dc);
 
         //---------------------------------------------
-        // Limiter CPU
+        // Titre fenêtre
+        //---------------------------------------------
+
+        char title[256];
+
+        sprintf_s(title, "Azure Engine | FPS : %.0f", g_FPS);
+
+        SetWindowTextA(window, title);
+
+        //---------------------------------------------
+        // Pause légère
         //---------------------------------------------
 
         Sleep(1);
