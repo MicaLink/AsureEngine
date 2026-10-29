@@ -9,6 +9,7 @@
 #include "Timer.h"
 #include "Input.h"
 #include "Renderer.h"
+#include "Sprite.h"
 
 //-----------------------------------------------------
 // Variables globales
@@ -33,9 +34,10 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         case WM_DESTROY:
             PostQuitMessage(0);
             return 0;
-    }
 
-    return DefWindowProc(hwnd, msg, wParam, lParam);
+        default:
+            return DefWindowProc(hwnd, msg, wParam, lParam);
+    }
 }
 
 //-----------------------------------------------------
@@ -48,13 +50,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
     // Classe de fenêtre
     //-------------------------------------------------
 
-    WNDCLASSA wc {};
+    WNDCLASSA windowClass = {};
 
-    wc.lpfnWndProc = WindowProc;
-    wc.hInstance = hInstance;
-    wc.lpszClassName = "AzureEngineWindow";
+    windowClass.lpfnWndProc = WindowProc;
+    windowClass.hInstance = hInstance;
+    windowClass.lpszClassName = "AzureEngineWindow";
 
-    RegisterClassA(&wc);
+    if (!RegisterClassA(&windowClass)) {
+        MessageBoxA(nullptr, "Impossible d'enregistrer la classe de fenêtre.", "Erreur", MB_OK | MB_ICONERROR);
+        return -1;
+    }
 
     //-------------------------------------------------
     // Création de la fenêtre
@@ -62,10 +67,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
 
     HWND window = CreateWindowExA(0, "AzureEngineWindow", "Azure Engine", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 1280, 720, nullptr, nullptr, hInstance, nullptr);
 
+    if (!window) {
+        MessageBoxA(nullptr, "Impossible de créer la fenêtre.", "Erreur", MB_OK | MB_ICONERROR);
+        return -1;
+    }
+
     ShowWindow(window, nCmdShow);
+    UpdateWindow(window);
 
     //-------------------------------------------------
-    // Timer
+    // Initialisation des sous-systèmes
     //-------------------------------------------------
 
     Timer timer;
@@ -79,7 +90,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
     // Boucle principale
     //-------------------------------------------------
 
-    MSG msg = {};
+    MSG message = {};
 
     while (g_Running) {
 
@@ -87,9 +98,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
         // Messages Windows
         //---------------------------------------------
 
-        while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {    
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
+        while (PeekMessage(&message, nullptr, 0, 0, PM_REMOVE)) { 
+            if (message.message == WM_QUIT) {
+                g_Running = false;
+            }
+            
+            TranslateMessage(&message);
+            DispatchMessage(&message);
         }
 
         //---------------------------------------------
@@ -98,37 +113,49 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
 
         timer.Update();
 
-        float dt = timer.GetDeltaTime();
+        float deltaTime = timer.GetDeltaTime();
         
-        //-------------------------------------------------
-        // UPDATE
-        //-------------------------------------------------
+        //---------------------------------------------
+        // Entrées clavier
+        //---------------------------------------------
         
         InputUpdate();
 
-        const float Speed = 200.0f;
+        //---------------------------------------------
+        // Update
+        //---------------------------------------------
+
+        const float playerSpeed = 200.0f;
 
         if (IsKeyDown(VK_LEFT)) {
-            g_PlayerX -= Speed * dt;
+            g_PlayerX -= playerSpeed * deltaTime;
         }
 
         if (IsKeyDown(VK_RIGHT)) {
-            g_PlayerX += Speed * dt;
+            g_PlayerX += playerSpeed * deltaTime;
         }
 
         if (IsKeyDown(VK_UP)) {
-            g_PlayerY -= Speed * dt;
+            g_PlayerY -= playerSpeed * deltaTime;
         }
 
         if (IsKeyDown(VK_DOWN)) {
-            g_PlayerY += Speed * dt;
+            g_PlayerY += playerSpeed * deltaTime;
         }
+
+        //---------------------------------------------
+        // Rendu
+        //---------------------------------------------
 
         Clear(0x00101010);
         
-        DrawRect((int)g_PlayerX, (int)g_PlayerY, 16, 16, 0x0000FF00);
+        DrawSprite((int)g_PlayerX, (int)g_PlayerY, Hero);
 
-        RendererEndFrame(window);
+        Present(window);
+
+        //---------------------------------------------
+        // Affichage FPS
+        //---------------------------------------------
 
         char title[256];
 
@@ -137,10 +164,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
         SetWindowTextA(window, title);
 
         //---------------------------------------------
-        // Pause légère
+        // Réduction charge CPU
         //---------------------------------------------
 
         Sleep(1);
     }
+
+    //-------------------------------------------------
+    // Fin du programme
+    //-------------------------------------------------
+
     return 0;
 }
