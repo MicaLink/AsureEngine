@@ -2,11 +2,12 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch Azure",
+            "name": "Azure Engine",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/src/main.exe",
-            "cwd": "${workspaceFolder}"
+            "program": "${workspaceFolder}\\build\\AzureEngine.exe",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
         }
     ]
 }
