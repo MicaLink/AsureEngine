@@ -6,10 +6,10 @@
 #include <Windows.h>
 #include <cstdio>
 
-#include "Timer.h"
-#include "Input.h"
-#include "Renderer.h"
-#include "Sprite.h"
+#include "Core/Timer.h"
+#include "Input/Input.h"
+#include "Graphics/Renderer.h"
+#include "Graphics/Hero.h"
 
 //-----------------------------------------------------
 // Variables globales
@@ -125,7 +125,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
         // Update
         //---------------------------------------------
 
-        const float playerSpeed = 200.0f;
+        const float playerSpeed = 120.0f;
 
         if (IsKeyDown(VK_LEFT)) {
             g_PlayerX -= playerSpeed * deltaTime;
@@ -147,11 +147,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
         // Rendu
         //---------------------------------------------
 
-        Clear(0x00101010);
+        Clear(0x00102030);
         
         DrawSprite((int)g_PlayerX, (int)g_PlayerY, Hero);
 
-        Present(window);
+        RendererPresent(window);
 
         //---------------------------------------------
         // Affichage FPS

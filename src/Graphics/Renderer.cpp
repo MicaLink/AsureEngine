@@ -4,24 +4,24 @@
 constexpr int SCREEN_WIDTH = 320;
 constexpr int SCREEN_HEIGHT = 200;
 
-static uint32_t FrameBuffer[SCREEN_WIDTH * SCREEN_HEIGHT];
+static uint32_t g_FrameBuffer[SCREEN_WIDTH * SCREEN_HEIGHT];
 
-static BITMAPINFO BitmapInfo;
+static BITMAPINFO g_BitmapInfo;
 
 void RendererInitialize() {
-    ZeroMemory(&BitmapInfo, sizeof(BitmapInfo));
+    ZeroMemory(&g_BitmapInfo, sizeof(g_BitmapInfo));
 
-    BitmapInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-    BitmapInfo.bmiHeader.biWidth = SCREEN_WIDTH;
-    BitmapInfo.bmiHeader.biHeight = -SCREEN_HEIGHT;
-    BitmapInfo.bmiHeader.biPlanes = 1;
-    BitmapInfo.bmiHeader.biBitCount = 32;
-    BitmapInfo.bmiHeader.biCompression = BI_RGB;
+    g_BitmapInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+    g_BitmapInfo.bmiHeader.biWidth = SCREEN_WIDTH;
+    g_BitmapInfo.bmiHeader.biHeight = -SCREEN_HEIGHT;
+    g_BitmapInfo.bmiHeader.biPlanes = 1;
+    g_BitmapInfo.bmiHeader.biBitCount = 32;
+    g_BitmapInfo.bmiHeader.biCompression = BI_RGB;
 }
 
-void Clear(uint32_t color) {
+void Clear(unsigned int color) {
     for (int i = 0; i < SCREEN_WIDTH * SCREEN_HEIGHT; i++) {
-        FrameBuffer[i] = color;
+        g_FrameBuffer[i] = color;
     }
     
 }
@@ -33,10 +33,10 @@ void DrawPixel(int x, int y, unsigned int color) {
     if (y < 0 || y >= SCREEN_HEIGHT)
         return;
         
-    FrameBuffer[y * SCREEN_WIDTH + x] = color;
+    g_FrameBuffer[y * SCREEN_WIDTH + x] = color;
 }
 
-void DrawRect(int x, int y, int width, int height, uint32_t color) {
+void DrawRect(int x, int y, int width, int height, unsigned int color) {
     for (int py = 0; py < height; py++) {
         for (int px = 0; px < width; px++) {
             DrawPixel(x + px, y + py, color);
@@ -49,21 +49,19 @@ void DrawSprite(int x, int y, const Sprite& sprite) {
         for (int sx = 0; sx < sprite.Width; sx++) {
             uint32_t color = sprite.Pixel[sy * sprite.Width + sx];
 
-            if (color != TRANSPARENT_COLOR) {
+            if (color != 0x00000000) {
                 DrawPixel(x + sx, y + sy, color);
-            }
+            }     
         }
-        
     }
-    
 }
 
-void Present(HWND window) {
+void RendererPresent(HWND window) {
     HDC dc = GetDC(window);
 
     RECT rect;
     GetClientRect(window, &rect);
 
-    StretchDIBits(dc, 0, 0, rect.right, rect.bottom, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, FrameBuffer, &BitmapInfo, DIB_RGB_COLORS, SRCCOPY);
+    StretchDIBits(dc, 0, 0, rect.right, rect.bottom, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, g_FrameBuffer, &g_BitmapInfo, DIB_RGB_COLORS, SRCCOPY);
     ReleaseDC(window, dc);
 }

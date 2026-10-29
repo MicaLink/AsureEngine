@@ -7,10 +7,20 @@
             "command": "cl",
             "args": [
                 "/EHsc",
-                "/nologo",
-                "src\\*.cpp",
+
+                "src\\main.cpp",
+
+                "src\\Core\\Timer.cpp",
+
+                "src\\Input\\Input.cpp",
+
+                "src\\Graphics\\Renderer.cpp",
+                "src\\Graphics\\Hero.cpp",
+
                 "/Fe:build\\AzureEngine.exe",
+
                 "/link",
+
                 "user32.lib",
                 "gdi32.lib"
             ],
@@ -20,7 +30,7 @@
             },
             "problemMatcher": [
                 "$msCompile"
-            ],  
+            ]
         }
     ]
 }
