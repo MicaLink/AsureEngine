@@ -1,11 +1,16 @@
 #include "Timer.h"
 
-void Timer::Initialize() {    
-    QueryPerformanceFrequency(&m_Frequency);
-    QueryPerformanceCounter(&m_LastCounter);
+#include <Windows.h>
 
-    m_DeltaTime = 0.0f;
-    m_FPS = 0.0f;
+void Timer::Initialize() {
+    LARGE_INTEGER frequency;
+    LARGE_INTEGER counter;
+
+    QueryPerformanceFrequency(&frequency);
+    QueryPerformanceCounter(&counter);
+
+    m_Frequency = frequency.QuadPart;
+    m_LastCounter = counter.QuadPart;
 }
 
 void Timer::Update() {
@@ -13,9 +18,9 @@ void Timer::Update() {
     
     QueryPerformanceCounter(&currentCounter);
 
-    m_DeltaTime = static_cast<float>(currentCounter.QuadPart - m_LastCounter.QuadPart) / static_cast<float>(m_Frequency.QuadPart);
+    m_DeltaTime = static_cast<float>(currentCounter.QuadPart - m_LastCounter) / static_cast<float>(m_Frequency);
 
-    m_LastCounter = currentCounter;
+    m_LastCounter = currentCounter.QuadPart;
 
     if (m_DeltaTime > 0.0f) {
         m_FPS = 1.0f / m_DeltaTime;

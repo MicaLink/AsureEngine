@@ -7,6 +7,8 @@
 #include <cstdio>
 
 #include "Timer.h"
+#include "Input.h"
+#include "Renderer.h"
 
 //-----------------------------------------------------
 // Variables globales
@@ -14,15 +16,15 @@
 
 static bool g_Running = true;
 
-static float g_DeltaTime = 0.0f;
-static float g_FPS = 0.0f;
+static float g_PlayerX = 100.0f;
+static float g_PlayerY = 100.0f;
 
 //-----------------------------------------------------
 // Procédure de fenêtre
 //-----------------------------------------------------
 
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
-    switch (message) {
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+    switch (msg) {
         case WM_CLOSE:
             g_Running = false;
             DestroyWindow(hwnd);
@@ -33,7 +35,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPara
             return 0;
     }
 
-    return DefWindowProc(hwnd, message, wParam, lParam);
+    return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
 //-----------------------------------------------------
@@ -46,16 +48,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
     // Classe de fenêtre
     //-------------------------------------------------
 
-    WNDCLASSA windowClass {};
+    WNDCLASSA wc {};
 
-    windowClass.lpfnWndProc = WindowProc;
-    windowClass.hInstance = hInstance;
-    windowClass.lpszClassName = "AzureEngineWindow";
+    wc.lpfnWndProc = WindowProc;
+    wc.hInstance = hInstance;
+    wc.lpszClassName = "AzureEngineWindow";
 
-    if (!RegisterClassA(&windowClass)) {
-        MessageBoxA(nullptr, "Impossible d'enregistrer la classe.", "Erreur", MB_OK | MB_ICONERROR);
-        return -1;
-    }
+    RegisterClassA(&wc);
 
     //-------------------------------------------------
     // Création de la fenêtre
@@ -63,26 +62,24 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
 
     HWND window = CreateWindowExA(0, "AzureEngineWindow", "Azure Engine", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 1280, 720, nullptr, nullptr, hInstance, nullptr);
 
-    if (!window) {
-        MessageBoxA(nullptr, "Impossible de créer la fenêtre.", "Erreur", MB_OK | MB_ICONERROR);
-        return -1;
-    }
-
     ShowWindow(window, nCmdShow);
-    UpdateWindow(window);
 
     //-------------------------------------------------
     // Timer
     //-------------------------------------------------
 
     Timer timer;
+
     timer.Initialize();
+
+    InputInitialize();
+    RendererInitialize();
 
     //-------------------------------------------------
     // Boucle principale
     //-------------------------------------------------
 
-    MSG message = {};
+    MSG msg = {};
 
     while (g_Running) {
 
@@ -90,13 +87,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
         // Messages Windows
         //---------------------------------------------
 
-        while (PeekMessage(&message, nullptr, 0, 0, PM_REMOVE)) {
-            if (message.message == WM_QUIT) {
-                g_Running = false;
-            }
-            
-            TranslateMessage(&message);
-            DispatchMessage(&message);
+        while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {    
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
         }
 
         //---------------------------------------------
@@ -105,39 +98,41 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
 
         timer.Update();
 
-        g_DeltaTime = timer.GetDeltaTime();
-        g_FPS = timer.GetFPS();
+        float dt = timer.GetDeltaTime();
         
         //-------------------------------------------------
         // UPDATE
         //-------------------------------------------------
+        
+        InputUpdate();
 
-        // TODO :
-        // Input
-        // Gameplay
-        // Audio
-        // Scripts
+        const float Speed = 200.0f;
 
-        //-------------------------------------------------
-        // RENDER
-        //-------------------------------------------------
+        if (IsKeyDown(VK_LEFT)) {
+            g_PlayerX -= Speed * dt;
+        }
 
-        HDC dc = GetDC(window);
+        if (IsKeyDown(VK_RIGHT)) {
+            g_PlayerX += Speed * dt;
+        }
 
-        RECT clientRect;
-        GetClientRect(window, &clientRect);
+        if (IsKeyDown(VK_UP)) {
+            g_PlayerY -= Speed * dt;
+        }
 
-        FillRect(dc, &clientRect, (HBRUSH)GetStockObject(BLACK_BRUSH));
+        if (IsKeyDown(VK_DOWN)) {
+            g_PlayerY += Speed * dt;
+        }
 
-        ReleaseDC(window, dc);
+        Clear(0x00101010);
+        
+        DrawRect((int)g_PlayerX, (int)g_PlayerY, 16, 16, 0x0000FF00);
 
-        //---------------------------------------------
-        // Titre fenêtre
-        //---------------------------------------------
+        RendererEndFrame(window);
 
         char title[256];
 
-        sprintf_s(title, "Azure Engine | FPS : %.0f", g_FPS);
+        sprintf_s(title, "Azure Engine | FPS : %.0f", timer.GetFPS());
 
         SetWindowTextA(window, title);
 

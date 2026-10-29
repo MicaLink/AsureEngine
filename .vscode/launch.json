@@ -7,7 +7,8 @@
             "request": "launch",
             "program": "${workspaceFolder}\\build\\AzureEngine.exe",
             "cwd": "${workspaceFolder}",
-            "console": "integratedTerminal"
+            "console": "integratedTerminal",
+            "stopAtEntry": false
         }
     ]
 }

@@ -1,7 +1,5 @@
 #pragma once
 
-#include <Windows.h>
-
 class Timer
 {
 public:
@@ -12,8 +10,8 @@ public:
     float GetFPS() const;
 
 private:
-    LARGE_INTEGER m_Frequency{};
-    LARGE_INTEGER m_LastCounter{};
+    long long m_Frequency = 0;
+    long long m_LastCounter = 0;
 
     float m_DeltaTime = 0.0f;
     float m_FPS = 0.0f;
