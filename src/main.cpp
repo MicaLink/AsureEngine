@@ -11,6 +11,7 @@
 #include "Graphics/Renderer.h"
 #include "Graphics/Hero.h"
 #include "Graphics/TileMap.h"
+#include "Graphics/Camera.h"
 
 //-----------------------------------------------------
 // Variables globales
@@ -144,6 +145,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
             g_PlayerY += playerSpeed * deltaTime;
         }
 
+        UpdateCamera((int)g_PlayerX, (int)g_PlayerY, 320, 200);
+
         //---------------------------------------------
         // Rendu
         //---------------------------------------------
@@ -151,7 +154,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
         Clear(0x00101010);
 
         DrawTileMap();
-        
+
         DrawSprite((int)g_PlayerX, (int)g_PlayerY, Hero);
 
         RendererPresent(window);

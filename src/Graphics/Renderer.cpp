@@ -1,5 +1,6 @@
 #include "Renderer.h"
 #include "Sprite.h"
+#include "Camera.h"
 
 constexpr int SCREEN_WIDTH = 320;
 constexpr int SCREEN_HEIGHT = 200;
@@ -45,11 +46,14 @@ void DrawRect(int x, int y, int width, int height, unsigned int color) {
 }
 
 void DrawSprite(int x, int y, const Sprite& sprite) {
+    x -= CameraX;
+    y -= CameraY;
+
     for (int sy = 0; sy < sprite.Height; sy++) {
         for (int sx = 0; sx < sprite.Width; sx++) {
-            uint32_t color = sprite.Pixel[sy * sprite.Width + sx];
+            unsigned int color = sprite.Pixel[sy * sprite.Width + sx];
 
-            if (color != 0x00000000) {
+            if (color != 0xFFFF00FF) {
                 DrawPixel(x + sx, y + sy, color);
             }     
         }

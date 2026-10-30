@@ -1,5 +1,6 @@
 #include "TileMap.h"
 #include "Renderer.h"
+#include "Camera.h"
 
 constexpr int TILE_SIZE = 16;
 
@@ -22,7 +23,7 @@ void DrawTileMap() {
         for (int x = 0; x < MAP_WIDTH; x++) {
             unsigned int color = WorldMap[y][x] ? 0x00606060 : 0x00202020;
             
-            DrawRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE, color);
+            DrawRect(x * TILE_SIZE - CameraX, y * TILE_SIZE - CameraY, TILE_SIZE, TILE_SIZE, color);
         }
     }
 }
