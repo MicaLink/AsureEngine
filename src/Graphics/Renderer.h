@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Windows.h>
+#include <cstdint>
 
 #include "Sprite.h"
 
@@ -12,5 +13,3 @@ void DrawRect(int x, int y, int width, int height, unsigned int color);
 void DrawSprite(int x, int y, const Sprite& sprite);
 
 void RendererPresent(HWND window);
-
-

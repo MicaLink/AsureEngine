@@ -5,5 +5,5 @@
 struct Sprite {
     int Width;
     int Height;
-    const uint32_t* Pixel;
+    const uint32_t* Pixels;
 };

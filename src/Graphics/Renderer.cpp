@@ -2,6 +2,8 @@
 #include "Sprite.h"
 #include "Camera.h"
 
+#include <cstdint>
+
 constexpr int SCREEN_WIDTH = 320;
 constexpr int SCREEN_HEIGHT = 200;
 
@@ -51,7 +53,7 @@ void DrawSprite(int x, int y, const Sprite& sprite) {
 
     for (int sy = 0; sy < sprite.Height; sy++) {
         for (int sx = 0; sx < sprite.Width; sx++) {
-            unsigned int color = sprite.Pixel[sy * sprite.Width + sx];
+            unsigned int color = sprite.Pixels[sy * sprite.Width + sx];
 
             if (color != 0xFFFF00FF) {
                 DrawPixel(x + sx, y + sy, color);

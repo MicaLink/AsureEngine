@@ -17,6 +17,11 @@
 // Variables globales
 //-----------------------------------------------------
 
+constexpr int SCREEN_WIDTH = 320;
+constexpr int SCREEN_HEIGHT = 200;
+
+constexpr int HERO_SIZE = 8;
+
 static bool g_Running = true;
 
 static float g_PlayerX = 100.0f;
@@ -127,25 +132,33 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
         // Update
         //---------------------------------------------
 
-        const float playerSpeed = 120.0f;
+        const float playerSpeed = 200.0f;
 
-        if (IsKeyDown(VK_LEFT)) {
-            g_PlayerX -= playerSpeed * deltaTime;
+        float newX = g_PlayerX;
+        float newY = g_PlayerY;
+
+        if (IsKeyDown(VK_LEFT))
+            newX -= playerSpeed * deltaTime;
+
+        if (IsKeyDown(VK_RIGHT))
+            newX += playerSpeed * deltaTime;
+
+        if (IsKeyDown(VK_UP))
+            newY -= playerSpeed * deltaTime;
+
+        if (IsKeyDown(VK_DOWN))
+            newY += playerSpeed * deltaTime;
+
+        constexpr int HERO_SIZE = 8;
+
+        bool collision = IsTileSolid((int)newX, (int)newY) || IsTileSolid((int)newX + HERO_SIZE - 1, (int)newY) || IsTileSolid((int)newX, (int)newY + HERO_SIZE - 1) || IsTileSolid((int)newX + HERO_SIZE - 1, (int)newY + HERO_SIZE - 1);
+
+        if (!collision) {
+            g_PlayerX = newX;
+            g_PlayerY = newY;
         }
 
-        if (IsKeyDown(VK_RIGHT)) {
-            g_PlayerX += playerSpeed * deltaTime;
-        }
-
-        if (IsKeyDown(VK_UP)) {
-            g_PlayerY -= playerSpeed * deltaTime;
-        }
-
-        if (IsKeyDown(VK_DOWN)) {
-            g_PlayerY += playerSpeed * deltaTime;
-        }
-
-        UpdateCamera((int)g_PlayerX, (int)g_PlayerY, 320, 200);
+        UpdateCamera((int)g_PlayerX, (int)g_PlayerY, SCREEN_WIDTH, SCREEN_HEIGHT);
 
         //---------------------------------------------
         // Rendu

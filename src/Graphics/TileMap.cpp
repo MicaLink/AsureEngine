@@ -27,3 +27,22 @@ void DrawTileMap() {
         }
     }
 }
+
+bool IsTileSolid(int worldX, int worldY) {
+    const int tileX = worldX / TILE_SIZE;
+    const int tileY = worldY / TILE_SIZE;
+
+    if (tileX < 0)
+        return true;
+
+    if (tileY < 0)
+        return true;
+
+    if (tileX >= MAP_WIDTH)
+        return true;
+    
+    if (tileY >= MAP_HEIGHT)
+        return true;
+
+    return WorldMap[tileY][tileX] == 1;
+}
