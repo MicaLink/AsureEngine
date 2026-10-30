@@ -10,6 +10,7 @@
 #include "Input/Input.h"
 #include "Graphics/Renderer.h"
 #include "Graphics/Hero.h"
+#include "Graphics/TileMap.h"
 
 //-----------------------------------------------------
 // Variables globales
@@ -147,7 +148,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
         // Rendu
         //---------------------------------------------
 
-        Clear(0x00102030);
+        Clear(0x00101010);
+
+        DrawTileMap();
         
         DrawSprite((int)g_PlayerX, (int)g_PlayerY, Hero);
 

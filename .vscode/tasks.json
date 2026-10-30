@@ -16,6 +16,7 @@
 
                 "src\\Graphics\\Renderer.cpp",
                 "src\\Graphics\\Hero.cpp",
+                "src\\Graphics\\TileMap.cpp",
 
                 "/Fe:build\\AzureEngine.exe",
 
