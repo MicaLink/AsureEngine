@@ -1,5 +1,6 @@
 #pragma once
 
 #include "Sprite.h"
+#include "Animation.h"
 
-extern Sprite Hero;
+extern Animation HeroAnimation;

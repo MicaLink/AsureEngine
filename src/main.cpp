@@ -12,6 +12,7 @@
 #include "Graphics/Hero.h"
 #include "Graphics/TileMap.h"
 #include "Graphics/Camera.h"
+#include "Graphics/Animation.h"
 
 //-----------------------------------------------------
 // Variables globales
@@ -158,6 +159,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
             g_PlayerY = newY;
         }
 
+        UpdateAnimation(HeroAnimation, deltaTime);
+
         UpdateCamera((int)g_PlayerX, (int)g_PlayerY, SCREEN_WIDTH, SCREEN_HEIGHT);
 
         //---------------------------------------------
@@ -168,7 +171,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
 
         DrawTileMap();
 
-        DrawSprite((int)g_PlayerX, (int)g_PlayerY, Hero);
+        DrawSprite((int)g_PlayerX, (int)g_PlayerY, GetAnimationFrame(HeroAnimation));
 
         RendererPresent(window);
 

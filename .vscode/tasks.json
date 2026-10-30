@@ -18,6 +18,7 @@
                 "src\\Graphics\\Hero.cpp",
                 "src\\Graphics\\TileMap.cpp",
                 "src\\Graphics\\Camera.cpp",
+                "src\\Graphics\\Animation.cpp",
 
                 "/Fe:build\\AzureEngine.exe",
 
