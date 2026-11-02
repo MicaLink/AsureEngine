@@ -158,13 +158,21 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
         // Collision TileMap
         //---------------------------------------------
 
-        const bool collision = IsTileSolid(static_cast<int>(newX), static_cast<int>(newY)) ||
-                               IsTileSolid(static_cast<int>(newX) + HERO_SIZE - 1, static_cast<int>(newY)) ||
-                               IsTileSolid(static_cast<int>(newX), static_cast<int>(newY) + HERO_SIZE - 1) ||
-                               IsTileSolid(static_cast<int>(newX) + HERO_SIZE - 1, static_cast<int>(newY) + HERO_SIZE - 1);
+        const bool collisionX = IsTileSolid(static_cast<int>(newX), static_cast<int>(g_PlayerY)) ||
+                               IsTileSolid(static_cast<int>(newX) + HERO_SIZE - 1, static_cast<int>(g_PlayerY)) ||
+                               IsTileSolid(static_cast<int>(newX), static_cast<int>(g_PlayerY) + HERO_SIZE - 1) ||
+                               IsTileSolid(static_cast<int>(newX) + HERO_SIZE - 1, static_cast<int>(g_PlayerY) + HERO_SIZE - 1);
 
-        if (!collision) {
+        if (!collisionX) {
             g_PlayerX = newX;
+        }
+
+        const bool collisionY = IsTileSolid(static_cast<int>(g_PlayerX), static_cast<int>(newY)) ||
+                               IsTileSolid(static_cast<int>(g_PlayerX) + HERO_SIZE - 1, static_cast<int>(newY)) ||
+                               IsTileSolid(static_cast<int>(g_PlayerX), static_cast<int>(newY) + HERO_SIZE - 1) ||
+                               IsTileSolid(static_cast<int>(g_PlayerX) + HERO_SIZE - 1, static_cast<int>(newY) + HERO_SIZE - 1);
+
+        if (!collisionY) {
             g_PlayerY = newY;
         }
 
