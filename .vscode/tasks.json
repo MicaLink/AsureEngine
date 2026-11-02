@@ -22,6 +22,8 @@
                 "src\\Graphics\\TileMap.cpp",
                 
                 "src\\Game\\Player.cpp",
+                "src\\Game\\EntityManager.cpp",
+                "src\\Game\\Enemy.cpp",
 
                 "/Fe:build\\AzureEngine.exe",
 

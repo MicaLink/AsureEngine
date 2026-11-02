@@ -6,4 +6,6 @@ struct Entity {
 
     int Width;
     int Height;
+
+    bool Active = true;
 };

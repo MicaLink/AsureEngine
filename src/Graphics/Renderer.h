@@ -5,6 +5,9 @@
 
 #include "Sprite.h"
 
+constexpr int SCREEN_WIDTH  = 320;
+constexpr int SCREEN_HEIGHT = 200;
+
 void RendererInitialize();
 
 void Clear(uint32_t color);

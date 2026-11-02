@@ -1,8 +1,6 @@
 #include "Renderer.h"
 #include "Camera.h"
 
-constexpr int SCREEN_WIDTH = 320;
-constexpr int SCREEN_HEIGHT = 200;
 constexpr int PIXEL_COUNT = SCREEN_WIDTH * SCREEN_HEIGHT;
 
 namespace {

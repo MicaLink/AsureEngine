@@ -22,9 +22,6 @@
 // Constantes
 //-----------------------------------------------------
 
-constexpr int SCREEN_WIDTH = 320;
-constexpr int SCREEN_HEIGHT = 200;
-
 constexpr int HERO_SIZE = 8;
 constexpr float PLAYER_SPEED = 200.0f;
 
@@ -108,6 +105,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
 
     InputInitialize();
     RendererInitialize();
+    InitializeTileMap();
 
     //-------------------------------------------------
     // Boucle principale
