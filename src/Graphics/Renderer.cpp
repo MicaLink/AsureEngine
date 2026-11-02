@@ -7,6 +7,8 @@
 constexpr int SCREEN_WIDTH = 320;
 constexpr int SCREEN_HEIGHT = 200;
 
+const int count = SCREEN_WIDTH * SCREEN_HEIGHT;
+
 static uint32_t g_FrameBuffer[SCREEN_WIDTH * SCREEN_HEIGHT];
 
 static BITMAPINFO g_BitmapInfo;
@@ -23,7 +25,7 @@ void RendererInitialize() {
 }
 
 void Clear(unsigned int color) {
-    for (int i = 0; i < SCREEN_WIDTH * SCREEN_HEIGHT; i++) {
+    for (int i = 0; i < count; i++) {
         g_FrameBuffer[i] = color;
     }
     

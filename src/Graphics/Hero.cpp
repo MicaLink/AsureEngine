@@ -1,6 +1,6 @@
 #include "Hero.h"
 
-static uint32_t HeroFrame0Pixeles[64] = {
+static uint32_t HeroFrame0Pixels[64] = {
     0x00000000,0x0000FF00,0x0000FF00,0x0000FF00,0x0000FF00,0x0000FF00,0x0000FF00,0x00000000,
     0x0000FF00,0x00FFFFFF,0x00FFFFFF,0x0000FF00,0x0000FF00,0x00FFFFFF,0x00FFFFFF,0x0000FF00,
     0x0000FF00,0x00000000,0x00000000,0x0000FF00,0x0000FF00,0x00000000,0x00000000,0x0000FF00,
@@ -11,7 +11,7 @@ static uint32_t HeroFrame0Pixeles[64] = {
     0x00000000,0x00000000,0x0000FF00,0x00000000,0x00000000,0x0000FF00,0x00000000,0x00000000
 };
 
-static uint32_t HeroFrame1Pixeles[64] = {
+static uint32_t HeroFrame1Pixels[64] = {
     0x00000000,0x0000FF00,0x0000FF00,0x0000FF00,0x0000FF00,0x0000FF00,0x0000FF00,0x00000000,
     0x0000FF00,0x00FFFFFF,0x00FFFFFF,0x0000FF00,0x0000FF00,0x00FFFFFF,0x00FFFFFF,0x0000FF00,
     0x0000FF00,0x00000000,0x00000000,0x0000FF00,0x0000FF00,0x00000000,0x00000000,0x0000FF00,
@@ -23,8 +23,8 @@ static uint32_t HeroFrame1Pixeles[64] = {
 };
 
 static Sprite HeroFrames[] = {
-    {8, 8, HeroFrame0Pixeles},
-    {8, 8, HeroFrame1Pixeles}
+    {8, 8, HeroFrame0Pixels},
+    {8, 8, HeroFrame1Pixels}
 };
 
 Animation HeroAnimation = {HeroFrames, 2, 0.25f, 0.0f, 0};

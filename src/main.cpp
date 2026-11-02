@@ -8,20 +8,25 @@
 
 #include "Core/Timer.h"
 #include "Input/Input.h"
-#include "Graphics/Renderer.h"
-#include "Graphics/Hero.h"
-#include "Graphics/TileMap.h"
-#include "Graphics/Camera.h"
+
 #include "Graphics/Animation.h"
+#include "Graphics/Camera.h"
+#include "Graphics/Hero.h"
+#include "Graphics/Renderer.h"
+#include "Graphics/TileMap.h"
 
 //-----------------------------------------------------
-// Variables globales
+// Constantes
 //-----------------------------------------------------
 
 constexpr int SCREEN_WIDTH = 320;
 constexpr int SCREEN_HEIGHT = 200;
 
 constexpr int HERO_SIZE = 8;
+
+//-----------------------------------------------------
+// Variables globales
+//-----------------------------------------------------
 
 static bool g_Running = true;
 
@@ -32,8 +37,8 @@ static float g_PlayerY = 100.0f;
 // Procédure de fenêtre
 //-----------------------------------------------------
 
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
-    switch (msg) {
+LRESULT CALLBACK WindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
+    switch (message) {
         case WM_CLOSE:
             g_Running = false;
             DestroyWindow(hwnd);
@@ -42,10 +47,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         case WM_DESTROY:
             PostQuitMessage(0);
             return 0;
-
-        default:
-            return DefWindowProc(hwnd, msg, wParam, lParam);
     }
+    return DefWindowProc(hwnd, message, wParam, lParam);
 }
 
 //-----------------------------------------------------
@@ -84,7 +87,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
     UpdateWindow(window);
 
     //-------------------------------------------------
-    // Initialisation des sous-systèmes
+    // Initialisation
     //-------------------------------------------------
 
     Timer timer;
@@ -121,47 +124,61 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
 
         timer.Update();
 
-        float deltaTime = timer.GetDeltaTime();
+        const float deltaTime = timer.GetDeltaTime();
         
         //---------------------------------------------
-        // Entrées clavier
+        // Entrées
         //---------------------------------------------
         
         InputUpdate();
 
+
         //---------------------------------------------
-        // Update
+        // Déplacement du joueur
         //---------------------------------------------
 
-        const float playerSpeed = 200.0f;
+        constexpr float PLAYER_SPEED = 200.0f;
 
         float newX = g_PlayerX;
         float newY = g_PlayerY;
 
         if (IsKeyDown(VK_LEFT))
-            newX -= playerSpeed * deltaTime;
+            newX -= PLAYER_SPEED * deltaTime;
 
         if (IsKeyDown(VK_RIGHT))
-            newX += playerSpeed * deltaTime;
+            newX += PLAYER_SPEED * deltaTime;
 
         if (IsKeyDown(VK_UP))
-            newY -= playerSpeed * deltaTime;
+            newY -= PLAYER_SPEED * deltaTime;
 
         if (IsKeyDown(VK_DOWN))
-            newY += playerSpeed * deltaTime;
+            newY += PLAYER_SPEED * deltaTime;
 
-        constexpr int HERO_SIZE = 8;
+        //---------------------------------------------
+        // Collision TileMap
+        //---------------------------------------------
 
-        bool collision = IsTileSolid((int)newX, (int)newY) || IsTileSolid((int)newX + HERO_SIZE - 1, (int)newY) || IsTileSolid((int)newX, (int)newY + HERO_SIZE - 1) || IsTileSolid((int)newX + HERO_SIZE - 1, (int)newY + HERO_SIZE - 1);
+        const bool collision = IsTileSolid(static_cast<int>(newX), static_cast<int>(newY)) ||
+                               IsTileSolid(static_cast<int>(newX) + HERO_SIZE - 1, static_cast<int>(newY)) ||
+                               IsTileSolid(static_cast<int>(newX), static_cast<int>(newY) + HERO_SIZE - 1) ||
+                               IsTileSolid(static_cast<int>(newX) + HERO_SIZE - 1, static_cast<int>(newY) + HERO_SIZE - 1);
 
         if (!collision) {
             g_PlayerX = newX;
             g_PlayerY = newY;
         }
 
+        //---------------------------------------------
+        // Animation
+        //---------------------------------------------
+
         UpdateAnimation(HeroAnimation, deltaTime);
 
-        UpdateCamera((int)g_PlayerX, (int)g_PlayerY, SCREEN_WIDTH, SCREEN_HEIGHT);
+        //---------------------------------------------
+        // Caméra
+        //---------------------------------------------
+
+        UpdateCamera(static_cast<int>(g_PlayerX), static_cast<int>(g_PlayerY), SCREEN_WIDTH, SCREEN_HEIGHT);
 
         //---------------------------------------------
         // Rendu
@@ -171,12 +188,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
 
         DrawTileMap();
 
-        DrawSprite((int)g_PlayerX, (int)g_PlayerY, GetAnimationFrame(HeroAnimation));
+        DrawSprite(static_cast<int>(g_PlayerX), static_cast<int>(g_PlayerY), GetAnimationFrame(HeroAnimation));
 
         RendererPresent(window);
 
         //---------------------------------------------
-        // Affichage FPS
+        // FPS
         //---------------------------------------------
 
         char title[256];
@@ -186,15 +203,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
         SetWindowTextA(window, title);
 
         //---------------------------------------------
-        // Réduction charge CPU
+        // Limite CPU
         //---------------------------------------------
 
         Sleep(1);
     }
-
-    //-------------------------------------------------
-    // Fin du programme
-    //-------------------------------------------------
 
     return 0;
 }

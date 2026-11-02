@@ -7,9 +7,9 @@
 
 void RendererInitialize();
 
-void Clear(unsigned int color);
-void DrawPixel(int x, int y, unsigned int color);
-void DrawRect(int x, int y, int width, int height, unsigned int color);
+void Clear(uint32_t color);
+void DrawPixel(int x, int y, uint32_t color);
+void DrawRect(int x, int y, int width, int height, uint32_t color);
 void DrawSprite(int x, int y, const Sprite& sprite);
 
 void RendererPresent(HWND window);

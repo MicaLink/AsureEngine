@@ -14,5 +14,5 @@ struct Animation {
     int CurrentFrame;
 };
 
-void UpdateAnimation(Animation& animationn, float deltaTime);
+void UpdateAnimation(Animation& animation, float deltaTime);
 const Sprite& GetAnimationFrame(const Animation& animation);
