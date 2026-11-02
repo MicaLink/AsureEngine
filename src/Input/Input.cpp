@@ -2,9 +2,14 @@
 
 #include <Windows.h>
 
-static bool g_Keys[256];
+namespace {
+    bool g_Keys[256] = {};
+}
 
 void InputInitialize() {
+    for (int i = 0; i < 256; i++) {
+        g_Keys[i] = false;
+    }
 }
 
 void InputUpdate() {

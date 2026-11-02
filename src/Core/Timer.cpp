@@ -11,6 +11,9 @@ void Timer::Initialize() {
 
     m_Frequency = frequency.QuadPart;
     m_LastCounter = counter.QuadPart;
+
+    m_DeltaTime = 0.0f;
+    m_FPS = 0.0f;
 }
 
 void Timer::Update() {
@@ -18,14 +21,15 @@ void Timer::Update() {
     
     QueryPerformanceCounter(&currentCounter);
 
-    m_DeltaTime = static_cast<float>(currentCounter.QuadPart - m_LastCounter) / static_cast<float>(m_Frequency);
+    const long long elapsed = currentCounter.QuadPart - m_LastCounter;
+
+    m_DeltaTime = static_cast<float>(elapsed) / static_cast<float>(m_Frequency);
 
     m_LastCounter = currentCounter.QuadPart;
 
     if (m_DeltaTime > 0.0f) {
         m_FPS = 1.0f / m_DeltaTime;
     }
-    
 }
 
 float Timer::GetDeltaTime() const {

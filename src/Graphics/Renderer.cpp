@@ -1,17 +1,15 @@
 #include "Renderer.h"
-#include "Sprite.h"
 #include "Camera.h"
-
-#include <cstdint>
 
 constexpr int SCREEN_WIDTH = 320;
 constexpr int SCREEN_HEIGHT = 200;
+constexpr int PIXEL_COUNT = SCREEN_WIDTH * SCREEN_HEIGHT;
 
-const int count = SCREEN_WIDTH * SCREEN_HEIGHT;
+namespace {
+    uint32_t g_FrameBuffer[PIXEL_COUNT];
 
-static uint32_t g_FrameBuffer[SCREEN_WIDTH * SCREEN_HEIGHT];
-
-static BITMAPINFO g_BitmapInfo;
+    BITMAPINFO g_BitmapInfo = {};
+}
 
 void RendererInitialize() {
     ZeroMemory(&g_BitmapInfo, sizeof(g_BitmapInfo));
@@ -25,13 +23,13 @@ void RendererInitialize() {
 }
 
 void Clear(unsigned int color) {
-    for (int i = 0; i < count; i++) {
+    for (int i = 0; i < PIXEL_COUNT; i++) {
         g_FrameBuffer[i] = color;
     }
     
 }
 
-void DrawPixel(int x, int y, unsigned int color) {
+void DrawPixel(int x, int y, uint32_t color) {
     if (x < 0 || x >= SCREEN_WIDTH)
         return;
 
@@ -41,7 +39,7 @@ void DrawPixel(int x, int y, unsigned int color) {
     g_FrameBuffer[y * SCREEN_WIDTH + x] = color;
 }
 
-void DrawRect(int x, int y, int width, int height, unsigned int color) {
+void DrawRect(int x, int y, int width, int height, uint32_t color) {
     for (int py = 0; py < height; py++) {
         for (int px = 0; px < width; px++) {
             DrawPixel(x + px, y + py, color);
@@ -55,11 +53,13 @@ void DrawSprite(int x, int y, const Sprite& sprite) {
 
     for (int sy = 0; sy < sprite.Height; sy++) {
         for (int sx = 0; sx < sprite.Width; sx++) {
-            unsigned int color = sprite.Pixels[sy * sprite.Width + sx];
+            const uint32_t color = sprite.Pixels[sy * sprite.Width + sx];
 
-            if (color != 0xFFFF00FF) {
-                DrawPixel(x + sx, y + sy, color);
-            }     
+            if (color == TRANSPARENT_COLOR) {
+                continue;
+            }
+
+            DrawPixel(x + sx, y + sy, color);
         }
     }
 }

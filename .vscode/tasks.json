@@ -7,6 +7,7 @@
             "command": "cl",
             "args": [
                 "/EHsc",
+                "/nologo",
 
                 "src\\main.cpp",
 
@@ -15,10 +16,12 @@
                 "src\\Input\\Input.cpp",
 
                 "src\\Graphics\\Renderer.cpp",
+                "src\\Graphics\\Animation.cpp",
+                "src\\Graphics\\Camera.cpp",
                 "src\\Graphics\\Hero.cpp",
                 "src\\Graphics\\TileMap.cpp",
-                "src\\Graphics\\Camera.cpp",
-                "src\\Graphics\\Animation.cpp",
+                
+                "src\\Game\\Player.cpp",
 
                 "/Fe:build\\AzureEngine.exe",
 

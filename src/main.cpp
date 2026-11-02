@@ -7,6 +7,7 @@
 #include <cstdio>
 
 #include "Core/Timer.h"
+
 #include "Input/Input.h"
 
 #include "Graphics/Animation.h"
@@ -14,6 +15,8 @@
 #include "Graphics/Hero.h"
 #include "Graphics/Renderer.h"
 #include "Graphics/TileMap.h"
+
+#include "Game/Player.h"
 
 //-----------------------------------------------------
 // Constantes
@@ -23,15 +26,13 @@ constexpr int SCREEN_WIDTH = 320;
 constexpr int SCREEN_HEIGHT = 200;
 
 constexpr int HERO_SIZE = 8;
+constexpr float PLAYER_SPEED = 200.0f;
 
 //-----------------------------------------------------
 // Variables globales
 //-----------------------------------------------------
 
 static bool g_Running = true;
-
-static float g_PlayerX = 100.0f;
-static float g_PlayerY = 100.0f;
 
 //-----------------------------------------------------
 // Procédure de fenêtre
@@ -52,6 +53,17 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPara
 }
 
 //-----------------------------------------------------
+// Test collision joueur
+//-----------------------------------------------------
+
+static bool CanMoveTo(float x, float y) {
+    return !IsTileSolid(static_cast<int>(x), static_cast<int>(y)) &&
+           !IsTileSolid(static_cast<int>(x) + HERO_SIZE - 1, static_cast<int>(y)) &&
+           !IsTileSolid(static_cast<int>(x), static_cast<int>(y) + HERO_SIZE - 1) &&
+           !IsTileSolid(static_cast<int>(x) + HERO_SIZE - 1, static_cast<int>(y) + HERO_SIZE - 1);
+}
+
+//-----------------------------------------------------
 // Point d'entrée
 //-----------------------------------------------------
 
@@ -68,7 +80,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
     windowClass.lpszClassName = "AzureEngineWindow";
 
     if (!RegisterClassA(&windowClass)) {
-        MessageBoxA(nullptr, "Impossible d'enregistrer la classe de fenêtre.", "Erreur", MB_OK | MB_ICONERROR);
+        MessageBoxA(nullptr, "Impossible d'enregistrer la classe.", "Erreur", MB_OK | MB_ICONERROR);
         return -1;
     }
 
@@ -87,7 +99,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
     UpdateWindow(window);
 
     //-------------------------------------------------
-    // Initialisation
+    // Initialisation systèmes
     //-------------------------------------------------
 
     Timer timer;
@@ -137,10 +149,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
         // Déplacement du joueur
         //---------------------------------------------
 
-        constexpr float PLAYER_SPEED = 200.0f;
-
-        float newX = g_PlayerX;
-        float newY = g_PlayerY;
+        float newX = Player.X;
+        float newY = Player.Y;
 
         if (IsKeyDown(VK_LEFT))
             newX -= PLAYER_SPEED * deltaTime;
@@ -155,25 +165,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
             newY += PLAYER_SPEED * deltaTime;
 
         //---------------------------------------------
-        // Collision TileMap
+        // Collision X
         //---------------------------------------------
 
-        const bool collisionX = IsTileSolid(static_cast<int>(newX), static_cast<int>(g_PlayerY)) ||
-                               IsTileSolid(static_cast<int>(newX) + HERO_SIZE - 1, static_cast<int>(g_PlayerY)) ||
-                               IsTileSolid(static_cast<int>(newX), static_cast<int>(g_PlayerY) + HERO_SIZE - 1) ||
-                               IsTileSolid(static_cast<int>(newX) + HERO_SIZE - 1, static_cast<int>(g_PlayerY) + HERO_SIZE - 1);
-
-        if (!collisionX) {
-            g_PlayerX = newX;
+        if (CanMoveTo(newX, Player.Y)) {
+            Player.X = newX;
         }
 
-        const bool collisionY = IsTileSolid(static_cast<int>(g_PlayerX), static_cast<int>(newY)) ||
-                               IsTileSolid(static_cast<int>(g_PlayerX) + HERO_SIZE - 1, static_cast<int>(newY)) ||
-                               IsTileSolid(static_cast<int>(g_PlayerX), static_cast<int>(newY) + HERO_SIZE - 1) ||
-                               IsTileSolid(static_cast<int>(g_PlayerX) + HERO_SIZE - 1, static_cast<int>(newY) + HERO_SIZE - 1);
+        //---------------------------------------------
+        // Collision Y
+        //---------------------------------------------
 
-        if (!collisionY) {
-            g_PlayerY = newY;
+        if (CanMoveTo(Player.X, newY)) {
+            Player.Y = newY;
         }
 
         //---------------------------------------------
@@ -186,7 +190,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
         // Caméra
         //---------------------------------------------
 
-        UpdateCamera(static_cast<int>(g_PlayerX), static_cast<int>(g_PlayerY), SCREEN_WIDTH, SCREEN_HEIGHT);
+        UpdateCamera(static_cast<int>(Player.X), static_cast<int>(Player.Y), SCREEN_WIDTH, SCREEN_HEIGHT);
 
         //---------------------------------------------
         // Rendu
@@ -196,7 +200,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
 
         DrawTileMap();
 
-        DrawSprite(static_cast<int>(g_PlayerX), static_cast<int>(g_PlayerY), GetAnimationFrame(HeroAnimation));
+        DrawSprite(static_cast<int>(Player.X), static_cast<int>(Player.Y), GetAnimationFrame(HeroAnimation));
 
         RendererPresent(window);
 
@@ -211,7 +215,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
         SetWindowTextA(window, title);
 
         //---------------------------------------------
-        // Limite CPU
+        // Réduction charge CPU
         //---------------------------------------------
 
         Sleep(1);
