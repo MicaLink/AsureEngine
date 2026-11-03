@@ -19,26 +19,22 @@
 
 #include "World/TileMap.h"
 
-#include "Game/Player.h"
-#include "Game/Enemy.h"
 #include "Game/Entity.h"
+#include "Game/EntityManager.h"
+#include "Game/Enemy.h"
+#include "Game/Player.h"
 
 //-----------------------------------------------------
-// Constantes
+// Gameplay
 //-----------------------------------------------------
 
-constexpr int HERO_SIZE = 8;
 constexpr float PLAYER_SPEED = 200.0f;
 
-//-----------------------------------------------------
-// Variables globales
-//-----------------------------------------------------
-
 static bool g_Running = true;
-static float damageTimer = 0.0f;
+static float g_DamageTimer = 0.0f;
 
 //-----------------------------------------------------
-// Procédure de fenêtre
+// Fenêtre
 //-----------------------------------------------------
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
@@ -60,22 +56,99 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPara
 //-----------------------------------------------------
 
 static bool CanMoveTo(float x, float y) {
+    constexpr int SIZE = 8;
+
     return !IsTileSolid(static_cast<int>(x), static_cast<int>(y)) &&
-           !IsTileSolid(static_cast<int>(x) + HERO_SIZE - 1, static_cast<int>(y)) &&
-           !IsTileSolid(static_cast<int>(x), static_cast<int>(y) + HERO_SIZE - 1) &&
-           !IsTileSolid(static_cast<int>(x) + HERO_SIZE - 1, static_cast<int>(y) + HERO_SIZE - 1);
+           !IsTileSolid(static_cast<int>(x) + SIZE - 1, static_cast<int>(y)) &&
+           !IsTileSolid(static_cast<int>(x), static_cast<int>(y) + SIZE - 1) &&
+           !IsTileSolid(static_cast<int>(x) + SIZE - 1, static_cast<int>(y) + SIZE - 1);
 }
 
 //-----------------------------------------------------
-// Entrée programme
+// Joueur
+//-----------------------------------------------------
+
+static void UpdatePlayer(float deltaTime) {
+    float newX = Player.X;
+    float newY = Player.Y;
+
+    if (IsKeyDown(VK_LEFT))
+        newX -= PLAYER_SPEED * deltaTime;
+
+    if (IsKeyDown(VK_RIGHT))
+        newX += PLAYER_SPEED * deltaTime;
+
+    if (IsKeyDown(VK_UP))
+        newY -= PLAYER_SPEED * deltaTime;
+
+    if (IsKeyDown(VK_DOWN))
+        newY += PLAYER_SPEED * deltaTime;
+
+    if (CanMoveTo(newX, Player.Y))
+        Player.X = newX;
+    if (CanMoveTo(Player.X, newY))
+        Player.Y = newY;
+}
+
+//-----------------------------------------------------
+// Ennemis
+//-----------------------------------------------------
+
+static bool UpdateEnemyCollision(float deltaTime) {
+    bool collision = false;
+
+    g_DamageTimer += deltaTime;
+
+    for (int i = 0; i < g_EntityCount; i++) {
+        if (Intersects(Player, g_Entities[i])) {
+            collision = true;
+
+            if (g_DamageTimer >= 0.25f) {
+                Player.Health--;
+                g_DamageTimer = 0.0f;
+            }
+        }
+    }
+    return collision;
+}
+
+//-----------------------------------------------------
+// Entités de test
+//-----------------------------------------------------
+
+static void CreateTestEntities() {
+    Entity* enemy;
+    enemy = CreateEntity();
+
+    if (enemy) {
+        enemy->X = 200.0f;
+        enemy->Y = 200.0f;
+        enemy->Width = 8;
+        enemy->Height = 8;
+    }
+    enemy = CreateEntity();
+    
+    if (enemy) {
+        enemy->X = 260.0f;
+        enemy->Y = 180.0f;
+        enemy->Width = 8;
+        enemy->Height = 8;
+    }
+    enemy = CreateEntity();
+    
+    if (enemy) {
+        enemy->X = 320.0f;
+        enemy->Y = 240.0f;
+        enemy->Width = 8;
+        enemy->Height = 8;
+    }
+}
+
+//-----------------------------------------------------
+// WinMain
 //-----------------------------------------------------
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
-
-    //-------------------------------------------------
-    // Classe de fenêtre
-    //-------------------------------------------------
-
     WNDCLASSA windowClass = {};
 
     windowClass.lpfnWndProc = WindowProc;
@@ -85,17 +158,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
     if (!RegisterClassA(&windowClass))
         return -1;
 
-    //-------------------------------------------------
-    // Création de la fenêtre
-    //-------------------------------------------------
-
     HWND window = CreateWindowExA(0, "AzureEngineWindow", "Azure Engine", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, WINDOW_WIDTH, WINDOW_HEIGHT, nullptr, nullptr, hInstance, nullptr);
 
     if (!window)
         return -1;
 
     ShowWindow(window, nCmdShow);
-    UpdateWindow(window);
 
     //-------------------------------------------------
     // Initialisation
@@ -108,6 +176,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
     InputInitialize();
     RendererInitialize();
     InitializeTileMap();
+    ClearEntities();
+    CreateTestEntities();
 
     //-------------------------------------------------
     // Boucle principale
@@ -138,71 +208,22 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
         const float deltaTime = timer.GetDeltaTime();
         
         //---------------------------------------------
-        // Entrées
+        // Update
         //---------------------------------------------
         
         InputUpdate();
-
-        //---------------------------------------------
-        // Joueur
-        //---------------------------------------------
-        
-        float newX = Player.X;
-        float newY = Player.Y;
-
-        if (IsKeyDown(VK_LEFT))
-            newX -= PLAYER_SPEED * deltaTime;
-
-        if (IsKeyDown(VK_RIGHT))
-            newX += PLAYER_SPEED * deltaTime;
-
-        if (IsKeyDown(VK_UP))
-            newY -= PLAYER_SPEED * deltaTime;
-
-        if (IsKeyDown(VK_DOWN))
-            newY += PLAYER_SPEED * deltaTime;
-        if (CanMoveTo(newX, Player.Y))
-            Player.X = newX;
-        if (CanMoveTo(Player.X, newY))
-            Player.Y = newY;
-
-        //---------------------------------------------
-        // Enemy
-        //---------------------------------------------
-        
+        UpdatePlayer(deltaTime);
         UpdateEnemy(deltaTime);
-
-        //---------------------------------------------
-        // Animation
-        //---------------------------------------------
-
         UpdateAnimation(HeroAnimation, deltaTime);
-
-        //---------------------------------------------
-        // Caméra
-        //---------------------------------------------
-
         UpdateCamera(static_cast<int>(Player.X), static_cast<int>(Player.Y), SCREEN_WIDTH, SCREEN_HEIGHT);
 
+        const bool collisionEnemy = UpdateEnemyCollision(deltaTime);
+
         //---------------------------------------------
-        // Collision Enemy
+        // Game Over
         //---------------------------------------------
-
-        bool collisionEnemy = Intersects(Player, Enemy);
-
-        damageTimer += deltaTime;
-
-        if (collisionEnemy) {
-            if (damageTimer >= 0.25f) {
-                Player.Health--;
-
-                damageTimer = 0.0f;
-            }
-        }
 
         if (Player.Health <= 0) {
-            Player.Health = 0;
-
             MessageBoxA(nullptr, "Game Over", "Azure Engine", MB_OK);
 
             g_Running = false;
@@ -216,8 +237,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
 
         DrawTileMap();
 
-        DrawWorldRect(static_cast<int>(Enemy.X), static_cast<int>(Enemy.Y), Enemy.Width, Enemy.Height, collisionEnemy ? COLOR_GREEN : COLOR_RED);
-
+        for (int i = 0; i < g_EntityCount; i++) {
+            DrawWorldRect(static_cast<int>(g_Entities[i].X), static_cast<int>(g_Entities[i].Y), g_Entities[i].Width, g_Entities[i].Height, COLOR_RED);
+        }
+        
         DrawSprite(static_cast<int>(Player.X), static_cast<int>(Player.Y), GetAnimationFrame(HeroAnimation));
 
         RendererPresent(window);
@@ -228,13 +251,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
 
         char title[256];
         
-        sprintf_s(title, "HP:%d | FPS:%.0f", Player.Health, timer.GetFPS());
+        sprintf_s(title, "HP:%d | Enemies:%d | FPS:%.0f", Player.Health, g_EntityCount, timer.GetFPS());
 
         SetWindowTextA(window, title);
-
-        //---------------------------------------------
-        // CPU
-        //---------------------------------------------
 
         Sleep(1);
     }
