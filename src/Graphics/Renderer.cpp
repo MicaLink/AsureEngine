@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "../Core/Colors.h"
 #include "Camera.h"
 
 constexpr int PIXEL_COUNT = SCREEN_WIDTH * SCREEN_HEIGHT;
@@ -8,6 +9,10 @@ namespace {
 
     BITMAPINFO g_BitmapInfo = {};
 }
+
+//-----------------------------------------------------
+// Initialisation
+//-----------------------------------------------------
 
 void RendererInitialize() {
     ZeroMemory(&g_BitmapInfo, sizeof(g_BitmapInfo));
@@ -20,12 +25,19 @@ void RendererInitialize() {
     g_BitmapInfo.bmiHeader.biCompression = BI_RGB;
 }
 
-void Clear(unsigned int color) {
+//-----------------------------------------------------
+// Effacement framebuffer
+//-----------------------------------------------------
+
+void Clear(uint32_t color) {
     for (int i = 0; i < PIXEL_COUNT; i++) {
         g_FrameBuffer[i] = color;
     }
-    
 }
+
+//-----------------------------------------------------
+// Pixel
+//-----------------------------------------------------
 
 void DrawPixel(int x, int y, uint32_t color) {
     if (x < 0 || x >= SCREEN_WIDTH)
@@ -37,6 +49,10 @@ void DrawPixel(int x, int y, uint32_t color) {
     g_FrameBuffer[y * SCREEN_WIDTH + x] = color;
 }
 
+//-----------------------------------------------------
+// Rectangle écran
+//-----------------------------------------------------
+
 void DrawRect(int x, int y, int width, int height, uint32_t color) {
     for (int py = 0; py < height; py++) {
         for (int px = 0; px < width; px++) {
@@ -44,6 +60,18 @@ void DrawRect(int x, int y, int width, int height, uint32_t color) {
         }
     }
 }
+
+//-----------------------------------------------------
+// Rectangle monde
+//-----------------------------------------------------
+
+void DrawWorldRect(int x, int y, int width, int height, uint32_t color) {
+    DrawRect(x - CameraX, y - CameraY, width, height, color);
+}
+
+//-----------------------------------------------------
+// Sprite
+//-----------------------------------------------------
 
 void DrawSprite(int x, int y, const Sprite& sprite) {
     x -= CameraX;
@@ -53,14 +81,17 @@ void DrawSprite(int x, int y, const Sprite& sprite) {
         for (int sx = 0; sx < sprite.Width; sx++) {
             const uint32_t color = sprite.Pixels[sy * sprite.Width + sx];
 
-            if (color == TRANSPARENT_COLOR) {
+            if (color == COLOR_TRANSPARENT)
                 continue;
-            }
 
             DrawPixel(x + sx, y + sy, color);
         }
     }
 }
+
+//-----------------------------------------------------
+// Présentation framebuffer
+//-----------------------------------------------------
 
 void RendererPresent(HWND window) {
     HDC dc = GetDC(window);

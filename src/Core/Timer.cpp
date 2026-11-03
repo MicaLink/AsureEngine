@@ -11,9 +11,6 @@ void Timer::Initialize() {
 
     m_Frequency = frequency.QuadPart;
     m_LastCounter = counter.QuadPart;
-
-    m_DeltaTime = 0.0f;
-    m_FPS = 0.0f;
 }
 
 void Timer::Update() {

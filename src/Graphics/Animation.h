@@ -3,15 +3,15 @@
 #include "Sprite.h"
 
 struct Animation {
-    const Sprite* Frames;
+    const Sprite* Frames = nullptr;
 
-    int FrameCount;
+    int FrameCount = 0;
 
-    float FrameDuration;
+    float FrameDuration = 0.0f;
 
-    float Timer;
+    float Timer = 0.0f;
 
-    int CurrentFrame;
+    int CurrentFrame = 0;
 };
 
 void UpdateAnimation(Animation& animation, float deltaTime);

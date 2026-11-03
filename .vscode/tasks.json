@@ -19,11 +19,15 @@
                 "src\\Graphics\\Animation.cpp",
                 "src\\Graphics\\Camera.cpp",
                 "src\\Graphics\\Hero.cpp",
-                "src\\Graphics\\TileMap.cpp",
+
+                "src\\World\\TileMap.cpp",
                 
                 "src\\Game\\Player.cpp",
                 "src\\Game\\EntityManager.cpp",
                 "src\\Game\\Enemy.cpp",
+                "src\\Game\\Entity.cpp",
+                
+
 
                 "/Fe:build\\AzureEngine.exe",
 

@@ -6,6 +6,7 @@
 #include <Windows.h>
 #include <cstdio>
 
+#include "Core/Colors.h"
 #include "Core/Timer.h"
 
 #include "Input/Input.h"
@@ -14,9 +15,13 @@
 #include "Graphics/Camera.h"
 #include "Graphics/Hero.h"
 #include "Graphics/Renderer.h"
-#include "Graphics/TileMap.h"
+#include "Graphics/RendererConfig.h"
+
+#include "World/TileMap.h"
 
 #include "Game/Player.h"
+#include "Game/Enemy.h"
+#include "Game/Entity.h"
 
 //-----------------------------------------------------
 // Constantes
@@ -50,7 +55,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPara
 }
 
 //-----------------------------------------------------
-// Test collision joueur
+// Collision TileMap
 //-----------------------------------------------------
 
 static bool CanMoveTo(float x, float y) {
@@ -61,7 +66,7 @@ static bool CanMoveTo(float x, float y) {
 }
 
 //-----------------------------------------------------
-// Point d'entrée
+// Entrée programme
 //-----------------------------------------------------
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
@@ -76,27 +81,23 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
     windowClass.hInstance = hInstance;
     windowClass.lpszClassName = "AzureEngineWindow";
 
-    if (!RegisterClassA(&windowClass)) {
-        MessageBoxA(nullptr, "Impossible d'enregistrer la classe.", "Erreur", MB_OK | MB_ICONERROR);
+    if (!RegisterClassA(&windowClass))
         return -1;
-    }
 
     //-------------------------------------------------
     // Création de la fenêtre
     //-------------------------------------------------
 
-    HWND window = CreateWindowExA(0, "AzureEngineWindow", "Azure Engine", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 1280, 720, nullptr, nullptr, hInstance, nullptr);
+    HWND window = CreateWindowExA(0, "AzureEngineWindow", "Azure Engine", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, WINDOW_WIDTH, WINDOW_HEIGHT, nullptr, nullptr, hInstance, nullptr);
 
-    if (!window) {
-        MessageBoxA(nullptr, "Impossible de créer la fenêtre.", "Erreur", MB_OK | MB_ICONERROR);
+    if (!window)
         return -1;
-    }
 
     ShowWindow(window, nCmdShow);
     UpdateWindow(window);
 
     //-------------------------------------------------
-    // Initialisation systèmes
+    // Initialisation
     //-------------------------------------------------
 
     Timer timer;
@@ -120,9 +121,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
         //---------------------------------------------
 
         while (PeekMessage(&message, nullptr, 0, 0, PM_REMOVE)) { 
-            if (message.message == WM_QUIT) {
+            if (message.message == WM_QUIT) 
                 g_Running = false;
-            }
             
             TranslateMessage(&message);
             DispatchMessage(&message);
@@ -142,11 +142,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
         
         InputUpdate();
 
-
         //---------------------------------------------
-        // Déplacement du joueur
+        // Joueur
         //---------------------------------------------
-
+        
         float newX = Player.X;
         float newY = Player.Y;
 
@@ -161,22 +160,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
 
         if (IsKeyDown(VK_DOWN))
             newY += PLAYER_SPEED * deltaTime;
-
-        //---------------------------------------------
-        // Collision X
-        //---------------------------------------------
-
-        if (CanMoveTo(newX, Player.Y)) {
+        if (CanMoveTo(newX, Player.Y))
             Player.X = newX;
-        }
-
-        //---------------------------------------------
-        // Collision Y
-        //---------------------------------------------
-
-        if (CanMoveTo(Player.X, newY)) {
+        if (CanMoveTo(Player.X, newY))
             Player.Y = newY;
-        }
+
+        //---------------------------------------------
+        // Enemy
+        //---------------------------------------------
+        
+        UpdateEnemy(deltaTime);
 
         //---------------------------------------------
         // Animation
@@ -191,29 +184,40 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
         UpdateCamera(static_cast<int>(Player.X), static_cast<int>(Player.Y), SCREEN_WIDTH, SCREEN_HEIGHT);
 
         //---------------------------------------------
+        // Collision Enemy
+        //---------------------------------------------
+
+        bool collisionEnemy = Intersects(Player, Enemy);
+
+        //---------------------------------------------
         // Rendu
         //---------------------------------------------
 
-        Clear(0x00101010);
+        Clear(COLOR_BLACK);
 
         DrawTileMap();
+
+        DrawWorldRect(static_cast<int>(Enemy.X), static_cast<int>(Enemy.Y), Enemy.Width, Enemy.Height, collisionEnemy ? COLOR_GREEN : COLOR_RED);
 
         DrawSprite(static_cast<int>(Player.X), static_cast<int>(Player.Y), GetAnimationFrame(HeroAnimation));
 
         RendererPresent(window);
 
         //---------------------------------------------
-        // FPS
+        // Titre fenêtre
         //---------------------------------------------
 
         char title[256];
-
-        sprintf_s(title, "Azure Engine | FPS : %.0f", timer.GetFPS());
+        
+        if (collisionEnemy)
+            sprintf_s(title, "COLLISION ! | FPS : %.0f", timer.GetFPS());
+        else
+            sprintf_s(title, "Azure Engine | FPS : %.0f", timer.GetFPS());
 
         SetWindowTextA(window, title);
 
         //---------------------------------------------
-        // Réduction charge CPU
+        // CPU
         //---------------------------------------------
 
         Sleep(1);
