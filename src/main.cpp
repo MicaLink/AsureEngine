@@ -189,6 +189,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
 
         bool collisionEnemy = Intersects(Player, Enemy);
 
+        if (Intersects(Player, Enemy))
+            Player.Health--;
+
         //---------------------------------------------
         // Rendu
         //---------------------------------------------
@@ -209,10 +212,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
 
         char title[256];
         
-        if (collisionEnemy)
-            sprintf_s(title, "COLLISION ! | FPS : %.0f", timer.GetFPS());
-        else
-            sprintf_s(title, "Azure Engine | FPS : %.0f", timer.GetFPS());
+        sprintf_s(title, "HP : %d | FPS : %.0f", Player.Health, timer.GetFPS());
 
         SetWindowTextA(window, title);
 
