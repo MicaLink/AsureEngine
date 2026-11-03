@@ -35,6 +35,7 @@ constexpr float PLAYER_SPEED = 200.0f;
 //-----------------------------------------------------
 
 static bool g_Running = true;
+static float damageTimer = 0.0f;
 
 //-----------------------------------------------------
 // Procédure de fenêtre
@@ -189,8 +190,23 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
 
         bool collisionEnemy = Intersects(Player, Enemy);
 
-        if (Intersects(Player, Enemy))
-            Player.Health--;
+        damageTimer += deltaTime;
+
+        if (collisionEnemy) {
+            if (damageTimer >= 0.25f) {
+                Player.Health--;
+
+                damageTimer = 0.0f;
+            }
+        }
+
+        if (Player.Health <= 0) {
+            Player.Health = 0;
+
+            MessageBoxA(nullptr, "Game Over", "Azure Engine", MB_OK);
+
+            g_Running = false;
+        }
 
         //---------------------------------------------
         // Rendu
@@ -212,7 +228,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
 
         char title[256];
         
-        sprintf_s(title, "HP : %d | FPS : %.0f", Player.Health, timer.GetFPS());
+        sprintf_s(title, "HP:%d | FPS:%.0f", Player.Health, timer.GetFPS());
 
         SetWindowTextA(window, title);
 
