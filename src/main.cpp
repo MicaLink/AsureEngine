@@ -29,14 +29,20 @@
 //-----------------------------------------------------
 
 constexpr float PLAYER_SPEED = 200.0f;
+
 constexpr int PLAYER_SIZE = 8;
+constexpr int TARGET_KILL = 3;
 
 //-----------------------------------------------------
 // Variables globales
 //-----------------------------------------------------
 
 static bool g_Running = true;
+
 static float g_DamageTimer = 0.0f;
+static float g_AttackTimer = 0.0f;
+
+static int g_KillCount = 0;
 
 //-----------------------------------------------------
 // Fenêtre
@@ -85,8 +91,8 @@ static void CreateTestEntities() {
     enemy = CreateEntity();
     
     if (enemy) {
-        enemy->X = 350.0f;
-        enemy->Y = 220.0f;
+        enemy->X = 300.0f;
+        enemy->Y = 250.0f;
         enemy->Width = 8;
         enemy->Height = 8;
         enemy->Health = 100;
@@ -94,8 +100,8 @@ static void CreateTestEntities() {
     enemy = CreateEntity();
     
     if (enemy) {
-        enemy->X = 500.0f;
-        enemy->Y = 320.0f;
+        enemy->X = 400.0f;
+        enemy->Y = 350.0f;
         enemy->Width = 8;
         enemy->Height = 8;
         enemy->Health = 100;
@@ -118,18 +124,6 @@ static void UpdatePlayer(float deltaTime) {
         newY -= PLAYER_SPEED * deltaTime;
     if (IsKeyDown(VK_DOWN))
         newY += PLAYER_SPEED * deltaTime;
-    
-    if (IsKeyDown(VK_SPACE)) {
-        for (int i = 0; i < g_EntityCount; i++) {
-            Entity& enemy = g_Entities[i];
-            if (!enemy.Active)
-                continue;
-            if (Intersects(Player, enemy))
-                enemy.Health -= 10;
-            if (enemy.Health <= 0)
-                enemy.Active = false;
-        }
-    }
 
     if (CanMoveTo(newX, Player.Y))
         Player.X = newX;
@@ -144,16 +138,44 @@ static void UpdatePlayer(float deltaTime) {
 static void UpdateEnemyDamage(float deltaTime) {
     g_DamageTimer += deltaTime;
 
+    if (g_DamageTimer < 0.25f) 
+        return;
+
     for (int i = 0; i < g_EntityCount; i++) {
         Entity& enemy = g_Entities[i];
 
         if (!enemy.Active)
             continue;
-        if (!Intersects(Player, enemy))
-            continue;
-        if (g_DamageTimer >= 0.25f) {
+        if (Intersects(Player, enemy)) {
             Player.Health--;
             g_DamageTimer = 0.0f;
+            break;
+        }
+    }
+}
+
+//-----------------------------------------------------
+// Attaque joueur
+//-----------------------------------------------------
+
+static void UpdatePlayerAttack(float deltaTime) {
+    g_AttackTimer += deltaTime;
+
+    if (!IsKeyDown(VK_SPACE))
+        return;
+    if (g_AttackTimer < 0.30f)
+        return;
+    g_AttackTimer = 0.0f;
+    
+    for (int i = 0; i < g_EntityCount; i++) {
+        Entity& enemy = g_Entities[i];
+        if (!enemy.Active)
+            continue;
+        if (Intersects(Player, enemy))
+            enemy.Health -= 10;
+        if (enemy.Health <= 0) {
+            enemy.Active = false;
+            g_KillCount++;
         }
     }
 }
@@ -164,7 +186,7 @@ static void UpdateEnemyDamage(float deltaTime) {
 
 static void DrawEnemies() {
     for (int i = 0; i < g_EntityCount; i++) {
-        Entity& enemy = g_Entities[i];
+        const Entity& enemy = g_Entities[i];
         if (!enemy.Active)
             continue;
 
@@ -221,20 +243,31 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
             DispatchMessage(&message);
         }
 
+        timer.Update();
+
+        const float deltaTime = timer.GetDeltaTime();
         //---------------------------------------------
         // Update
         //---------------------------------------------
 
-        timer.Update();
-
-        const float deltaTime = timer.GetDeltaTime();
 
         InputUpdate();
         UpdatePlayer(deltaTime);
         UpdateEnemies(deltaTime);
+        UpdatePlayerAttack(deltaTime);
         UpdateEnemyDamage(deltaTime);
         UpdateAnimation(HeroAnimation, deltaTime);
         UpdateCamera(static_cast<int>(Player.X), static_cast<int>(Player.Y), SCREEN_WIDTH, SCREEN_HEIGHT);
+
+        //---------------------------------------------
+        // Victoire
+        //---------------------------------------------
+
+        if (g_KillCount >= TARGET_KILL) {
+            MessageBoxA(nullptr, "Victoire!", "Azure Engine", MB_OK);
+
+            g_Running = false;
+        }
 
         //---------------------------------------------
         // Game Over
@@ -266,7 +299,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
 
         char title[256];
         
-        sprintf_s(title, "HP:%d | Enemies:%d | FPS:%.0f", Player.Health, g_EntityCount, timer.GetFPS());
+        sprintf_s(title, "HP:%d | Kills:%d/%d | Enemies:%d | FPS:%.0f ", Player.Health, g_KillCount, TARGET_KILL, g_EntityCount, timer.GetFPS());
 
         SetWindowTextA(window, title);
 
