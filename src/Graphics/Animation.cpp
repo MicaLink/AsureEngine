@@ -3,7 +3,7 @@
 void UpdateAnimation(Animation& animation, float deltaTime){
     animation.Timer += deltaTime;
 
-    if(animation.Timer >= animation.FrameDuration) {
+    while (animation.Timer >= animation.FrameDuration) {
         animation.Timer -= animation.FrameDuration;
         animation.CurrentFrame++;
 

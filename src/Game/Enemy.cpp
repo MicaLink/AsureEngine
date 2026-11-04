@@ -3,13 +3,18 @@
 #include "EntityManager.h"
 #include "Player.h"
 
-constexpr float ENEMY_SPEED = 75.0f;
+namespace {
+    constexpr float ENEMY_SPEED = 75.0f;
+}
 
 void UpdateEnemies(float deltaTime) {
     for (int i = 0; i < g_EntityCount; i++) {
         Entity& enemy = g_Entities[i];
         if (!enemy.Active)
             continue;
+        if (enemy.Type != EntityType::Enemy)
+            continue;
+
         if (Player.X < enemy.X)
             enemy.X -= ENEMY_SPEED * deltaTime;
         if (Player.X > enemy.X)
@@ -18,6 +23,5 @@ void UpdateEnemies(float deltaTime) {
             enemy.Y -= ENEMY_SPEED * deltaTime;
         if (Player.Y > enemy.Y)
             enemy.Y += ENEMY_SPEED * deltaTime;
-        
     }
 }

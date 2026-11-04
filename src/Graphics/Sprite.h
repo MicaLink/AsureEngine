@@ -2,11 +2,9 @@
 
 #include <cstdint>
 
-#include "../Core/Colors.h"
-
 struct Sprite {
-    int Width;
-    int Height;
+    int Width = 0;
+    int Height = 0;
 
     const uint32_t* Pixels;
 };

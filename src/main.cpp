@@ -28,11 +28,15 @@
 // Constantes Gameplay
 //-----------------------------------------------------
 
-constexpr float PLAYER_SPEED = 200.0f;
+namespace {
+    constexpr float PLAYER_SPEED = 200.0f;
 
-constexpr int PLAYER_SIZE = 8;
-constexpr int TARGET_KILL = 3;
+    constexpr int PLAYER_SIZE = 8;
+    constexpr int TARGET_KILL = 3;
 
+    constexpr float DAMAGE_COOLDOWN = 0.25f;
+    constexpr float ATTACK_COOLDOWN = 0.30f;
+}
 //-----------------------------------------------------
 // Variables globales
 //-----------------------------------------------------
@@ -63,7 +67,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPara
 }
 
 //-----------------------------------------------------
-// Collision TileMap
+// Collision carte
 //-----------------------------------------------------
 
 static bool CanMoveTo(float x, float y) {
@@ -74,11 +78,11 @@ static bool CanMoveTo(float x, float y) {
 }
 
 //-----------------------------------------------------
-// Initialisation ennemis
+// Création entités de test
 //-----------------------------------------------------
 
 static void CreateTestEntities() {
-    Entity* enemy;
+    Entity* enemy = nullptr;
     enemy = CreateEntity();
 
     if (enemy) {
@@ -87,6 +91,7 @@ static void CreateTestEntities() {
         enemy->Width = 8;
         enemy->Height = 8;
         enemy->Health = 100;
+        enemy->Type = EntityType::Enemy;
     }
     enemy = CreateEntity();
     
@@ -96,6 +101,7 @@ static void CreateTestEntities() {
         enemy->Width = 8;
         enemy->Height = 8;
         enemy->Health = 100;
+        enemy->Type = EntityType::Enemy;
     }
     enemy = CreateEntity();
     
@@ -105,11 +111,12 @@ static void CreateTestEntities() {
         enemy->Width = 8;
         enemy->Height = 8;
         enemy->Health = 100;
+        enemy->Type = EntityType::Enemy;
     }
 }
 
 //-----------------------------------------------------
-// Déplacement joueur
+// Joueur
 //-----------------------------------------------------
 
 static void UpdatePlayer(float deltaTime) {
@@ -132,29 +139,6 @@ static void UpdatePlayer(float deltaTime) {
 }
 
 //-----------------------------------------------------
-// Dégâts ennemis
-//-----------------------------------------------------
-
-static void UpdateEnemyDamage(float deltaTime) {
-    g_DamageTimer += deltaTime;
-
-    if (g_DamageTimer < 0.25f) 
-        return;
-
-    for (int i = 0; i < g_EntityCount; i++) {
-        Entity& enemy = g_Entities[i];
-
-        if (!enemy.Active)
-            continue;
-        if (Intersects(Player, enemy)) {
-            Player.Health--;
-            g_DamageTimer = 0.0f;
-            break;
-        }
-    }
-}
-
-//-----------------------------------------------------
 // Attaque joueur
 //-----------------------------------------------------
 
@@ -163,7 +147,7 @@ static void UpdatePlayerAttack(float deltaTime) {
 
     if (!IsKeyDown(VK_SPACE))
         return;
-    if (g_AttackTimer < 0.30f)
+    if (g_AttackTimer < ATTACK_COOLDOWN)
         return;
     g_AttackTimer = 0.0f;
     
@@ -171,8 +155,13 @@ static void UpdatePlayerAttack(float deltaTime) {
         Entity& enemy = g_Entities[i];
         if (!enemy.Active)
             continue;
-        if (Intersects(Player, enemy))
-            enemy.Health -= 10;
+        if (enemy.Type != EntityType::Enemy)
+            continue;
+        if (!Intersects(Player, enemy))
+            continue;
+
+        enemy.Health -= 10;
+
         if (enemy.Health <= 0) {
             enemy.Active = false;
             g_KillCount++;
@@ -181,7 +170,32 @@ static void UpdatePlayerAttack(float deltaTime) {
 }
 
 //-----------------------------------------------------
-// Rendu ennemis
+// Dégâts ennemis
+//-----------------------------------------------------
+
+static void UpdateEnemyDamage(float deltaTime) {
+    g_DamageTimer += deltaTime;
+
+    if (g_DamageTimer < DAMAGE_COOLDOWN) 
+        return;
+
+    for (int i = 0; i < g_EntityCount; i++) {
+        const Entity& enemy = g_Entities[i];
+
+        if (!enemy.Active)
+            continue;
+        if (enemy.Type != EntityType::Enemy)
+            continue;
+        if (!Intersects(Player, enemy))
+            continue;
+        Player.Health--;
+        g_DamageTimer = 0.0f;
+        break;
+    }
+}
+
+//-----------------------------------------------------
+// Dessin ennemis
 //-----------------------------------------------------
 
 static void DrawEnemies() {
@@ -199,6 +213,11 @@ static void DrawEnemies() {
 //-----------------------------------------------------
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
+
+    //-------------------------------------------------
+    // Fenêtre
+    //-------------------------------------------------
+
     WNDCLASSA windowClass = {};
 
     windowClass.lpfnWndProc = WindowProc;
@@ -243,13 +262,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
             DispatchMessage(&message);
         }
 
-        timer.Update();
-
-        const float deltaTime = timer.GetDeltaTime();
         //---------------------------------------------
         // Update
         //---------------------------------------------
 
+        timer.Update();
+
+        const float deltaTime = timer.GetDeltaTime();
 
         InputUpdate();
         UpdatePlayer(deltaTime);
@@ -260,18 +279,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
         UpdateCamera(static_cast<int>(Player.X), static_cast<int>(Player.Y), SCREEN_WIDTH, SCREEN_HEIGHT);
 
         //---------------------------------------------
-        // Victoire
+        // Conditions de fin
         //---------------------------------------------
 
         if (g_KillCount >= TARGET_KILL) {
-            MessageBoxA(nullptr, "Victoire!", "Azure Engine", MB_OK);
+            MessageBoxA(nullptr, "Victoire !", "Azure Engine", MB_OK);
 
             g_Running = false;
         }
-
-        //---------------------------------------------
-        // Game Over
-        //---------------------------------------------
 
         if (Player.Health <= 0) {
             MessageBoxA(nullptr, "Game Over", "Azure Engine", MB_OK);
@@ -294,7 +309,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
         RendererPresent(window);
 
         //---------------------------------------------
-        // Infos
+        // Titre
         //---------------------------------------------
 
         char title[256];

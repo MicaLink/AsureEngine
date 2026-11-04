@@ -9,6 +9,8 @@
                 "/EHsc",
                 "/nologo",
 
+                "/Fobuild\\obj\\",
+
                 "src\\main.cpp",
 
                 "src\\Core\\Timer.cpp",
