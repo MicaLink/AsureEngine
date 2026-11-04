@@ -118,6 +118,18 @@ static void UpdatePlayer(float deltaTime) {
         newY -= PLAYER_SPEED * deltaTime;
     if (IsKeyDown(VK_DOWN))
         newY += PLAYER_SPEED * deltaTime;
+    
+    if (IsKeyDown(VK_SPACE)) {
+        for (int i = 0; i < g_EntityCount; i++) {
+            Entity& enemy = g_Entities[i];
+            if (!enemy.Active)
+                continue;
+            if (Intersects(Player, enemy))
+                enemy.Health -= 10;
+            if (enemy.Health <= 0)
+                enemy.Active = false;
+        }
+    }
 
     if (CanMoveTo(newX, Player.Y))
         Player.X = newX;
