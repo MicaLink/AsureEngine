@@ -2,6 +2,4 @@
 
 #include "Entity.h"
 
-extern Entity Enemy;
-
-void UpdateEnemy(float deltaTime);
+void UpdateEnemies(float deltaTime);

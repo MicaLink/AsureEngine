@@ -25,10 +25,15 @@
 #include "Game/Player.h"
 
 //-----------------------------------------------------
-// Gameplay
+// Constantes Gameplay
 //-----------------------------------------------------
 
 constexpr float PLAYER_SPEED = 200.0f;
+constexpr int PLAYER_SIZE = 8;
+
+//-----------------------------------------------------
+// Variables globales
+//-----------------------------------------------------
 
 static bool g_Running = true;
 static float g_DamageTimer = 0.0f;
@@ -56,64 +61,14 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPara
 //-----------------------------------------------------
 
 static bool CanMoveTo(float x, float y) {
-    constexpr int SIZE = 8;
-
     return !IsTileSolid(static_cast<int>(x), static_cast<int>(y)) &&
-           !IsTileSolid(static_cast<int>(x) + SIZE - 1, static_cast<int>(y)) &&
-           !IsTileSolid(static_cast<int>(x), static_cast<int>(y) + SIZE - 1) &&
-           !IsTileSolid(static_cast<int>(x) + SIZE - 1, static_cast<int>(y) + SIZE - 1);
+           !IsTileSolid(static_cast<int>(x) + PLAYER_SIZE - 1, static_cast<int>(y)) &&
+           !IsTileSolid(static_cast<int>(x), static_cast<int>(y) + PLAYER_SIZE - 1) &&
+           !IsTileSolid(static_cast<int>(x) + PLAYER_SIZE - 1, static_cast<int>(y) + PLAYER_SIZE - 1);
 }
 
 //-----------------------------------------------------
-// Joueur
-//-----------------------------------------------------
-
-static void UpdatePlayer(float deltaTime) {
-    float newX = Player.X;
-    float newY = Player.Y;
-
-    if (IsKeyDown(VK_LEFT))
-        newX -= PLAYER_SPEED * deltaTime;
-
-    if (IsKeyDown(VK_RIGHT))
-        newX += PLAYER_SPEED * deltaTime;
-
-    if (IsKeyDown(VK_UP))
-        newY -= PLAYER_SPEED * deltaTime;
-
-    if (IsKeyDown(VK_DOWN))
-        newY += PLAYER_SPEED * deltaTime;
-
-    if (CanMoveTo(newX, Player.Y))
-        Player.X = newX;
-    if (CanMoveTo(Player.X, newY))
-        Player.Y = newY;
-}
-
-//-----------------------------------------------------
-// Ennemis
-//-----------------------------------------------------
-
-static bool UpdateEnemyCollision(float deltaTime) {
-    bool collision = false;
-
-    g_DamageTimer += deltaTime;
-
-    for (int i = 0; i < g_EntityCount; i++) {
-        if (Intersects(Player, g_Entities[i])) {
-            collision = true;
-
-            if (g_DamageTimer >= 0.25f) {
-                Player.Health--;
-                g_DamageTimer = 0.0f;
-            }
-        }
-    }
-    return collision;
-}
-
-//-----------------------------------------------------
-// Entités de test
+// Initialisation ennemis
 //-----------------------------------------------------
 
 static void CreateTestEntities() {
@@ -125,27 +80,88 @@ static void CreateTestEntities() {
         enemy->Y = 200.0f;
         enemy->Width = 8;
         enemy->Height = 8;
+        enemy->Health = 100;
     }
     enemy = CreateEntity();
     
     if (enemy) {
-        enemy->X = 260.0f;
-        enemy->Y = 180.0f;
+        enemy->X = 350.0f;
+        enemy->Y = 220.0f;
         enemy->Width = 8;
         enemy->Height = 8;
+        enemy->Health = 100;
     }
     enemy = CreateEntity();
     
     if (enemy) {
-        enemy->X = 320.0f;
-        enemy->Y = 240.0f;
+        enemy->X = 500.0f;
+        enemy->Y = 320.0f;
         enemy->Width = 8;
         enemy->Height = 8;
+        enemy->Health = 100;
     }
 }
 
 //-----------------------------------------------------
-// WinMain
+// Déplacement joueur
+//-----------------------------------------------------
+
+static void UpdatePlayer(float deltaTime) {
+    float newX = Player.X;
+    float newY = Player.Y;
+
+    if (IsKeyDown(VK_LEFT))
+        newX -= PLAYER_SPEED * deltaTime;
+    if (IsKeyDown(VK_RIGHT))
+        newX += PLAYER_SPEED * deltaTime;
+    if (IsKeyDown(VK_UP))
+        newY -= PLAYER_SPEED * deltaTime;
+    if (IsKeyDown(VK_DOWN))
+        newY += PLAYER_SPEED * deltaTime;
+
+    if (CanMoveTo(newX, Player.Y))
+        Player.X = newX;
+    if (CanMoveTo(Player.X, newY))
+        Player.Y = newY;
+}
+
+//-----------------------------------------------------
+// Dégâts ennemis
+//-----------------------------------------------------
+
+static void UpdateEnemyDamage(float deltaTime) {
+    g_DamageTimer += deltaTime;
+
+    for (int i = 0; i < g_EntityCount; i++) {
+        Entity& enemy = g_Entities[i];
+
+        if (!enemy.Active)
+            continue;
+        if (!Intersects(Player, enemy))
+            continue;
+        if (g_DamageTimer >= 0.25f) {
+            Player.Health--;
+            g_DamageTimer = 0.0f;
+        }
+    }
+}
+
+//-----------------------------------------------------
+// Rendu ennemis
+//-----------------------------------------------------
+
+static void DrawEnemies() {
+    for (int i = 0; i < g_EntityCount; i++) {
+        Entity& enemy = g_Entities[i];
+        if (!enemy.Active)
+            continue;
+
+        DrawWorldRect(static_cast<int>(enemy.X), static_cast<int>(enemy.Y), enemy.Width, enemy.Height, COLOR_RED);
+    }
+}
+
+//-----------------------------------------------------
+// Point d'entrée
 //-----------------------------------------------------
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
@@ -170,7 +186,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
     //-------------------------------------------------
 
     Timer timer;
-
     timer.Initialize();
 
     InputInitialize();
@@ -186,11 +201,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
     MSG message = {};
 
     while (g_Running) {
-
-        //---------------------------------------------
-        // Messages Windows
-        //---------------------------------------------
-
         while (PeekMessage(&message, nullptr, 0, 0, PM_REMOVE)) { 
             if (message.message == WM_QUIT) 
                 g_Running = false;
@@ -200,24 +210,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
         }
 
         //---------------------------------------------
-        // Temps
+        // Update
         //---------------------------------------------
 
         timer.Update();
 
         const float deltaTime = timer.GetDeltaTime();
-        
-        //---------------------------------------------
-        // Update
-        //---------------------------------------------
-        
+
         InputUpdate();
         UpdatePlayer(deltaTime);
-        UpdateEnemy(deltaTime);
+        UpdateEnemies(deltaTime);
+        UpdateEnemyDamage(deltaTime);
         UpdateAnimation(HeroAnimation, deltaTime);
         UpdateCamera(static_cast<int>(Player.X), static_cast<int>(Player.Y), SCREEN_WIDTH, SCREEN_HEIGHT);
-
-        const bool collisionEnemy = UpdateEnemyCollision(deltaTime);
 
         //---------------------------------------------
         // Game Over
@@ -237,16 +242,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow) {
 
         DrawTileMap();
 
-        for (int i = 0; i < g_EntityCount; i++) {
-            DrawWorldRect(static_cast<int>(g_Entities[i].X), static_cast<int>(g_Entities[i].Y), g_Entities[i].Width, g_Entities[i].Height, COLOR_RED);
-        }
-        
+        DrawEnemies();
+
         DrawSprite(static_cast<int>(Player.X), static_cast<int>(Player.Y), GetAnimationFrame(HeroAnimation));
 
         RendererPresent(window);
 
         //---------------------------------------------
-        // Titre fenêtre
+        // Infos
         //---------------------------------------------
 
         char title[256];
