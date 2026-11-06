@@ -1,245 +1,280 @@
-AZURE PLATFORM ROADMAP v0.1
+AZUREENGINE ROADMAP v0.0.1
 
-========================================
-AZURE PLATFORM v0.1
-FEUILLE DE ROUTE OFFICIELLE
-========================================
+==================================================
+AZUREENGINE v0.0.1
+PREMIER JALON OFFICIEL
+==================================================
 
-VISION
+VERSION :
+v0.0.1 Alpha
 
-L'objectif de la version v0.1 n'est pas de créer immédiatement un moteur complet,
-plusieurs émulateurs ou une marketplace.
+STATUT :
+Partiellement terminé
 
-L'objectif est de valider le concept fondamental :
+==================================================
+OBJECTIF
+==================================================
 
-    Azure Studio
-        +
-    Azure-8
-        +
-    Un jeu de démonstration
+Valider le noyau de Azure-8.
 
-Une fois ce premier écosystème fonctionnel, les évolutions futures pourront être
-construites sur des bases solides.
+La version v0.0.1 a pour unique objectif
+de permettre l'exécution d'instructions
+depuis une ROM binaire.
 
-========================================
-PHASE 1 - FONDATIONS
-========================================
+==================================================
+LOT A - CPU
+==================================================
 
-Objectif : préparer l'architecture du projet.
+[✓] Structure CPU
 
-À réaliser :
+Registres :
 
-[ ] Définir Azure-8 Technical Specification
-[ ] Définir l'organisation des dépôts
-[ ] Définir la structure des modules
-[ ] Définir les conventions de code
-[ ] Définir le format ROM .az8
-[ ] Définir le format assembleur .asm
+[✓] A
+[✓] B
+[✓] C
+[✓] D
 
-Livrable :
+[✓] PC
+[✓] SP
+[✓] FLAGS
 
-- Documentation v1.0
+[✓] Reset()
 
-========================================
-PHASE 2 - AZURE-8 CPU
-========================================
+Statut :
 
-Objectif : exécuter les premières instructions.
+TERMINÉ
 
-À réaliser :
+==================================================
+LOT B - MÉMOIRE
+==================================================
 
-[ ] CPU 8 bits
-[ ] Registres A B C D
-[ ] Registre PC
-[ ] Registre SP
-[ ] Registre FLAGS
-[ ] Cycle Fetch
-[ ] Cycle Decode
-[ ] Cycle Execute
+[✓] RAM 64 Ko
 
-Instructions minimum :
+[✓] Read8()
 
-[ ] MOV
-[ ] LOAD
-[ ] STORE
-[ ] ADD
-[ ] SUB
-[ ] JMP
-[ ] JZ
-[ ] JNZ
-[ ] NOP
-[ ] HLT
+[✓] Write8()
 
-Livrable :
+Statut :
 
-- Premier programme exécutable
+TERMINÉ
 
-========================================
-PHASE 3 - MÉMOIRE
-========================================
+==================================================
+LOT C - FETCH
+==================================================
 
-Objectif : système mémoire complet.
+[✓] FetchByte()
 
-À réaliser :
+Statut :
 
-[ ] RAM 64 Ko
-[ ] Lecture mémoire
-[ ] Écriture mémoire
-[ ] Stack
-[ ] Gestion ROM
+TERMINÉ
 
-Livrable :
+==================================================
+LOT D - DECODE
+==================================================
 
-- Programme chargé depuis une ROM
+[✓] Décodage opcode
 
-========================================
-PHASE 4 - AZURE ASM
-========================================
+[✓] Switch opcode
 
-Objectif : écrire des programmes lisibles.
+Statut :
 
-À réaliser :
+TERMINÉ
 
-[ ] Lexer
-[ ] Parser
-[ ] Génération bytecode
-[ ] Gestion labels
-[ ] Gestion erreurs
+==================================================
+LOT E - EXECUTE
+==================================================
 
-Livrable :
+Instructions supportées :
 
-- AzureASM v0.1
+[✓] NOP (00h)
 
-Exemple :
+[✓] HLT (FFh)
 
-MOV A,10
-MOV B,5
-ADD A,B
-HLT
+[✓] Gestion opcode inconnu
 
-========================================
-PHASE 5 - PREMIER BIOS
-========================================
+Statut :
 
-Objectif : fournir des services système.
+TERMINÉ
 
-À réaliser :
+==================================================
+LOT F - BOUCLE CPU
+==================================================
 
-[ ] CLS
-[ ] PRINT
-[ ] WAIT
-[ ] READKEY
+[✓] Step()
 
-Livrable :
+[✓] Run()
 
-- Hello World
+[✓] Arrêt sur HLT
 
-========================================
-PHASE 6 - GPU
-========================================
+Statut :
 
-Objectif : premier affichage graphique.
+TERMINÉ
 
-À réaliser :
+==================================================
+LOT G - ROM
+==================================================
 
-[ ] VRAM
-[ ] FrameBuffer
-[ ] Palette 4 couleurs
-[ ] Mode texte
-[ ] Mode graphique
+[✓] Chargement ROM
 
-Livrable :
+[✓] Lecture binaire
 
-- Affichage de pixels
+[✓] Chargement mémoire
 
-========================================
-PHASE 7 - TILES ET SPRITES
-========================================
+[✓] ROM test fonctionnelle
 
-À réaliser :
+Statut :
 
-[ ] Tiles 8x8
-[ ] TileMap
-[ ] Sprites 8x8
-[ ] Déplacement sprite
+TERMINÉ
 
-Livrable :
+==================================================
+LOT H - DEBUG
+==================================================
 
-- Démonstration graphique
+[✓] Affichage PC
 
-========================================
-PHASE 8 - JEU DE DÉMONSTRATION
-========================================
+[✓] Affichage OPCODE
 
-Objectif : valider Azure-8.
+[✓] Affichage erreurs
 
-Jeu recommandé :
+[✓] Message CPU HALTED
 
-- Pong
-ou
-- Breakout
-ou
-- Space Invader simplifié
+Statut :
 
-À réaliser :
+TERMINÉ
 
-[ ] Sprite joueur
-[ ] Entrées clavier/manette
-[ ] Score
-[ ] Conditions victoire
+==================================================
+LOT I - DOCUMENTATION
+==================================================
 
-Livrable :
+[✓] Azure-8 Technical Specification v0.0.1
 
-- Premier jeu Azure-8
+[✓] AzureEngine Roadmap v0.0.1
 
-========================================
-PHASE 9 - AZURE STUDIO v0.1
-========================================
+[✓] Build.md
 
-Objectif : environnement minimal.
+[✓] CodingStyle.md
 
-À réaliser :
+[✓] Contributing.md
 
-[ ] Éditeur texte
-[ ] Build
-[ ] Run
-[ ] Fenêtre émulateur
+Statut :
 
-Livrable :
+TERMINÉ
 
-- Azure Studio v0.1
+==================================================
+LOT J - INFRASTRUCTURE
+==================================================
 
-========================================
-PHASE 10 - VERSION PUBLIQUE v0.1
-========================================
+[✓] Dépôt AzureEngine
 
-Contenu :
+[✓] Structure src/
 
-[ ] Azure-8 Emulator
-[ ] AzureASM
-[ ] Azure Studio
-[ ] Documentation
-[ ] Jeu de démonstration
+[✓] build/
 
-Objectif final :
+[✓] roms/
 
-Permettre à un développeur d'installer Azure Studio,
-écrire un programme Azure-8,
-le compiler,
-l'exécuter dans l'émulateur,
-et créer son premier jeu.
+[✓] docs/
 
-========================================
-EXCLUS DE LA VERSION v0.1
-========================================
+[✓] Configuration VS Code
 
-- Marketplace
-- Modules premium
-- Azure-16
-- Audio avancé
-- Matériel réel
-- Réseau
-- Multiplateforme macOS
-- Compatibilité consoles modernes
+Statut :
 
-Ces fonctionnalités sont reportées aux versions futures.
+TERMINÉ
+
+==================================================
+À TERMINER AVANT TAG v0.0.1
+==================================================
+
+[ ] README.md
+
+[ ] LICENSE
+
+[ ] Architecture.md
+
+[ ] Ajouter plusieurs ROM de test
+
+    [ ] nop.rom
+    [ ] halt.rom
+    [ ] invalid.rom
+
+[ ] Nettoyage du code
+
+[ ] Vérification warnings MSVC
+
+==================================================
+VALIDATION
+==================================================
+
+Tests validés :
+
+[✓] ROM chargée
+
+[✓] Exécution NOP
+
+[✓] Exécution HLT
+
+[✓] Avancement PC
+
+[✓] Arrêt CPU
+
+[✓] Gestion opcode inconnu
+
+==================================================
+EXEMPLE FONCTIONNEL
+==================================================
+
+ROM :
+
+00
+00
+00
+FF
+
+Résultat :
+
+ROM Loaded
+
+PC=0000 OPCODE=00
+PC=0001 OPCODE=00
+PC=0002 OPCODE=00
+PC=0003 OPCODE=FF
+
+CPU HALTED
+
+Execution Completed
+
+==================================================
+PRÊT POUR LE PREMIER PUSH
+==================================================
+
+Le projet est prêt pour un premier push GitHub
+après ajout :
+
+- README.md
+- LICENSE
+- Architecture.md
+
+Une fois ces trois fichiers ajoutés :
+
+TAG :
+v0.0.1-alpha
+
+==================================================
+OBJECTIF DE LA VERSION SUIVANTE
+==================================================
+
+v0.0.2
+
+- Read16()
+- Write16()
+- Stack
+- Push8()
+- Pop8()
+- Push16()
+- Pop16()
+
+Préparation des futures instructions :
+
+CALL
+RET
+PUSH
+POP
