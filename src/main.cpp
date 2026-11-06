@@ -10,7 +10,7 @@ int main()
 {
     Emulator emulator;
 
-    if (!emulator.LoadROM("rome/test.rom"))
+    if (!emulator.LoadROM("roms/test.rom"))
     {
         printf("Unable to load ROM\n");
         getchar();
