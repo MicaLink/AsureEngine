@@ -4,6 +4,10 @@
 
 class Memory;
 
+//-----------------------------------------------------
+// CPU
+//-----------------------------------------------------
+
 class CPU
 {
 public:
@@ -11,6 +15,8 @@ public:
     void Step(Memory& memory);
 
     bool IsHalted() const;
+private:
+    u8 FetchByte(Memory& memory);
 public:
     u8 A = 0;
     u8 B = 0;

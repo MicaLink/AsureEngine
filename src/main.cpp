@@ -1,22 +1,25 @@
 #include "Azure8/Emulator.h"
 
 #include <cstdio>
-#include <stdlib.h>
+
+//-----------------------------------------------------
+// Main
+//-----------------------------------------------------
 
 int main()
 {
     Emulator emulator;
 
-    if (!emulator.LoadROM("../roms/test.rom"))
+    if (!emulator.LoadROM("rome/test.rom"))
     {
         printf("Unable to load ROM\n");
-        system("pause");
-        
+        getchar();
         return -1;
     }
+
     emulator.Run();
 
-    system("pause");
+    getchar();
     
     return 0;
 }

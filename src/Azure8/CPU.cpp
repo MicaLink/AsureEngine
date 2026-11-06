@@ -6,6 +6,10 @@
 constexpr u8 OPCODE_NOP = 0x00;
 constexpr u8 OPCODE_HLT = 0xFF;
 
+//-----------------------------------------------------
+// Reset
+//-----------------------------------------------------
+
 void CPU::Reset()
 {
     A = 0;
@@ -22,18 +26,37 @@ void CPU::Reset()
     m_Halted = false;
 }
 
+//-----------------------------------------------------
+// IsHalted
+//-----------------------------------------------------
+
 bool CPU::IsHalted() const
 {
     return m_Halted;
 }
 
+//-----------------------------------------------------
+// FetchByte
+//-----------------------------------------------------
+
+u8 CPU::FetchByte(Memory& memory)
+{
+    const u8 value = memory.Read8(PC);
+    
+    PC++;
+
+    return value;
+}
+
+//-----------------------------------------------------
+// Step
+//-----------------------------------------------------
+
 void CPU::Step(Memory& memory)
 {
-    const u8 opcode = memory.Read8(PC);
+    const u8 opcode = FetchByte(memory);
 
-    printf("PC=%04X OPCODE=%02X\n", PC, opcode);
-
-    PC++;
+    printf("PC=%04X OPCODE=%02X\n", PC - 1, opcode);
 
     switch (opcode)
     {

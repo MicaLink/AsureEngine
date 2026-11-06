@@ -3,6 +3,10 @@
 #include "CPU.h"
 #include "Memory.h"
 
+//-----------------------------------------------------
+// Emulator
+//-----------------------------------------------------
+
 class Emulator
 {
 public:
@@ -10,6 +14,8 @@ public:
 
     void Reset();
     void Run();
+
+    Memory& GetMemory();
 private:
     CPU m_CPU;
     Memory m_Memory;
