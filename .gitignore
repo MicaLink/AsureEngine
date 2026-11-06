@@ -1,0 +1,20 @@
+# Build
+build/
+
+# MSVC
+*.obj
+*.pdb
+*.ilk
+
+# Executables
+*.exe
+
+# Logs
+*.log
+
+# VS Code
+.vscode/*.ipch
+
+# Windows
+Thumbs.db
+Desktop.ini
