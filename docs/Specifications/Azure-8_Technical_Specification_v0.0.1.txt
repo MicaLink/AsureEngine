@@ -1,0 +1,280 @@
+AZUREENGINE ROADMAP v0.0.1
+
+==================================================
+AZUREENGINE v0.0.1
+PREMIER JALON OFFICIEL
+==================================================
+
+VERSION :
+v0.0.1 Alpha
+
+STATUT :
+Partiellement terminé
+
+==================================================
+OBJECTIF
+==================================================
+
+Valider le noyau de Azure-8.
+
+La version v0.0.1 a pour unique objectif
+de permettre l'exécution d'instructions
+depuis une ROM binaire.
+
+==================================================
+LOT A - CPU
+==================================================
+
+[✓] Structure CPU
+
+Registres :
+
+[✓] A
+[✓] B
+[✓] C
+[✓] D
+
+[✓] PC
+[✓] SP
+[✓] FLAGS
+
+[✓] Reset()
+
+Statut :
+
+TERMINÉ
+
+==================================================
+LOT B - MÉMOIRE
+==================================================
+
+[✓] RAM 64 Ko
+
+[✓] Read8()
+
+[✓] Write8()
+
+Statut :
+
+TERMINÉ
+
+==================================================
+LOT C - FETCH
+==================================================
+
+[✓] FetchByte()
+
+Statut :
+
+TERMINÉ
+
+==================================================
+LOT D - DECODE
+==================================================
+
+[✓] Décodage opcode
+
+[✓] Switch opcode
+
+Statut :
+
+TERMINÉ
+
+==================================================
+LOT E - EXECUTE
+==================================================
+
+Instructions supportées :
+
+[✓] NOP (00h)
+
+[✓] HLT (FFh)
+
+[✓] Gestion opcode inconnu
+
+Statut :
+
+TERMINÉ
+
+==================================================
+LOT F - BOUCLE CPU
+==================================================
+
+[✓] Step()
+
+[✓] Run()
+
+[✓] Arrêt sur HLT
+
+Statut :
+
+TERMINÉ
+
+==================================================
+LOT G - ROM
+==================================================
+
+[✓] Chargement ROM
+
+[✓] Lecture binaire
+
+[✓] Chargement mémoire
+
+[✓] ROM test fonctionnelle
+
+Statut :
+
+TERMINÉ
+
+==================================================
+LOT H - DEBUG
+==================================================
+
+[✓] Affichage PC
+
+[✓] Affichage OPCODE
+
+[✓] Affichage erreurs
+
+[✓] Message CPU HALTED
+
+Statut :
+
+TERMINÉ
+
+==================================================
+LOT I - DOCUMENTATION
+==================================================
+
+[✓] Azure-8 Technical Specification v0.0.1
+
+[✓] AzureEngine Roadmap v0.0.1
+
+[✓] Build.md
+
+[✓] CodingStyle.md
+
+[✓] Contributing.md
+
+Statut :
+
+TERMINÉ
+
+==================================================
+LOT J - INFRASTRUCTURE
+==================================================
+
+[✓] Dépôt AzureEngine
+
+[✓] Structure src/
+
+[✓] build/
+
+[✓] roms/
+
+[✓] docs/
+
+[✓] Configuration VS Code
+
+Statut :
+
+TERMINÉ
+
+==================================================
+À TERMINER AVANT TAG v0.0.1
+==================================================
+
+[ ] README.md
+
+[ ] LICENSE
+
+[ ] Architecture.md
+
+[ ] Ajouter plusieurs ROM de test
+
+    [ ] nop.rom
+    [ ] halt.rom
+    [ ] invalid.rom
+
+[ ] Nettoyage du code
+
+[ ] Vérification warnings MSVC
+
+==================================================
+VALIDATION
+==================================================
+
+Tests validés :
+
+[✓] ROM chargée
+
+[✓] Exécution NOP
+
+[✓] Exécution HLT
+
+[✓] Avancement PC
+
+[✓] Arrêt CPU
+
+[✓] Gestion opcode inconnu
+
+==================================================
+EXEMPLE FONCTIONNEL
+==================================================
+
+ROM :
+
+00
+00
+00
+FF
+
+Résultat :
+
+ROM Loaded
+
+PC=0000 OPCODE=00
+PC=0001 OPCODE=00
+PC=0002 OPCODE=00
+PC=0003 OPCODE=FF
+
+CPU HALTED
+
+Execution Completed
+
+==================================================
+PRÊT POUR LE PREMIER PUSH
+==================================================
+
+Le projet est prêt pour un premier push GitHub
+après ajout :
+
+- README.md
+- LICENSE
+- Architecture.md
+
+Une fois ces trois fichiers ajoutés :
+
+TAG :
+v0.0.1-alpha
+
+==================================================
+OBJECTIF DE LA VERSION SUIVANTE
+==================================================
+
+v0.0.2
+
+- Read16()
+- Write16()
+- Stack
+- Push8()
+- Pop8()
+- Push16()
+- Pop16()
+
+Préparation des futures instructions :
+
+CALL
+RET
+PUSH
+POP
