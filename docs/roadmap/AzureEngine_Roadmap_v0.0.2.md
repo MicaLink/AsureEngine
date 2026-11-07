@@ -1,38 +1,30 @@
 # AzureEngine Roadmap v0.0.2
 
-> Version cible : **v0.0.2-alpha**  
-> Statut : **En développement**  
-> Version précédente : **v0.0.1-alpha**  
-> Architecture : **CPU 8 bits / Adressage mémoire 16 bits**  
-> Progression estimée : **60 %**
+> Version cible : **v0.0.2-alpha**
+>
+> Statut : **En développement**
+>
+> Architecture : **CPU 8 bits / Adressage mémoire 16 bits**
 
 ---
 
 # Présentation
 
-La version **v0.0.2-alpha** poursuit la construction des fondations techniques de Azure-8.
+La version v0.0.2 poursuit la construction des fondations techniques d'Azure-8.
 
-Après la validation du premier processeur capable de charger et exécuter une ROM, cette version a pour objectif de finaliser toute l'infrastructure mémoire nécessaire aux futures instructions du processeur.
+L'objectif n'est pas encore d'ajouter des fonctionnalités visibles mais de consolider l'infrastructure interne du processeur.
 
-Cette étape prépare directement :
+Cette version est consacrée à :
 
-```asm
-MOV
-LOAD
-STORE
-
-PUSH
-POP
-
-CALL
-RET
-```
+- la mémoire 16 bits ;
+- la pile ;
+- le Stack Pointer ;
+- les FLAGS ;
+- la préparation du futur jeu d'instructions.
 
 ---
 
 # Architecture officielle Azure-8
-
-Azure-8 est un processeur **8 bits**.
 
 ## Registres utilisateur
 
@@ -59,72 +51,17 @@ SP      16 bits
 0000h -> FFFFh
 ```
 
-## Philosophie
+Azure-8 reste un véritable processeur 8 bits.
 
-Azure-8 travaille sur :
-
-```txt
-des données 8 bits
-```
-
-mais utilise :
-
-```txt
-un adressage mémoire 16 bits
-```
-
-comme les processeurs historiques :
-
-- MOS 6502
-- Z80
-- Motorola 6809
-
-L'objectif est de conserver un véritable processeur 8 bits tout en disposant d'un espace mémoire suffisamment grand pour les futures évolutions.
-
----
-
-# Objectif principal
-
-À la fin de la version v0.0.2, Azure-8 devra disposer de :
-
-- mémoire 16 bits fonctionnelle ;
-- pile (Stack) fonctionnelle ;
-- Stack Pointer sécurisé ;
-- gestion des FLAGS préparée ;
-- environnement prêt pour les futures instructions mémoire.
+Les systèmes 16 bits servent uniquement à l'adressage mémoire, au Program Counter et au Stack Pointer.
 
 ---
 
 # État d'avancement
 
-## Fonctionnalités terminées
+## Progression estimée
 
-### Mémoire
-
-- [x] Read8()
-- [x] Write8()
-- [x] Read16()
-- [x] Write16()
-- [x] Validation Little Endian
-
-### CPU
-
-- [x] Fetch
-- [x] Decode
-- [x] Execute
-
-### Pile
-
-- [x] Push8()
-- [x] Pop8()
-- [x] Push16()
-- [x] Pop16()
-
-### Architecture
-
-- [x] Réorganisation CPU
-- [x] Réorganisation Memory
-- [x] Préparation Stack
+**60 %**
 
 ---
 
@@ -132,7 +69,7 @@ L'objectif est de conserver un véritable processeur 8 bits tout en disposant d'
 
 ## Objectif
 
-Finaliser la couche mémoire Azure-8.
+Finaliser la couche mémoire.
 
 ### Tâches
 
@@ -140,6 +77,7 @@ Finaliser la couche mémoire Azure-8.
 - [x] Write8()
 - [x] Read16()
 - [x] Write16()
+- [x] Validation Little Endian
 
 ### Statut
 
@@ -151,51 +89,14 @@ Finaliser la couche mémoire Azure-8.
 
 ## Objectif
 
-Créer une pile fonctionnelle.
+Créer une pile complète.
 
 ### Tâches
 
 - [x] Push8()
 - [x] Pop8()
-
-### Validation
-
-```cpp
-cpu.Push8(memory, 0x42);
-
-u8 value =
-    cpu.Pop8(memory);
-```
-
-Résultat :
-
-```txt
-42
-```
-
----
-
-### Tâches
-
 - [x] Push16()
 - [x] Pop16()
-
-### Validation
-
-```cpp
-cpu.Push16(
-    memory,
-    0x1234);
-
-u16 value =
-    cpu.Pop16(memory);
-```
-
-Résultat :
-
-```txt
-1234
-```
 
 ### Statut
 
@@ -203,25 +104,23 @@ Résultat :
 
 ---
 
-# Lot C - Sécurisation du Stack Pointer
+# Lot C - Stack Pointer
 
 ## Objectif
 
-Empêcher les erreurs d'utilisation de la pile.
+Sécuriser totalement la pile.
 
 ### Tâches
 
-- [x] Définition de la zone Stack
 - [x] Définition STACK_TOP
 - [x] Définition STACK_BOTTOM
-- [x] Validation SP au Reset
+- [x] Réinitialisation du SP
 
-### Tâches restantes
+### À terminer
 
-- [ ] Validation complète SP
+- [ ] Validation complète du SP
 - [ ] Stack Overflow Detection
 - [ ] Stack Underflow Detection
-- [ ] Messages d'erreur dédiés
 - [ ] ROM de validation
 
 ### Statut
@@ -234,9 +133,9 @@ Empêcher les erreurs d'utilisation de la pile.
 
 ## Objectif
 
-Préparer les futures instructions CPU.
+Préparer les opérations arithmétiques.
 
-### FLAGS prévus
+### FLAGS
 
 ```txt
 Bit 0 : Zero
@@ -261,14 +160,9 @@ Bit 3 : Overflow
 
 ## Objectif
 
-Améliorer les informations de diagnostic.
+Améliorer les capacités de diagnostic.
 
 ### Tâches
-
-- [x] Affichage PC
-- [x] Affichage Opcode
-
-### À faire
 
 - [ ] Affichage SP
 - [ ] Affichage FLAGS
@@ -276,23 +170,9 @@ Améliorer les informations de diagnostic.
 - [ ] Dump pile
 - [ ] Dump registres
 
-### Exemple attendu
-
-```txt
-PC=0005
-SP=FFFC
-
-A=00
-B=00
-C=00
-D=00
-
-FLAGS=00
-```
-
 ### Statut
 
-🟨 En cours
+⬜ Non commencé
 
 ---
 
@@ -300,7 +180,7 @@ FLAGS=00
 
 ## Objectif
 
-Créer un jeu de tests permanent.
+Créer une batterie de tests permanente.
 
 ### Tâches
 
@@ -323,16 +203,16 @@ Créer un jeu de tests permanent.
 
 ## Objectif
 
-Conserver les spécifications synchronisées avec le code.
+Compléter la documentation du projet.
 
 ### Tâches
 
-- [ ] Mise à jour Azure-8 Technical Specification
+- [ ] LICENSE
+- [ ] Architecture.md
 - [ ] Documentation Stack
-- [ ] Documentation SP
 - [ ] Documentation FLAGS
-- [ ] Documentation Read16()
-- [ ] Documentation Write16()
+- [ ] Documentation SP
+- [ ] Mise à jour Technical Specification
 
 ### Statut
 
@@ -340,40 +220,27 @@ Conserver les spécifications synchronisées avec le code.
 
 ---
 
-# Architecture cible v0.0.2
+# Lot H - Qualité
 
-```txt
-AzureEngine
-│
-├── Azure8
-│   │
-│   ├── CPU
-│   │   ├── Fetch
-│   │   ├── Decode
-│   │   ├── Execute
-│   │   ├── Stack
-│   │   └── Flags
-│   │
-│   ├── Memory
-│   │   ├── Read8
-│   │   ├── Write8
-│   │   ├── Read16
-│   │   └── Write16
-│   │
-│   └── Emulator
-│
-├── docs
-│
-├── roms
-│
-└── tests
-```
+## Objectif
+
+Préparer AzureEngine pour les futures versions.
+
+### Tâches
+
+- [ ] Vérifier les warnings MSVC
+- [ ] Nettoyer le dépôt Git
+- [ ] Premiers tests automatisés
+
+### Statut
+
+⬜ Non commencé
 
 ---
 
 # Critères de validation
 
-La version v0.0.2 sera considérée comme terminée lorsque :
+La version v0.0.2 sera terminée lorsque :
 
 - [x] Read16 fonctionne
 - [x] Write16 fonctionne
@@ -382,34 +249,16 @@ La version v0.0.2 sera considérée comme terminée lorsque :
 - [x] Push16 fonctionne
 - [x] Pop16 fonctionne
 - [ ] Stack sécurisée
-- [ ] Overflow détecté
-- [ ] Underflow détecté
-- [ ] FLAGS définis
-- [ ] ROMs de validation fonctionnelles
+- [ ] FLAGS documentés
+- [ ] ROMs de validation terminées
 - [ ] Documentation mise à jour
-
----
-
-# Hors périmètre
-
-Toujours exclus de la série v0.0.x :
-
-- GPU
-- Audio
-- BIOS
-- AzureASM
-- Azure Studio
-- Marketplace
-- Azure-16
-- Jeux
-- Réseau
-- Matériel réel
+- [ ] Tests automatisés disponibles
 
 ---
 
 # Objectif de la v0.0.3
 
-La version v0.0.3 introduira les premières véritables instructions de manipulation de données :
+La version suivante introduira les premières véritables instructions de manipulation de données :
 
 ```asm
 MOV
@@ -436,17 +285,11 @@ D
 
 # Prochaine tâche immédiate
 
-Implémenter :
-
 ```txt
 Stack Overflow Detection
-
 Stack Underflow Detection
-
 Validation complète du Stack Pointer
 ```
-
-Une fois cette étape terminée, l'infrastructure mémoire d'Azure-8 sera considérée comme stable.
 
 ---
 
@@ -466,12 +309,6 @@ RAM           64 Ko
 
 Progression : ~60 %
 
-Statut : En développement
-
 Prochaine étape :
 Sécurisation complète du Stack Pointer
 ```
-
----
-
-**Objectif du jalon : terminer entièrement l'infrastructure mémoire avant l'arrivée des premières véritables instructions du processeur Azure-8.**
