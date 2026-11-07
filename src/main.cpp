@@ -16,11 +16,15 @@ int main()
     memory.Reset();
     cpu.Reset();
 
-    cpu.Push8(memory, 0x11);
-    cpu.Push8(memory, 0x22);
-    cpu.Push8(memory, 0x33);
+    for (u16 i = 0; i < 100; ++i)
+    {
+        cpu.Push16(memory, i);
+    }
 
-    cpu.DumpStack(memory);
+    for (u16 i = 0; i < 100; ++i)
+    {
+        cpu.Pop16(memory);
+    }
 
     return 0;
 }

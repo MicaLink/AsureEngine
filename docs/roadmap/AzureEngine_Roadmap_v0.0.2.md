@@ -4,19 +4,29 @@
 >
 > Statut : **En développement**
 >
+> Version précédente : **v0.0.1-alpha**
+>
 > Architecture : **CPU 8 bits / Adressage mémoire 16 bits**
 >
 > Progression estimée : **90 %**
 >
-> Priorité actuelle : **Finalisation des derniers éléments du Lot C**
+> Prochaine priorité : **Lot D - FLAGS**
 
 ---
 
 # Présentation
 
-La version v0.0.2-alpha est consacrée à la consolidation de l'architecture interne d'Azure-8.
+La version v0.0.2-alpha est consacrée à la consolidation de l'infrastructure interne d'Azure-8.
 
-L'objectif principal est de finaliser l'infrastructure mémoire et la gestion de la pile avant l'introduction des premiers opcodes manipulant des données.
+Cette version permet de finaliser :
+
+- la mémoire ;
+- la pile ;
+- le Stack Pointer ;
+- le système de validation ;
+- les outils de debug.
+
+L'objectif est de disposer d'une architecture stable avant l'arrivée des premières véritables instructions de manipulation de données.
 
 ---
 
@@ -47,21 +57,19 @@ SP      16 bits
 0000h → FFFFh
 ```
 
-Azure-8 reste un processeur 8 bits.
+Azure-8 reste un processeur strictement 8 bits.
+
+Les registres 16 bits servent uniquement à :
+
+- l'adressage mémoire ;
+- la pile ;
+- les futurs appels de fonctions.
 
 ---
 
 # Objectif principal
 
-Finaliser complètement le système de pile Azure-8.
-
-À la fin de la version v0.0.2, Azure-8 devra disposer :
-
-- d'une mémoire stable ;
-- d'une pile robuste ;
-- d'un Stack Pointer validé ;
-- d'outils de diagnostic complets ;
-- d'une base prête pour les FLAGS.
+Finaliser l'ensemble des fondations techniques avant l'introduction du premier véritable jeu d'instructions Azure-8.
 
 ---
 
@@ -96,11 +104,8 @@ Finaliser complètement le système de pile Azure-8.
 - [x] STACK_BOTTOM
 - [x] Initialisation du SP
 - [x] GetSP()
-- [x] Validation Reset()
-- [x] Validation Push8()
-- [x] Validation Pop8()
-- [x] Validation Push16()
-- [x] Validation Pop16()
+- [x] Validation complète du SP
+- [x] Validation des limites mémoire
 - [x] Détection Stack Overflow
 - [x] Détection Stack Underflow
 
@@ -111,10 +116,11 @@ Finaliser complètement le système de pile Azure-8.
 - [x] Affichage SP
 - [x] Dump Stack
 
-### Architecture
+### Robustesse
 
-- [x] Refactorisation CPU
-- [x] Refactorisation Memory
+- [x] Tests de charge Push8()
+- [x] Tests de charge Push16()
+- [x] Validation complète Stack
 
 ---
 
@@ -134,63 +140,54 @@ Finaliser complètement le système de pile Azure-8.
 
 ## Objectif
 
-Valider définitivement le fonctionnement de la pile Azure-8.
+Valider complètement le système de pile Azure-8.
 
-### Fonctionnalités validées
+### Résultat
 
-- [x] STACK_TOP
-- [x] STACK_BOTTOM
-- [x] Initialisation du SP
-- [x] GetSP()
-- [x] Validation complète du SP
-- [x] Détection Overflow
-- [x] Détection Underflow
+- [x] Validation du SP
+- [x] Validation Push8()
+- [x] Validation Pop8()
+- [x] Validation Push16()
+- [x] Validation Pop16()
+- [x] Overflow détecté
+- [x] Underflow détecté
 - [x] Affichage SP
 - [x] Dump Stack
-
-### Travail restant
-
-#### Robustesse
-
-- [ ] Tests de charge
-- [ ] Validation limites mémoire
-
-#### Documentation
-
-- [ ] Documentation Stack Pointer
-- [ ] Documentation architecture Stack
+- [x] Tests de charge
+- [x] Validation limites mémoire
 
 ### Statut
 
-🟨 95 % terminé
+✅ TERMINÉ
 
 ---
 
-# Lot D - FLAGS
+# Lot D - FLAGS (NOUVELLE PRIORITÉ)
 
-## Dépendance
+## Objectif
 
-⚠️ Début après clôture officielle du Lot C.
+Préparer les futures opérations CPU.
 
 ### FLAGS prévus
 
 ```txt
-Bit 0 : Zero
-Bit 1 : Carry
-Bit 2 : Negative
-Bit 3 : Overflow
+Bit 0 : Zero Flag
+Bit 1 : Carry Flag
+Bit 2 : Negative Flag
+Bit 3 : Overflow Flag
 ```
 
 ### Tâches
 
-- [ ] Définition officielle
+- [ ] Définition officielle des FLAGS
+- [ ] Structure interne FLAGS
 - [ ] Helpers CPU
 - [ ] Documentation
 - [ ] Première implémentation
 
 ### Statut
 
-⬜ En attente
+🟨 En cours de conception
 
 ---
 
@@ -203,7 +200,7 @@ Bit 3 : Overflow
 - [x] Affichage SP
 - [x] Dump Stack
 
-### À faire
+## À faire
 
 - [ ] Affichage FLAGS
 - [ ] Dump mémoire
@@ -245,7 +242,7 @@ Créer une bibliothèque permanente de ROMs de validation.
 
 Les ROMs Stack sont présentes dans le dépôt.
 
-Leur validation est reportée à la v0.0.3 car elle nécessitera :
+Leur validation effective est reportée à la v0.0.3 car elle dépend des futures instructions :
 
 ```asm
 PUSH
@@ -262,6 +259,8 @@ RET
 
 # Lot G - Documentation
 
+## Tâches
+
 - [ ] LICENSE
 - [ ] Architecture.md
 - [ ] Documentation Stack
@@ -269,23 +268,37 @@ RET
 - [ ] Documentation FLAGS
 - [ ] Mise à jour Azure-8 Technical Specification
 
+### Statut
+
+⬜ Non commencé
+
 ---
 
 # Lot H - Qualité
 
+## Tâches
+
 - [ ] Vérifier les warnings MSVC
 - [ ] Nettoyer le dépôt Git
 - [ ] Premiers tests automatisés
+
+### Statut
+
+⬜ Non commencé
 
 ---
 
 # Prochaine étape
 
 ```txt
-1. Tests de charge Stack
-2. Documentation Stack
-3. Clôture du Lot C
-4. Implémentation des FLAGS
+Lot D
+
+FLAGS
+
+├── Zero Flag
+├── Carry Flag
+├── Negative Flag
+└── Overflow Flag
 ```
 
 ---
@@ -329,6 +342,14 @@ RAM       : 64 Ko
 
 Progression : ~90 %
 
-Priorité :
-Finaliser définitivement le Lot C
+Lot A : ✅ Terminé
+Lot B : ✅ Terminé
+Lot C : ✅ Terminé
+
+Prochaine étape :
+FLAGS
 ```
+
+---
+
+**Le système de pile Azure-8 est désormais considéré comme stable et validé. La prochaine étape est l'implémentation du système FLAGS qui servira de fondation aux futures instructions arithmétiques et logiques.**
