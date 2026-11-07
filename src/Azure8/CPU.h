@@ -11,6 +11,12 @@ class Memory;
 class CPU
 {
 public:
+    CPU() = default;
+
+    //-------------------------------------------------
+    // Execution
+    //-------------------------------------------------
+
     void Reset();
     void Step(Memory& memory);
 
@@ -27,13 +33,20 @@ public:
     u16 Pop16(Memory& memory);
 
     //-------------------------------------------------
-    // Stack Status
+    // Debug
+    //-------------------------------------------------
+
+    void DumpStack(const Memory& memory, u16 count = 16) const;
+
+    //-------------------------------------------------
+    // Status
     //-------------------------------------------------
 
     u16 GetSP() const;
 
     bool HasStackOverflow() const;
     bool HasStackUnderflow() const;
+
 
 private:
 

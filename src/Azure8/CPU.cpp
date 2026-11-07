@@ -147,6 +147,33 @@ u16 CPU::Pop16(Memory& memory)
 }
 
 //-----------------------------------------------------
+// DumpStack
+//-----------------------------------------------------
+
+void CPU::DumpStack(const Memory& memory, u16 count) const
+{
+    printf("\n========== STACK ==========\n");
+    printf("SP = %04X\n\n", SP);
+
+    u32 address = static_cast<u32>(SP + 1);
+
+    for (u16 i = 0; i < count; i++)
+    {
+        if (address > STACK_TOP)
+            break;
+
+        printf("%04X : %02X", static_cast<u16>(address), memory.Read8(static_cast<u16>(address)));
+
+        if (address == static_cast<u32>(SP + 1))
+            printf(" <- TOP");
+
+        printf("\n");
+        address++;
+    }
+    printf("===========================\n");
+}
+
+//-----------------------------------------------------
 // Step
 //-----------------------------------------------------
 

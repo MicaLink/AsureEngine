@@ -1,48 +1,26 @@
 # AzureEngine Roadmap v0.0.2
 
-> Version cible : **v0.0.2-alpha**  
-> Statut : **En développement**  
-> Version précédente : **v0.0.1-alpha**  
-> Architecture : **CPU 8 bits / Adressage mémoire 16 bits**  
-> Progression estimée : **80 %**  
-> Priorité actuelle : **Finalisation du Lot C - Stack Pointer**
+> Version cible : **v0.0.2-alpha**
+>
+> Statut : **En développement**
+>
+> Architecture : **CPU 8 bits / Adressage mémoire 16 bits**
+>
+> Progression estimée : **90 %**
+>
+> Priorité actuelle : **Finalisation des derniers éléments du Lot C**
 
 ---
 
 # Présentation
 
-La version **v0.0.2-alpha** est consacrée à la consolidation de l'infrastructure interne d'Azure-8.
+La version v0.0.2-alpha est consacrée à la consolidation de l'architecture interne d'Azure-8.
 
-Après la validation du premier cycle complet :
-
-```txt
-ROM
-↓
-Fetch
-↓
-Decode
-↓
-Execute
-↓
-HALT
-```
-
-l'objectif est désormais de terminer toutes les fondations nécessaires avant l'arrivée des premières véritables instructions de manipulation de données.
-
-Cette version se concentre sur :
-
-- la mémoire 16 bits ;
-- la pile (Stack) ;
-- le Stack Pointer ;
-- les outils de diagnostic ;
-- les tests de validation ;
-- la préparation du système FLAGS.
+L'objectif principal est de finaliser l'infrastructure mémoire et la gestion de la pile avant l'introduction des premiers opcodes manipulant des données.
 
 ---
 
 # Architecture officielle Azure-8
-
-Azure-8 est un processeur **8 bits**.
 
 ## Registres utilisateur
 
@@ -69,24 +47,7 @@ SP      16 bits
 0000h → FFFFh
 ```
 
-## Philosophie
-
-Azure-8 manipule exclusivement :
-
-```txt
-des données sur 8 bits
-```
-
-Les registres 16 bits servent uniquement à :
-
-```txt
-- l'adressage mémoire ;
-- la pile ;
-- le Program Counter ;
-- les futurs appels de fonctions.
-```
-
-Azure-8 reste donc un véritable processeur 8 bits.
+Azure-8 reste un processeur 8 bits.
 
 ---
 
@@ -94,13 +55,13 @@ Azure-8 reste donc un véritable processeur 8 bits.
 
 Finaliser complètement le système de pile Azure-8.
 
-À la fin de la v0.0.2, Azure-8 devra disposer :
+À la fin de la version v0.0.2, Azure-8 devra disposer :
 
 - d'une mémoire stable ;
-- d'une pile fiable ;
-- d'un Stack Pointer sécurisé ;
-- d'outils de debug adaptés ;
-- d'un environnement prêt pour le futur ISA.
+- d'une pile robuste ;
+- d'un Stack Pointer validé ;
+- d'outils de diagnostic complets ;
+- d'une base prête pour les FLAGS.
 
 ---
 
@@ -143,6 +104,13 @@ Finaliser complètement le système de pile Azure-8.
 - [x] Détection Stack Overflow
 - [x] Détection Stack Underflow
 
+### Debug
+
+- [x] Affichage PC
+- [x] Affichage Opcode
+- [x] Affichage SP
+- [x] Dump Stack
+
 ### Architecture
 
 - [x] Refactorisation CPU
@@ -152,100 +120,49 @@ Finaliser complètement le système de pile Azure-8.
 
 # Lot A - Mémoire
 
-## Objectif
-
-Construire la couche mémoire officielle d'Azure-8.
-
-### Tâches
-
-- [x] Read8()
-- [x] Write8()
-- [x] Read16()
-- [x] Write16()
-
-### Statut
-
 ✅ Terminé
 
 ---
 
 # Lot B - Stack
 
-## Objectif
-
-Créer une pile fonctionnelle.
-
-### Tâches
-
-- [x] Push8()
-- [x] Pop8()
-- [x] Push16()
-- [x] Pop16()
-
-### Statut
-
 ✅ Terminé
 
 ---
 
-# Lot C - Stack Pointer (PRIORITÉ ABSOLUE)
+# Lot C - Stack Pointer
 
 ## Objectif
 
-Valider définitivement le fonctionnement du registre SP et de la pile.
+Valider définitivement le fonctionnement de la pile Azure-8.
 
 ### Fonctionnalités validées
 
 - [x] STACK_TOP
 - [x] STACK_BOTTOM
 - [x] Initialisation du SP
-- [x] Validation du Reset
-- [x] Validation Push8()
-- [x] Validation Pop8()
-- [x] Validation Push16()
-- [x] Validation Pop16()
-- [x] Affichage du SP
+- [x] GetSP()
+- [x] Validation complète du SP
 - [x] Détection Overflow
 - [x] Détection Underflow
+- [x] Affichage SP
+- [x] Dump Stack
 
----
+### Travail restant
 
-## Travail restant
-
-### Debug
-
-- [ ] Dump Stack
-
-### Robustesse
+#### Robustesse
 
 - [ ] Tests de charge
-- [ ] Validation des limites mémoire
+- [ ] Validation limites mémoire
 
-### Documentation
+#### Documentation
 
 - [ ] Documentation Stack Pointer
 - [ ] Documentation architecture Stack
 
----
-
-## Critères de clôture
-
-Le Lot C sera terminé lorsque :
-
-- [x] SP validé
-- [x] Overflow détecté
-- [x] Underflow détecté
-- [x] Affichage du SP opérationnel
-
-et lorsque :
-
-- [ ] Dump Stack opérationnel
-- [ ] Tests de charge terminés
-- [ ] Documentation Stack terminée
-
 ### Statut
 
-🟨 En cours (≈ 90 %)
+🟨 95 % terminé
 
 ---
 
@@ -253,7 +170,7 @@ et lorsque :
 
 ## Dépendance
 
-⚠️ Ne commence qu'après clôture officielle du Lot C.
+⚠️ Début après clôture officielle du Lot C.
 
 ### FLAGS prévus
 
@@ -279,19 +196,15 @@ Bit 3 : Overflow
 
 # Lot E - Debug
 
-## Objectif
-
-Améliorer les outils de diagnostic.
-
-### Réalisé
+## Réalisé
 
 - [x] Affichage PC
 - [x] Affichage Opcode
 - [x] Affichage SP
+- [x] Dump Stack
 
 ### À faire
 
-- [ ] Dump Stack
 - [ ] Affichage FLAGS
 - [ ] Dump mémoire
 - [ ] Dump registres
@@ -306,7 +219,7 @@ Améliorer les outils de diagnostic.
 
 ## Objectif
 
-Créer une bibliothèque permanente de ROMs de validation pour Azure-8.
+Créer une bibliothèque permanente de ROMs de validation.
 
 ### ROMs fondamentales
 
@@ -330,18 +243,9 @@ Créer une bibliothèque permanente de ROMs de validation pour Azure-8.
 
 ### Note
 
-Les ROMs :
+Les ROMs Stack sont présentes dans le dépôt.
 
-```txt
-stack8.rom
-stack16.rom
-overflow.rom
-underflow.rom
-```
-
-sont déjà présentes dans le dépôt.
-
-Leur validation effective est reportée à la v0.0.3 car elle dépend de futures instructions du processeur :
+Leur validation est reportée à la v0.0.3 car elle nécessitera :
 
 ```asm
 PUSH
@@ -358,12 +262,6 @@ RET
 
 # Lot G - Documentation
 
-## Objectif
-
-Maintenir les spécifications synchronisées avec le code.
-
-### Tâches
-
 - [ ] LICENSE
 - [ ] Architecture.md
 - [ ] Documentation Stack
@@ -371,123 +269,28 @@ Maintenir les spécifications synchronisées avec le code.
 - [ ] Documentation FLAGS
 - [ ] Mise à jour Azure-8 Technical Specification
 
-### Statut
-
-⬜ Non commencé
-
 ---
 
 # Lot H - Qualité
-
-## Objectif
-
-Préparer AzureEngine pour les futures versions.
-
-### Tâches
 
 - [ ] Vérifier les warnings MSVC
 - [ ] Nettoyer le dépôt Git
 - [ ] Premiers tests automatisés
 
-### Statut
-
-⬜ Non commencé
-
 ---
 
-# Ordre de développement
-
-## Étape actuelle
+# Prochaine étape
 
 ```txt
-LOT C
-
-Dump Stack
-↓
-Tests de charge
-↓
-Documentation Stack
-↓
-Validation finale
-```
-
-## Étape suivante
-
-```txt
-LOT D
-
-FLAGS
-```
-
-## Puis
-
-```txt
-LOT E
-
-Debug avancé
-```
-
-## Puis
-
-```txt
-v0.0.3
-
-MOV
-LOAD
-STORE
-
-PUSH
-POP
-
-CALL
-RET
-```
-
----
-
-# Critères de validation de la v0.0.2
-
-La version v0.0.2-alpha sera considérée comme terminée lorsque :
-
-- [x] Read16 fonctionne
-- [x] Write16 fonctionne
-- [x] Push8 fonctionne
-- [x] Pop8 fonctionne
-- [x] Push16 fonctionne
-- [x] Pop16 fonctionne
-- [x] Validation SP terminée
-- [ ] Dump Stack terminé
-- [ ] Documentation mise à jour
-- [ ] Tests automatisés disponibles
-
----
-
-# État actuel
-
-```txt
-Projet : AzureEngine
-
-Version : v0.0.2-alpha
-
-Architecture :
-
-CPU       8 bits
-PC        16 bits
-SP        16 bits
-RAM       64 Ko
-
-Progression : ~80 %
-
-Priorité :
-
-Finalisation du Lot C
+1. Tests de charge Stack
+2. Documentation Stack
+3. Clôture du Lot C
+4. Implémentation des FLAGS
 ```
 
 ---
 
 # Objectif de la v0.0.3
-
-La version v0.0.3 introduira les premières vraies instructions manipulant les données :
 
 ```asm
 MOV
@@ -501,7 +304,7 @@ CALL
 RET
 ```
 
-Les ROMs :
+Puis validation officielle :
 
 ```txt
 stack8.rom
@@ -510,8 +313,22 @@ overflow.rom
 underflow.rom
 ```
 
-pourront alors être exécutées et validées officiellement.
-
 ---
 
-**Objectif immédiat : terminer Dump Stack, finaliser la documentation de la pile et clôturer définitivement le Lot C.**
+# État actuel
+
+```txt
+Projet : AzureEngine
+
+Version : v0.0.2-alpha
+
+CPU       : 8 bits
+PC        : 16 bits
+SP        : 16 bits
+RAM       : 64 Ko
+
+Progression : ~90 %
+
+Priorité :
+Finaliser définitivement le Lot C
+```

@@ -16,25 +16,11 @@ int main()
     memory.Reset();
     cpu.Reset();
 
-    printf("Initial SP : %04X\n", cpu.GetSP());
-
     cpu.Push8(memory, 0x11);
+    cpu.Push8(memory, 0x22);
+    cpu.Push8(memory, 0x33);
 
-    printf("After Push8 : %04X\n", cpu.GetSP());
-
-    cpu.Push16(memory, 0x1234);
-
-    printf("After Push16 : %04X\n", cpu.GetSP());
-
-    cpu.Pop16(memory);
-
-    printf("After Pop16 : %04X\n", cpu.GetSP());
-
-    cpu.Pop8(memory);
-
-    printf("After Pop8 : %04X\n", cpu.GetSP());
-
-    getchar();
+    cpu.DumpStack(memory);
 
     return 0;
 }
