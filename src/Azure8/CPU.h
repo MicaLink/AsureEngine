@@ -11,9 +11,10 @@ class Memory;
 class CPU
 {
 public:
+    CPU() = default;
 
     //-------------------------------------------------
-    // CPU
+    // Execution
     //-------------------------------------------------
 
     void Reset();
@@ -54,5 +55,13 @@ public:
 
     u8 FLAGS = 0;
 private:
+
+    //-------------------------------------------------
+    // State
+    //-------------------------------------------------
+
     bool m_Halted = false;
+
+    bool m_StackOverflow = false;
+    bool m_StackUnderflow = false;
 };

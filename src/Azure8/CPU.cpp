@@ -6,6 +6,9 @@
 constexpr u8 OPCODE_NOP = 0x00;
 constexpr u8 OPCODE_HLT = 0xFF;
 
+constexpr u16 STACK_BOTTOM = 0xFE00;
+constexpr u16 STACK_TOP = 0xFFFF;
+
 //-----------------------------------------------------
 // Reset
 //-----------------------------------------------------
@@ -16,14 +19,17 @@ void CPU::Reset()
     B = 0;
     C = 0;
     D = 0;
+
+    FLAGS = 0;
     
     PC = 0x0000;
 
-    SP = 0xFFFF;
-    
-    FLAGS = 0;
+    SP = STACK_TOP;
 
     m_Halted = false;
+
+    m_StackOverflow = false;
+    m_StackUnderflow = false;
 }
 
 //-----------------------------------------------------
@@ -54,6 +60,16 @@ u8 CPU::FetchByte(Memory& memory)
 
 void CPU::Push8(Memory& memory, u8 value)
 {
+    if (SP < STACK_BOTTOM)
+    {
+        printf("STACK OVERFLOW\n");
+
+        m_StackOverflow = true;
+        m_Halted = true;
+
+        return;
+    }
+
     memory.Write8(SP, value);
     SP--;
 }
@@ -64,6 +80,16 @@ void CPU::Push8(Memory& memory, u8 value)
 
 u8 CPU::Pop8(Memory& memory)
 {
+    if (SP >= STACK_TOP)
+    {
+        printf("STACK UNDERFLOW\n");
+
+        m_StackUnderflow = true;
+        m_Halted = true;
+
+        return 0;
+    }
+    
     SP++;
     return memory.Read8(SP);
 }
@@ -101,7 +127,7 @@ void CPU::Step(Memory& memory)
 {
     const u8 opcode = FetchByte(memory);
 
-    printf("PC=%04X OPCODE=%02X\n", PC - 1, opcode);
+    printf("PC=%04X SP=%04X OPCODE=%02X\n", PC - 1, SP, opcode);
 
     switch (opcode)
     {
