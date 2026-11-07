@@ -15,14 +15,6 @@ int main()
     memory.Reset();
     cpu.Reset();
 
-    cpu.Push16(memory, 0x1111);
-    cpu.Push16(memory, 0x2222);
-    cpu.Push16(memory, 0x3333);
-
-    printf("%04X\n", cpu.Pop16(memory));
-    printf("%04X\n", cpu.Pop16(memory));
-    printf("%04X\n", cpu.Pop16(memory));
-
     if (!emulator.LoadROM("roms/test.rom"))
     {
         printf("Unable to load ROM\n");
