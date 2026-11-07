@@ -42,6 +42,33 @@ bool CPU::IsHalted() const
 }
 
 //-----------------------------------------------------
+// GetSP
+//-----------------------------------------------------
+
+u16 CPU::GetSP() const
+{
+    return SP;
+}
+
+//-----------------------------------------------------
+// HasStackOverflow
+//-----------------------------------------------------
+
+bool CPU::HasStackOverflow() const
+{
+    return m_StackOverflow;
+}
+
+//-----------------------------------------------------
+// HasStackUnderflow
+//-----------------------------------------------------
+
+bool CPU::HasStackUnderflow() const
+{
+    return m_StackUnderflow;
+}
+
+//-----------------------------------------------------
 // FetchByte
 //-----------------------------------------------------
 
@@ -119,16 +146,6 @@ u16 CPU::Pop16(Memory& memory)
     return static_cast<u16>(low | (hight << 8));
 }
 
-bool CPU::HasStackOverflow() const
-{
-    return m_StackOverflow;
-}
-
-bool CPU::HasStackUnderflow() const
-{
-    return m_StackUnderflow;
-}
-
 //-----------------------------------------------------
 // Step
 //-----------------------------------------------------
@@ -145,8 +162,8 @@ void CPU::Step(Memory& memory)
             break;
     
         case OPCODE_HLT:
-            m_Halted = true;
             printf("CPU HALTED\n");
+            m_Halted = true;
             break;
         
         default:

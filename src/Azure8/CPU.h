@@ -30,6 +30,8 @@ public:
     // Stack Status
     //-------------------------------------------------
 
+    u16 GetSP() const;
+
     bool HasStackOverflow() const;
     bool HasStackUnderflow() const;
 
