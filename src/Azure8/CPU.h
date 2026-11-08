@@ -63,6 +63,7 @@ public:
 
     void DumpStack(const Memory& memory, u16 count = 16) const;
     void DumpRegister() const;
+    void DumpMemory(const Memory& memory, u16 startAddress, u16 count = 128) const;
 
     //-------------------------------------------------
     // Status

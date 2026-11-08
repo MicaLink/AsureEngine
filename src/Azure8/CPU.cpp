@@ -284,6 +284,32 @@ void CPU::DumpRegister() const
 }
 
 //-----------------------------------------------------
+// DumpMemory
+//-----------------------------------------------------
+
+void CPU::DumpMemory(const Memory& memory, u16 startAddress, u16 count) const
+{
+    printf("\n========== MEMORY ==========\n");
+
+    for (u16 i = 0; i < count; i += 16)
+    {
+        const u16 address = startAddress + i;
+
+        printf("%04X : ", address);
+
+        for (u16 j = 0; j < 16; j++)
+        {
+            if ((i + j) >= count)
+                break;
+
+            printf("%02X ", memory.Read8(address + j));
+        }
+        printf("\n");
+    }
+    printf("============================\n");
+}
+
+//-----------------------------------------------------
 // Step
 //-----------------------------------------------------
 
