@@ -2,6 +2,15 @@
 
 #include "../Core/Type.h"
 
+//-----------------------------------------------------
+// FLAGS
+//-----------------------------------------------------
+
+constexpr u8 FLAG_ZERO = 1 << 0;
+constexpr u8 FLAG_CARRY = 1 << 1;
+constexpr u8 FLAG_NEGATIVE = 1 << 2;
+constexpr u8 FLAG_OVERFLOW = 1 << 3;
+
 class Memory;
 
 //-----------------------------------------------------
@@ -33,6 +42,17 @@ public:
     u16 Pop16(Memory& memory);
 
     //-------------------------------------------------
+    // Flags
+    //-------------------------------------------------
+
+    void SetFlag(u8 flag);
+    void ClearFlag(u8 flag);
+
+    bool IsFlagSet(u8 flag) const;
+
+    u8 GetFlags() const;
+
+    //-------------------------------------------------
     // Debug
     //-------------------------------------------------
 
@@ -47,7 +67,6 @@ public:
     bool HasStackOverflow() const;
     bool HasStackUnderflow() const;
 
-
 private:
 
     //-------------------------------------------------
@@ -55,7 +74,7 @@ private:
     //-------------------------------------------------
 
     u8 FetchByte(Memory& memory);
-public:
+private:
 
     //-------------------------------------------------
     // Registers

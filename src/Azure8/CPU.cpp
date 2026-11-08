@@ -3,12 +3,22 @@
 
 #include <cstdio>
 
-constexpr u8 OPCODE_NOP = 0x00;
-constexpr u8 OPCODE_HLT = 0xFF;
+namespace
+{
+    //-------------------------------------------------
+    // Opcodes
+    //-------------------------------------------------
 
-constexpr u16 STACK_BOTTOM = 0xFE00;
-constexpr u16 STACK_TOP = 0xFFFF;
+    constexpr u8 OPCODE_NOP = 0x00;
+    constexpr u8 OPCODE_HLT = 0xFF;
 
+    //-------------------------------------------------
+    // Stack
+    //-------------------------------------------------
+
+    constexpr u16 STACK_BOTTOM = 0xFE00;
+    constexpr u16 STACK_TOP = 0xFFFF;
+}
 //-----------------------------------------------------
 // Reset
 //-----------------------------------------------------
@@ -20,11 +30,10 @@ void CPU::Reset()
     C = 0;
     D = 0;
 
-    FLAGS = 0;
-    
     PC = 0x0000;
-
     SP = STACK_TOP;
+
+    FLAGS = 0;
 
     m_Halted = false;
 
@@ -51,6 +60,15 @@ u16 CPU::GetSP() const
 }
 
 //-----------------------------------------------------
+// GetFlags
+//-----------------------------------------------------
+
+u8 CPU::GetFlags() const
+{
+    return FLAGS;
+}
+
+//-----------------------------------------------------
 // HasStackOverflow
 //-----------------------------------------------------
 
@@ -66,6 +84,33 @@ bool CPU::HasStackOverflow() const
 bool CPU::HasStackUnderflow() const
 {
     return m_StackUnderflow;
+}
+
+//-----------------------------------------------------
+// SetFlag
+//-----------------------------------------------------
+
+void CPU::SetFlag(u8 flag)
+{
+    FLAGS |= flag;
+}
+
+//-----------------------------------------------------
+// ClearFlag
+//-----------------------------------------------------
+
+void CPU::ClearFlag(u8 flag)
+{
+    FLAGS &= ~flag;
+}
+
+//-----------------------------------------------------
+// IsFlagSet
+//-----------------------------------------------------
+
+bool CPU::IsFlagSet(u8 flag) const
+{
+    return (FLAGS & flag) != 0;
 }
 
 //-----------------------------------------------------

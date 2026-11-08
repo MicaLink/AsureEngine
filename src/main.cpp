@@ -16,15 +16,16 @@ int main()
     memory.Reset();
     cpu.Reset();
 
-    for (u16 i = 0; i < 100; ++i)
-    {
-        cpu.Push16(memory, i);
-    }
+    cpu.SetFlag(FLAG_ZERO);
+    cpu.SetFlag(FLAG_CARRY);
 
-    for (u16 i = 0; i < 100; ++i)
-    {
-        cpu.Pop16(memory);
-    }
+    printf("FLAGS = %02X\n", cpu.GetFlags());
+    printf("ZERO  = %d\n", cpu.IsFlagSet(FLAG_ZERO));
+    printf("CARRY = %d\n", cpu.IsFlagSet(FLAG_CARRY));
+
+    cpu.ClearFlag(FLAG_ZERO);
+
+    printf("FLAGS = %02X\n", cpu.GetFlags());
 
     return 0;
-}
+} 
