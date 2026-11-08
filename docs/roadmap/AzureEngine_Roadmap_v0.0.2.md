@@ -11,17 +11,11 @@
 
 # Présentation
 
-La version **v0.0.2-alpha** est consacrée à la finalisation de l'architecture de base d'Azure-8.
+La version **v0.0.2-alpha** est consacrée à la finalisation des fondations techniques d'Azure-8.
 
-L'ensemble des composants critiques du processeur est désormais opérationnel :
+Les systèmes mémoire, pile, Stack Pointer et debug principal sont désormais considérés comme stables.
 
-- mémoire ;
-- pile ;
-- Stack Pointer ;
-- système de debug ;
-- infrastructure FLAGS.
-
-Cette version prépare directement le terrain pour la future v0.0.3 qui introduira les premières instructions capables de manipuler des données utilisateur.
+Cette version constitue la dernière étape avant l'arrivée du premier véritable jeu d'instructions Azure-8 prévu pour la v0.0.3.
 
 ---
 
@@ -56,13 +50,13 @@ SP      16 bits
 
 ## Philosophie
 
-Azure-8 manipule uniquement :
+Azure-8 manipule exclusivement :
 
 ```txt
-des valeurs 8 bits
+des données sur 8 bits
 ```
 
-Les registres 16 bits sont utilisés exclusivement pour :
+Les registres 16 bits sont utilisés uniquement pour :
 
 ```txt
 - l'adressage mémoire
@@ -75,7 +69,7 @@ Les registres 16 bits sont utilisés exclusivement pour :
 
 # Objectif principal
 
-Achever définitivement les fondations du processeur avant le démarrage du futur jeu d'instructions Azure-8.
+Finaliser toutes les fondations techniques nécessaires avant l'apparition des premières instructions de manipulation de données.
 
 ---
 
@@ -109,11 +103,12 @@ Achever définitivement les fondations du processeur avant le démarrage du futu
 - [x] STACK_TOP
 - [x] STACK_BOTTOM
 - [x] Initialisation du SP
+- [x] GetSP()
 - [x] Validation complète du SP
-- [x] Détection Overflow
-- [x] Détection Underflow
 - [x] Validation des limites mémoire
 - [x] Tests de charge
+- [x] Détection Stack Overflow
+- [x] Détection Stack Underflow
 
 ### FLAGS
 
@@ -125,11 +120,10 @@ Achever définitivement les fondations du processeur avant le démarrage du futu
 - [x] SetFlag()
 - [x] ClearFlag()
 - [x] IsFlagSet()
+- [x] GetFlags()
 
 - [x] UpdateZeroFlag()
 - [x] UpdateNegativeFlag()
-
-- [x] GetFlags()
 
 ### Debug
 
@@ -185,7 +179,7 @@ Achever définitivement les fondations du processeur avant le démarrage du futu
 
 ## Résultat
 
-Le système de pile Azure-8 est considéré comme stable.
+Le système de pile Azure-8 est validé.
 
 ### Fonctionnalités validées
 
@@ -203,11 +197,11 @@ Le système de pile Azure-8 est considéré comme stable.
 
 ---
 
-# Lot D - FLAGS
+# Lot D - FLAGS (PRIORITÉ ACTUELLE)
 
 ## Objectif
 
-Préparer Azure-8 aux futures opérations arithmétiques, logiques et de contrôle de flux.
+Préparer Azure-8 aux futures opérations logiques, arithmétiques et de contrôle de flux.
 
 ---
 
@@ -222,17 +216,9 @@ Bit 3 : Overflow Flag (V)
 Bits 4 à 7 : Réservés
 ```
 
-Représentation :
-
-```txt
-7 6 5 4 3 2 1 0
-
-- - - - V N C Z
-```
-
 ---
 
-## Infrastructure FLAGS
+## Infrastructure
 
 ### Définition
 
@@ -248,7 +234,7 @@ Représentation :
 - [x] IsFlagSet()
 - [x] GetFlags()
 
-### Gestion automatique
+### Mise à jour automatique
 
 - [x] UpdateZeroFlag()
 - [x] UpdateNegativeFlag()
@@ -259,47 +245,50 @@ Représentation :
 
 ---
 
-## Validation FLAGS
+## Validation
 
 ### Zero Flag
 
-- [x] Activation si résultat = 0
-- [x] Désactivation si résultat ≠ 0
+- [x] Activation lorsque valeur = 0
+- [x] Désactivation lorsque valeur ≠ 0
 
 ### Negative Flag
 
-- [x] Activation si bit 7 = 1
-- [x] Désactivation si bit 7 = 0
+- [x] Activation lorsque le bit 7 = 1
+- [x] Désactivation lorsque le bit 7 = 0
 
 ### Validation combinée
 
-- [x] Fonctionnement simultané validé
+- [x] Fonctionnement simultané de Z et N
 
 ---
 
 ## Travail restant
 
-### Évolution future
+### Carry Flag
 
-- [ ] Carry Flag pour ADD
-- [ ] Carry Flag pour SUB
-- [ ] Overflow Flag signé
-- [ ] Intégration aux futures instructions
+- [ ] Helpers dédiés
+- [ ] Validation complète
+
+### Overflow Flag
+
+- [ ] Helpers dédiés
+- [ ] Validation complète
 
 ### Documentation
 
 - [ ] Documentation FLAGS
-- [ ] Mise à jour Azure-8 Technical Specification
+- [ ] Mise à jour Technical Specification
 
 ### Statut
 
-🟨 Quasiment terminé
+🟨 En cours (≈ 95 %)
 
 ---
 
 # Lot E - Debug
 
-## Fonctionnalités réalisées
+## Réalisé
 
 - [x] Affichage PC
 - [x] Affichage Opcode
@@ -308,13 +297,13 @@ Représentation :
 - [x] Dump Stack
 - [x] Dump Registers
 
-## Travaux futurs
+## À faire
 
 - [ ] Dump Memory
 
 ### Statut
 
-✅ Fonctionnel
+🟨 Presque terminé
 
 ---
 
@@ -322,7 +311,7 @@ Représentation :
 
 ## Objectif
 
-Créer une bibliothèque permanente de ROMs de validation.
+Maintenir une bibliothèque permanente de validation Azure-8.
 
 ### ROMs fondamentales
 
@@ -390,7 +379,7 @@ Maintenir les spécifications synchronisées avec le code.
 
 ## Objectif
 
-Préparer AzureEngine aux futures versions.
+Préparer AzureEngine pour les futures versions.
 
 ### Tâches
 
@@ -409,30 +398,34 @@ Préparer AzureEngine aux futures versions.
 ## Étape actuelle
 
 ```txt
-Finalisation du Lot D
+LOT D
 
+Carry Flag
 ↓
-
+Overflow Flag
+↓
 Documentation FLAGS
-
-↓
-
-Mise à jour Technical Specification
-
-↓
-
-Clôture officielle v0.0.2
 ```
 
 ## Étape suivante
 
 ```txt
-Préparation v0.0.3
+LOT E
+
+Dump Memory
 ```
 
 ## Puis
 
 ```txt
+Finalisation v0.0.2
+```
+
+## Puis
+
+```txt
+v0.0.3
+
 MOV
 LOAD
 STORE
@@ -447,10 +440,17 @@ La version v0.0.2-alpha sera considérée comme terminée lorsque :
 - [x] Mémoire validée
 - [x] Stack validée
 - [x] Stack Pointer validé
-- [x] Infrastructure FLAGS validée
 
-- [ ] Documentation FLAGS terminée
-- [ ] Documentation technique mise à jour
+- [x] Infrastructure FLAGS
+- [x] Validation Zero Flag
+- [x] Validation Negative Flag
+
+- [ ] Validation Carry Flag
+- [ ] Validation Overflow Flag
+
+- [ ] Documentation FLAGS
+- [ ] Documentation mise à jour
+
 - [ ] Tests automatisés disponibles
 
 ---
@@ -509,16 +509,16 @@ Progression : ~98 %
 Lot A       : ✅ Terminé
 Lot B       : ✅ Terminé
 Lot C       : ✅ Terminé
-Lot D       : 🟨 Quasiment terminé
-Lot E       : ✅ Fonctionnel
+Lot D       : 🟨 En cours
+Lot E       : 🟨 En cours
 
 Priorité :
 
+Carry Flag
+Overflow Flag
 Documentation FLAGS
-Documentation technique
-Préparation v0.0.3
 ```
 
 ---
 
-**Azure-8 dispose désormais d'une base technique solide. La v0.0.3 pourra se concentrer sur l'arrivée des premières instructions de manipulation de données sans nécessiter de refonte de l'architecture interne.**
+**Objectif immédiat : finaliser Carry Flag et Overflow Flag afin de clôturer définitivement le Lot D et terminer la v0.0.2.**

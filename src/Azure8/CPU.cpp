@@ -126,6 +126,18 @@ void CPU::UpdateZeroFlag(u8 value)
 }
 
 //-----------------------------------------------------
+// UpdateCarryFlag
+//-----------------------------------------------------
+
+void CPU::UpdateCarryFlag(bool carry)
+{
+    if (carry)
+        SetFlag(FLAG_CARRY);
+    else
+        ClearFlag(FLAG_CARRY);
+}
+
+//-----------------------------------------------------
 // UpdateNegativeFlag
 //-----------------------------------------------------
 
@@ -135,6 +147,18 @@ void CPU::UpdateNegativeFlag(u8 value)
         SetFlag(FLAG_NEGATIVE);
     else
         ClearFlag(FLAG_NEGATIVE);
+}
+
+//-----------------------------------------------------
+// UpdateOverflowFlag
+//-----------------------------------------------------
+
+void CPU::UpdateOverflowFlag(bool overflow)
+{
+    if (overflow)
+        SetFlag(FLAG_OVERFLOW);
+    else
+        ClearFlag(FLAG_OVERFLOW);
 }
 
 //-----------------------------------------------------

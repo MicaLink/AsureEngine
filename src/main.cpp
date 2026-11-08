@@ -16,8 +16,8 @@ int main()
     memory.Reset();
     cpu.Reset();
 
-    cpu.UpdateZeroFlag(0);
-    cpu.UpdateNegativeFlag(0x80);
+    cpu.UpdateCarryFlag(true);
+    cpu.UpdateOverflowFlag(true);
 
-    printf("FLAGS = %02X\n", cpu.GetFlags());
+    printf("FLAGS=%02X\n", cpu.GetFlags());
 }

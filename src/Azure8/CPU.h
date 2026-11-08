@@ -51,7 +51,9 @@ public:
     bool IsFlagSet(u8 flag) const;
 
     void UpdateZeroFlag(u8 value);
+    void UpdateCarryFlag(bool carry);
     void UpdateNegativeFlag(u8 value);
+    void UpdateOverflowFlag(bool overflow);
 
     u8 GetFlags() const;
 
