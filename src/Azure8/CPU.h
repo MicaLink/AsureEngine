@@ -6,10 +6,10 @@
 // FLAGS
 //-----------------------------------------------------
 
-constexpr u8 FLAG_ZERO = 1 << 0;
-constexpr u8 FLAG_CARRY = 1 << 1;
-constexpr u8 FLAG_NEGATIVE = 1 << 2;
-constexpr u8 FLAG_OVERFLOW = 1 << 3;
+constexpr u8 FLAG_ZERO = (1 << 0);
+constexpr u8 FLAG_CARRY = (1 << 1);
+constexpr u8 FLAG_NEGATIVE = (1 << 2);
+constexpr u8 FLAG_OVERFLOW = (1 << 3);
 
 class Memory;
 
@@ -50,6 +50,9 @@ public:
 
     bool IsFlagSet(u8 flag) const;
 
+    void UpdateZeroFlag(u8 value);
+    void UpdateNegativeFlag(u8 value);
+
     u8 GetFlags() const;
 
     //-------------------------------------------------
@@ -77,13 +80,17 @@ private:
 private:
 
     //-------------------------------------------------
-    // Registers
+    // User Registers
     //-------------------------------------------------
 
     u8 A = 0;
     u8 B = 0;
     u8 C = 0;
     u8 D = 0;
+
+    //-------------------------------------------------
+    // System Registers
+    //-------------------------------------------------
 
     u16 PC = 0;
     u16 SP = 0;
@@ -92,7 +99,7 @@ private:
 private:
 
     //-------------------------------------------------
-    // State
+    // CPU State
     //-------------------------------------------------
 
     bool m_Halted = false;

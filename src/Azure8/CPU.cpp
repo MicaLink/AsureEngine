@@ -114,6 +114,30 @@ bool CPU::IsFlagSet(u8 flag) const
 }
 
 //-----------------------------------------------------
+// UpdateZeroFlag
+//-----------------------------------------------------
+
+void CPU::UpdateZeroFlag(u8 value)
+{
+    if (value == 0)
+        SetFlag(FLAG_ZERO);
+    else
+        ClearFlag(FLAG_ZERO);
+}
+
+//-----------------------------------------------------
+// UpdateNegativeFlag
+//-----------------------------------------------------
+
+void CPU::UpdateNegativeFlag(u8 value)
+{
+    if ((value & 0x80) != 0)
+        SetFlag(FLAG_NEGATIVE);
+    else
+        ClearFlag(FLAG_NEGATIVE);
+}
+
+//-----------------------------------------------------
 // FetchByte
 //-----------------------------------------------------
 
