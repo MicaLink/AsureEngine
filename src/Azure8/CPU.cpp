@@ -250,7 +250,7 @@ void CPU::Step(Memory& memory)
 {
     const u8 opcode = FetchByte(memory);
 
-    printf("PC=%04X SP=%04X OPCODE=%02X\n", PC - 1, SP, opcode);
+    printf("PC=%04X SP=%04X FFAGS=%02X OPCODE=%02X\n", static_cast<u16>(PC - 1), SP, FLAGS, opcode);
 
     switch (opcode)
     {

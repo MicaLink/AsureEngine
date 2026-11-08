@@ -4,7 +4,7 @@
 > Statut : **En développement**  
 > Version précédente : **v0.0.1-alpha**  
 > Architecture : **CPU 8 bits / Adressage mémoire 16 bits**  
-> Progression estimée : **95 %**  
+> Progression estimée : **97 %**  
 > Priorité actuelle : **Finalisation du Lot D - FLAGS**
 
 ---
@@ -13,16 +13,16 @@
 
 La version **v0.0.2-alpha** est consacrée à la finalisation des fondations techniques d'Azure-8.
 
-Les sous-systèmes mémoire et pile sont désormais considérés comme stables et validés.
+Les systèmes mémoire, pile et gestion du Stack Pointer sont désormais considérés comme stables et validés.
 
 Le travail restant concerne principalement :
 
-- le registre FLAGS ;
-- les outils de debug associés ;
+- le système FLAGS ;
+- l'affichage des FLAGS dans le debug ;
 - la documentation ;
-- les tâches de qualité du projet.
+- la qualité du projet.
 
-Cette version est la dernière étape avant l'introduction du premier véritable jeu d'instructions de manipulation de données prévu pour la v0.0.3.
+Cette version constitue la dernière étape avant le développement du premier véritable jeu d'instructions Azure-8.
 
 ---
 
@@ -63,26 +63,22 @@ Azure-8 manipule exclusivement :
 des données sur 8 bits
 ```
 
-L'adressage mémoire est réalisé sur :
+Les registres 16 bits servent uniquement à :
 
 ```txt
-16 bits
+- l'adressage mémoire
+- la pile
+- le Program Counter
+- les futurs appels de fonctions
 ```
 
-afin de permettre :
-
-```txt
-- un espace mémoire de 64 Ko
-- une pile robuste
-- les futurs sous-programmes
-- les futurs appels de fonction
-```
+Azure-8 reste donc un véritable processeur 8 bits.
 
 ---
 
 # Objectif principal
 
-Finaliser l'ensemble des fondations techniques du processeur Azure-8 avant le début du développement du jeu d'instructions utilisateur.
+Finaliser complètement les fondations techniques du processeur Azure-8 avant l'introduction des premières instructions de manipulation de données.
 
 ---
 
@@ -116,10 +112,11 @@ Finaliser l'ensemble des fondations techniques du processeur Azure-8 avant le d�
 - [x] STACK_TOP
 - [x] STACK_BOTTOM
 - [x] Initialisation du SP
+- [x] GetSP()
 - [x] Validation complète du SP
-- [x] Overflow
-- [x] Underflow
-- [x] Validation limites mémoire
+- [x] Détection Stack Overflow
+- [x] Détection Stack Underflow
+- [x] Validation des limites mémoire
 - [x] Tests de charge
 
 ### Debug
@@ -138,7 +135,16 @@ Finaliser l'ensemble des fondations techniques du processeur Azure-8 avant le d�
 
 # Lot A - Mémoire
 
-## Statut
+## Résultat
+
+### Fonctionnalités
+
+- [x] Read8()
+- [x] Write8()
+- [x] Read16()
+- [x] Write16()
+
+### Statut
 
 ✅ TERMINÉ
 
@@ -146,7 +152,16 @@ Finaliser l'ensemble des fondations techniques du processeur Azure-8 avant le d�
 
 # Lot B - Stack
 
-## Statut
+## Résultat
+
+### Fonctionnalités
+
+- [x] Push8()
+- [x] Pop8()
+- [x] Push16()
+- [x] Pop16()
+
+### Statut
 
 ✅ TERMINÉ
 
@@ -156,21 +171,19 @@ Finaliser l'ensemble des fondations techniques du processeur Azure-8 avant le d�
 
 ## Résultat
 
-Le système de pile Azure-8 est désormais considéré comme stable et validé.
+Le système de pile Azure-8 est validé.
 
-### Validations obtenues
+### Fonctionnalités validées
 
-- [x] Reset
-- [x] Push8()
-- [x] Pop8()
-- [x] Push16()
-- [x] Pop16()
+- [x] STACK_TOP
+- [x] STACK_BOTTOM
+- [x] Validation du SP
 - [x] Overflow
 - [x] Underflow
 - [x] Affichage SP
 - [x] Dump Stack
 - [x] Tests de charge
-- [x] Validation limites mémoire
+- [x] Limites mémoire validées
 
 ### Statut
 
@@ -182,9 +195,11 @@ Le système de pile Azure-8 est désormais considéré comme stable et validé.
 
 ## Objectif
 
-Préparer Azure-8 aux futures opérations logiques et arithmétiques.
+Préparer Azure-8 aux futures opérations logiques, arithmétiques et de contrôle de flux.
 
-### Définition officielle
+---
+
+## Définition officielle
 
 ```txt
 Bit 0 : Zero Flag     (Z)
@@ -192,56 +207,84 @@ Bit 1 : Carry Flag    (C)
 Bit 2 : Negative Flag (N)
 Bit 3 : Overflow Flag (V)
 
-Bits 4 à 7 réservés
+Bits 4 à 7 : Réservés
 ```
 
-### Infrastructure validée
+Représentation :
 
-#### Définition des FLAGS
+```txt
+7 6 5 4 3 2 1 0
+
+- - - - V N C Z
+```
+
+---
+
+## Infrastructure FLAGS
+
+### Définition
 
 - [x] FLAG_ZERO
 - [x] FLAG_CARRY
 - [x] FLAG_NEGATIVE
 - [x] FLAG_OVERFLOW
 
-#### Gestion manuelle
+### Gestion manuelle
 
 - [x] SetFlag()
 - [x] ClearFlag()
 - [x] IsFlagSet()
 - [x] GetFlags()
 
-#### Helpers automatiques
+### Mise à jour automatique
 
 - [x] UpdateZeroFlag()
 - [x] UpdateNegativeFlag()
 
-#### Initialisation
+### Initialisation
 
-- [x] Reset des FLAGS au démarrage
+- [x] Reset des FLAGS
+
+---
+
+## Validation FLAGS
+
+### Zero Flag
+
+- [x] Activation lorsque valeur = 0
+- [x] Désactivation lorsque valeur ≠ 0
+
+### Negative Flag
+
+- [x] Activation lorsque le bit 7 = 1
+- [x] Désactivation lorsque le bit 7 = 0
+
+### Validation combinée
+
+- [x] Fonctionnement simultané de Z et N
 
 ---
 
 ## Travail restant
 
-### Flags automatiques
-
-- [ ] Validation complète de UpdateZeroFlag()
-- [ ] Validation complète de UpdateNegativeFlag()
-
 ### Debug
 
-- [ ] Affichage FLAGS
+- [ ] Affichage FLAGS dans Step()
 - [ ] Dump registres
 
 ### Documentation
 
 - [ ] Documentation FLAGS
-- [ ] Mise à jour Technical Specification
+- [ ] Mise à jour Azure-8 Technical Specification
+
+### Préparation future
+
+- [ ] Carry Flag pour ADD/SUB
+- [ ] Overflow Flag pour opérations signées
 
 ### Statut
 
-🟨 En cours
+🟨 En cours (≈ 85 %)
 
 ---
 
@@ -270,7 +313,7 @@ Bits 4 à 7 réservés
 
 ## Objectif
 
-Créer une bibliothèque permanente de ROMs de validation.
+Maintenir une bibliothèque permanente de validation Azure-8.
 
 ### ROMs fondamentales
 
@@ -296,7 +339,7 @@ Créer une bibliothèque permanente de ROMs de validation.
 
 Les ROMs Stack sont présentes dans le dépôt.
 
-Leur validation complète est reportée à la v0.0.3 car elle dépend des futures instructions :
+Leur validation effective est reportée à la v0.0.3 avec l'arrivée des instructions :
 
 ```asm
 PUSH
@@ -315,15 +358,17 @@ RET
 
 ## Objectif
 
-Maintenir la documentation synchronisée avec le code.
+Maintenir les spécifications synchronisées avec le code.
 
 ### Tâches
 
 - [ ] LICENSE
 - [ ] Architecture.md
+
 - [ ] Documentation Stack
 - [ ] Documentation SP
 - [ ] Documentation FLAGS
+
 - [ ] Mise à jour Azure-8 Technical Specification
 
 ### Statut
@@ -336,7 +381,7 @@ Maintenir la documentation synchronisée avec le code.
 
 ## Objectif
 
-Préparer AzureEngine aux futures versions.
+Préparer AzureEngine pour les futures versions.
 
 ### Tâches
 
@@ -357,9 +402,7 @@ Préparer AzureEngine aux futures versions.
 ```txt
 LOT D
 
-Validation Zero Flag
-↓
-Validation Negative Flag
+Validation FLAGS
 ↓
 Affichage FLAGS
 ↓
@@ -377,7 +420,7 @@ Debug avancé
 ## Puis
 
 ```txt
-Finalisation v0.0.2
+Clôture v0.0.2
 ```
 
 ## Puis
@@ -400,8 +443,12 @@ La version v0.0.2-alpha sera considérée comme terminée lorsque :
 - [x] Stack validée
 - [x] Stack Pointer validé
 
-- [ ] FLAGS validés
+- [x] Infrastructure FLAGS
+- [x] Validation Zero Flag
+- [x] Validation Negative Flag
+
 - [ ] Affichage FLAGS
+- [ ] Documentation FLAGS
 - [ ] Documentation mise à jour
 - [ ] Tests automatisés disponibles
 
@@ -409,7 +456,7 @@ La version v0.0.2-alpha sera considérée comme terminée lorsque :
 
 # Objectif de la v0.0.3
 
-Introduction du premier véritable jeu d'instructions Azure-8 :
+Introduction du premier jeu d'instructions Azure-8 :
 
 ```asm
 MOV
@@ -427,7 +474,7 @@ CALL
 RET
 ```
 
-Enfin :
+Puis :
 
 ```asm
 INC
@@ -435,7 +482,10 @@ DEC
 
 ADD
 SUB
+
 CMP
+JZ
+JNZ
 ```
 
 ---
@@ -453,16 +503,19 @@ FLAGS       : 8 bits
 
 RAM         : 64 Ko
 
-Progression : ~95 %
+Progression : ~97 %
 
 Lot A       : ✅ Terminé
 Lot B       : ✅ Terminé
 Lot C       : ✅ Terminé
 Lot D       : 🟨 En cours
 
-Priorité    : Validation complète des FLAGS
+Priorité :
+
+Affichage FLAGS
+Documentation FLAGS
 ```
 
 ---
 
-**Objectif immédiat : terminer le système FLAGS afin de clôturer définitivement la v0.0.2 et préparer l'arrivée des premières véritables instructions Azure-8.**
+**Objectif immédiat : terminer le système FLAGS et son intégration dans le debug afin de clôturer définitivement la v0.0.2.**
