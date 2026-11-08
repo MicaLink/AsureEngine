@@ -60,6 +60,7 @@ public:
     //-------------------------------------------------
 
     void DumpStack(const Memory& memory, u16 count = 16) const;
+    void DumpRegister() const;
 
     //-------------------------------------------------
     // Status

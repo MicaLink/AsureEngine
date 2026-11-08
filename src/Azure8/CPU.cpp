@@ -243,6 +243,23 @@ void CPU::DumpStack(const Memory& memory, u16 count) const
 }
 
 //-----------------------------------------------------
+// DumpRegisters
+//-----------------------------------------------------
+
+void CPU::DumpRegister() const
+{
+    printf("\n========== REGISTERS ==========\n");
+    printf("A = %02X\n", A);
+    printf("B = %02X\n", B);
+    printf("C = %02X\n", C);
+    printf("D = %02X\n", D);
+    printf("PC = %04X\n", PC);
+    printf("SP = %04X\n", SP);
+    printf("FLAGS = %02X\n", FLAGS);
+    printf("===============================\n");
+}
+
+//-----------------------------------------------------
 // Step
 //-----------------------------------------------------
 
