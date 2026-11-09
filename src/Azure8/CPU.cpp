@@ -220,10 +220,10 @@ u8 CPU::Pop8(Memory& memory)
 
 void CPU::Push16(Memory& memory, u16 value)
 {
-    const u8 hight = static_cast<u8>((value >> 8) & 0xFF);
+    const u8 high = static_cast<u8>((value >> 8) & 0xFF);
     const u8 low = static_cast<u8>(value & 0xFF);
 
-    Push8(memory, hight);
+    Push8(memory, high);
     Push8(memory, low);
 }
 
@@ -234,9 +234,9 @@ void CPU::Push16(Memory& memory, u16 value)
 u16 CPU::Pop16(Memory& memory)
 {
     const u8 low = Pop8(memory);
-    const u8 hight = Pop8(memory);
+    const u8 high = Pop8(memory);
 
-    return static_cast<u16>(low | (hight << 8));
+    return static_cast<u16>(low | (high << 8));
 }
 
 //-----------------------------------------------------
@@ -317,7 +317,7 @@ void CPU::Step(Memory& memory)
 {
     const u8 opcode = FetchByte(memory);
 
-    printf("PC=%04X SP=%04X FFAGS=%02X OPCODE=%02X\n", static_cast<u16>(PC - 1), SP, FLAGS, opcode);
+    printf("PC=%04X SP=%04X FLAGS=%02X OPCODE=%02X\n", static_cast<u16>(PC - 1), SP, FLAGS, opcode);
 
     switch (opcode)
     {

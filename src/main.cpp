@@ -1,22 +1,43 @@
 #include "Azure8/Emulator.h"
-#include "Azure8/CPU.h"
-#include "Azure8/Memory.h"
 
 #include <cstdio>
 
-//-----------------------------------------------------
-// Main
-//-----------------------------------------------------
-
 int main()
 {
-    Memory memory;
-    CPU cpu;
+    //-------------------------------------------------
+    // Configuration
+    //-------------------------------------------------
 
-    memory.Reset();
-    cpu.Reset();
+    constexpr const char* ROM_PATH = "roms/invalid.rom";
 
-    cpu.DumpMemory(memory, 0x0000, 32);
+    //-------------------------------------------------
+    // Init
+    //-------------------------------------------------
 
-    printf("FLAGS=%02X\n", cpu.GetFlags());
+    Emulator emulator;
+
+    emulator.Reset();
+
+    //-------------------------------------------------
+    // Load ROM
+    //-------------------------------------------------
+
+    if (!emulator.LoadROM(ROM_PATH))
+    {
+        printf("FAILED TO LOAD ROM\n");
+
+        return 1;
+    }
+
+    printf("\nROM LOADED : %s\n\n", ROM_PATH);
+
+    //-------------------------------------------------
+    // Debug
+    //-------------------------------------------------
+
+    emulator.Run();
+
+    printf("\nEXECUTION COMPLETED\n");
+
+    return 0;
 }

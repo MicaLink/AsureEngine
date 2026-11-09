@@ -10,7 +10,7 @@
 >
 > Progression estimée : **99 %**
 >
-> Priorité actuelle : **Documentation et Qualité**
+> Priorité actuelle : **Lot G - Documentation**
 
 ---
 
@@ -18,9 +18,16 @@
 
 La version v0.0.2-alpha finalise les fondations techniques du processeur Azure-8.
 
-Les systèmes mémoire, pile, Stack Pointer, FLAGS et Debug sont désormais implémentés et fonctionnels.
+Cette version ajoute :
 
-Cette version prépare directement l'arrivée des premières instructions de manipulation de données prévues pour la v0.0.3.
+- la mémoire 16 bits ;
+- la pile ;
+- le Stack Pointer ;
+- le système FLAGS ;
+- les outils de debug avancés ;
+- les ROMs de validation.
+
+Cette version constitue la dernière étape avant l'introduction des premières instructions de manipulation de données prévues pour la v0.0.3.
 
 ---
 
@@ -47,7 +54,7 @@ SP      16 bits
 ## Mémoire
 
 ```txt
-64 Ko
+RAM 64 Ko
 
 0000h → FFFFh
 ```
@@ -119,29 +126,11 @@ SP      16 bits
 
 # Lot A - Mémoire
 
-## Résultat
-
-- [x] Read8()
-- [x] Write8()
-- [x] Read16()
-- [x] Write16()
-
-## Statut
-
 ✅ TERMINÉ
 
 ---
 
 # Lot B - Stack
-
-## Résultat
-
-- [x] Push8()
-- [x] Pop8()
-- [x] Push16()
-- [x] Pop16()
-
-## Statut
 
 ✅ TERMINÉ
 
@@ -149,65 +138,11 @@ SP      16 bits
 
 # Lot C - Stack Pointer
 
-## Résultat
-
-Le système de pile Azure-8 est complètement validé.
-
-### Fonctionnalités validées
-
-- [x] Validation SP
-- [x] Overflow
-- [x] Underflow
-- [x] Affichage SP
-- [x] DumpStack()
-- [x] Tests de charge
-- [x] Validation limites mémoire
-
-### Statut
-
 ✅ TERMINÉ
 
 ---
 
 # Lot D - FLAGS
-
-## Résultat
-
-Le système FLAGS est entièrement implémenté.
-
-### Définition
-
-```txt
-Bit 0 : Zero Flag     (Z)
-Bit 1 : Carry Flag    (C)
-Bit 2 : Negative Flag (N)
-Bit 3 : Overflow Flag (V)
-
-Bits 4 à 7 réservés
-```
-
-### Gestion
-
-- [x] SetFlag()
-- [x] ClearFlag()
-- [x] IsFlagSet()
-- [x] GetFlags()
-
-### Mise à jour
-
-- [x] UpdateZeroFlag()
-- [x] UpdateCarryFlag()
-- [x] UpdateNegativeFlag()
-- [x] UpdateOverflowFlag()
-
-### Validation
-
-- [x] Zero Flag
-- [x] Carry Flag
-- [x] Negative Flag
-- [x] Overflow Flag
-
-### Statut
 
 ✅ TERMINÉ
 
@@ -215,26 +150,18 @@ Bits 4 à 7 réservés
 
 # Lot E - Debug
 
-## Résultat
+✅ TERMINÉ
 
-Le système de débogage Azure-8 est pleinement opérationnel.
-
-### Affichage CPU
-
-- [x] PC
-- [x] SP
-- [x] FLAGS
-- [x] OPCODE
-
-### Inspection
+### Fonctionnalités validées
 
 - [x] DumpStack()
 - [x] DumpRegister()
 - [x] DumpMemory()
 
-### Statut
-
-✅ TERMINÉ
+- [x] Affichage PC
+- [x] Affichage SP
+- [x] Affichage FLAGS
+- [x] Affichage OPCODE
 
 ---
 
@@ -242,41 +169,119 @@ Le système de débogage Azure-8 est pleinement opérationnel.
 
 ## ROMs fondamentales
 
-- [ ] nop.rom
-- [ ] halt.rom
-- [ ] invalid.rom
+### nop.rom
+
+Validation :
+
+```asm
+NOP
+NOP
+NOP
+NOP
+HLT
+```
+
+Statut :
+
+- [x] Créée
+- [x] Validée
+
+---
+
+### halt.rom
+
+Validation :
+
+```asm
+HLT
+```
+
+Statut :
+
+- [x] Créée
+- [x] Validée
+
+---
+
+### invalid.rom
+
+Validation :
+
+```txt
+Opcode inconnu
+```
+
+Statut :
+
+- [x] Créée
+- [x] Validée
+
+---
 
 ## ROMs mémoire
 
-- [ ] memory16.rom
+### memory16.rom
+
+Statut :
+
+- [x] Créée
+- [ ] Validation reportée à la v0.0.3
+
+---
 
 ## ROMs Stack
 
-- [x] stack8.rom
-- [x] stack16.rom
+### stack8.rom
+
+Statut :
+
+- [x] Créée
+- [ ] Validation reportée à la v0.0.3
+
+### stack16.rom
+
+Statut :
+
+- [x] Créée
+- [ ] Validation reportée à la v0.0.3
+
+---
 
 ## ROMs sécurité
 
-- [x] overflow.rom
-- [x] underflow.rom
+### overflow.rom
 
-### Note
+Statut :
 
-Les ROMs Stack et Sécurité sont présentes dans le dépôt.
+- [x] Créée
+- [ ] Validation reportée à la v0.0.3
 
-Leur validation effective est reportée à la v0.0.3 avec l'arrivée des instructions :
+### underflow.rom
 
-```asm
-PUSH
-POP
+Statut :
 
-CALL
-RET
-```
+- [x] Créée
+- [ ] Validation reportée à la v0.0.3
 
-### Statut
+---
+
+## Statut du Lot F
 
 🟨 Partiellement terminé
+
+### Validé dans la v0.0.2
+
+- [x] nop.rom
+- [x] halt.rom
+- [x] invalid.rom
+
+### Reporté à la v0.0.3
+
+- [ ] memory16.rom
+- [ ] stack8.rom
+- [ ] stack16.rom
+- [ ] overflow.rom
+- [ ] underflow.rom
 
 ---
 
@@ -284,7 +289,7 @@ RET
 
 ## Objectif
 
-Maintenir les spécifications synchronisées avec le code.
+Maintenir la documentation synchronisée avec le code.
 
 ### Tâches
 
@@ -312,7 +317,8 @@ Préparer AzureEngine pour les futures versions.
 ### Tâches
 
 - [ ] Vérification warnings MSVC
-- [ ] Nettoyage dépôt Git
+- [ ] Nettoyage du code
+- [ ] Nettoyage du dépôt Git
 - [ ] Premiers tests automatisés
 
 ### Statut
@@ -355,15 +361,19 @@ Release v0.0.2-alpha
 - [x] FLAGS validés
 - [x] Debug validé
 
+- [x] nop.rom validée
+- [x] halt.rom validée
+- [x] invalid.rom validée
+
 - [ ] Documentation mise à jour
-- [ ] Tests automatisés disponibles
 - [ ] Validation finale du dépôt
+- [ ] Tests automatisés disponibles
 
 ---
 
 # Objectif de la v0.0.3
 
-Introduction du premier jeu d'instructions Azure-8 :
+Introduction du premier véritable jeu d'instructions Azure-8 :
 
 ```asm
 MOV
@@ -419,6 +429,8 @@ Lot C       : ✅ Terminé
 Lot D       : ✅ Terminé
 Lot E       : ✅ Terminé
 
+Lot F       : 🟨 Validation partielle
+
 Priorité :
 
 Lot G - Documentation
@@ -427,4 +439,4 @@ Lot H - Qualité
 
 ---
 
-**La partie développement cœur du processeur Azure-8 est désormais terminée pour la v0.0.2. Les derniers travaux concernent principalement la documentation, la qualité du dépôt et la préparation de la release avant le démarrage de la v0.0.3.**
+**La partie développement du cœur Azure‑8 est désormais terminée pour la v0.0.2. Les ROMs fondamentales sont validées et les prochains travaux concernent principalement la documentation, la qualité du code et la préparation de la release v0.0.2-alpha.**
