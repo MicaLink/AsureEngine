@@ -2,7 +2,7 @@
 
 > Version cible : **v0.0.2-alpha**
 >
-> Statut : **En développement**
+> Statut : **Pré-release**
 >
 > Version précédente : **v0.0.1-alpha**
 >
@@ -10,24 +10,25 @@
 >
 > Progression estimée : **99 %**
 >
-> Priorité actuelle : **Lot G - Documentation**
+> Priorité actuelle : **Lot H - Qualité**
 
 ---
 
 # Présentation
 
-La version v0.0.2-alpha finalise les fondations techniques d'Azure-8.
+La version v0.0.2-alpha finalise les fondations techniques de la plateforme Azure-8.
 
 Cette version introduit :
 
 - l'adressage mémoire 16 bits ;
 - le système de pile ;
-- le Stack Pointer ;
-- le système FLAGS ;
-- les outils de debug avancés ;
-- les ROMs de validation.
+- le registre Stack Pointer ;
+- le registre FLAGS ;
+- les outils avancés de débogage ;
+- les ROMs de validation ;
+- la documentation complète de l'architecture.
 
-L'objectif principal est de stabiliser l'architecture Azure-8 avant l'arrivée des premières instructions de manipulation de données dans la v0.0.3.
+L'objectif principal est de stabiliser Azure-8 avant l'arrivée des premières instructions de manipulation de données prévues pour la v0.0.3.
 
 ---
 
@@ -44,12 +45,16 @@ D       8 bits
 FLAGS   8 bits
 ```
 
+---
+
 ## Registres système
 
 ```txt
 PC      16 bits
 SP      16 bits
 ```
+
+---
 
 ## Mémoire
 
@@ -61,13 +66,15 @@ RAM 64 Ko
 
 ---
 
-# État général
+# État global d'avancement
 
 ## CPU
 
 - [x] Fetch
 - [x] Decode
 - [x] Execute
+
+---
 
 ## Mémoire
 
@@ -79,6 +86,8 @@ RAM 64 Ko
 
 - [x] Validation Little Endian
 
+---
+
 ## Stack
 
 - [x] Push8()
@@ -87,31 +96,42 @@ RAM 64 Ko
 - [x] Push16()
 - [x] Pop16()
 
+---
+
 ## Stack Pointer
 
 - [x] STACK_TOP
 - [x] STACK_BOTTOM
+
+- [x] Validation complète
 
 - [x] Overflow
 - [x] Underflow
 
 - [x] Tests de charge
 
+---
+
 ## FLAGS
 
-- [x] Zero
-- [x] Carry
-- [x] Negative
-- [x] Overflow
+- [x] FLAG_ZERO
+- [x] FLAG_CARRY
+- [x] FLAG_NEGATIVE
+- [x] FLAG_OVERFLOW
 
 - [x] SetFlag()
 - [x] ClearFlag()
+
 - [x] IsFlagSet()
+- [x] GetFlags()
 
 - [x] UpdateZeroFlag()
 - [x] UpdateCarryFlag()
+
 - [x] UpdateNegativeFlag()
 - [x] UpdateOverflowFlag()
+
+---
 
 ## Debug
 
@@ -128,11 +148,33 @@ RAM 64 Ko
 
 # Lot A - Mémoire
 
+## Fonctionnalités
+
+- [x] Read8()
+- [x] Write8()
+
+- [x] Read16()
+- [x] Write16()
+
+- [x] Little Endian
+
+## Statut
+
 ✅ TERMINÉ
 
 ---
 
 # Lot B - Stack
+
+## Fonctionnalités
+
+- [x] Push8()
+- [x] Pop8()
+
+- [x] Push16()
+- [x] Pop16()
+
+## Statut
 
 ✅ TERMINÉ
 
@@ -140,11 +182,43 @@ RAM 64 Ko
 
 # Lot C - Stack Pointer
 
+## Fonctionnalités
+
+- [x] Gestion du registre SP
+- [x] Limites de pile
+- [x] Validation mémoire
+- [x] Détection Overflow
+- [x] Détection Underflow
+- [x] Tests de charge
+
+## Statut
+
 ✅ TERMINÉ
 
 ---
 
 # Lot D - FLAGS
+
+## Fonctionnalités
+
+- [x] Zero Flag
+- [x] Carry Flag
+- [x] Negative Flag
+- [x] Overflow Flag
+
+- [x] SetFlag()
+- [x] ClearFlag()
+
+- [x] IsFlagSet()
+- [x] GetFlags()
+
+- [x] UpdateZeroFlag()
+- [x] UpdateCarryFlag()
+
+- [x] UpdateNegativeFlag()
+- [x] UpdateOverflowFlag()
+
+## Statut
 
 ✅ TERMINÉ
 
@@ -152,18 +226,24 @@ RAM 64 Ko
 
 # Lot E - Debug
 
-✅ TERMINÉ
+## Fonctionnalités
 
-### Fonctionnalités validées
+### Affichage CPU
+
+- [x] PC
+- [x] SP
+- [x] FLAGS
+- [x] OPCODE
+
+### Outils
 
 - [x] DumpStack()
 - [x] DumpRegister()
 - [x] DumpMemory()
 
-- [x] Affichage PC
-- [x] Affichage SP
-- [x] Affichage FLAGS
-- [x] Affichage OPCODE
+## Statut
+
+✅ TERMINÉ
 
 ---
 
@@ -252,23 +332,9 @@ Statut :
 
 ---
 
-## Statut du Lot F
+## Statut
 
-✅ TERMINÉ POUR LA v0.0.2
-
-### Validé
-
-- [x] nop.rom
-- [x] halt.rom
-- [x] invalid.rom
-
-### Reporté à la v0.0.3
-
-- [ ] memory16.rom
-- [ ] stack8.rom
-- [ ] stack16.rom
-- [ ] overflow.rom
-- [ ] underflow.rom
+✅ TERMINÉ POUR LA V0.0.2
 
 ---
 
@@ -278,21 +344,41 @@ Statut :
 
 Maintenir la documentation synchronisée avec le code.
 
-### Tâches
+---
 
-- [ ] LICENSE
+## Documentation générale
 
+- [x] README.md
+- [x] LICENSE
 - [x] Architecture.md
 
-- [ ] Documentation Stack
-- [ ] Documentation Stack Pointer
-- [ ] Documentation FLAGS
+---
 
-- [ ] Azure-8_Technical_Specification_v0.0.2.txt
+## Documentation technique
 
-### Statut
+- [x] Documentation Stack.md
+- [x] Documentation SP.md
+- [x] Documentation FLAGS.md
 
-🟨 En cours
+---
+
+## Spécifications
+
+- [x] Azure-8_Technical_Specification_v0.0.1.txt
+- [x] Azure-8_Technical_Specification_v0.0.2.txt
+
+---
+
+## Roadmaps
+
+- [x] AzureEngine_Roadmap_v0.0.1.md
+- [x] AzureEngine_Roadmap_v0.0.2.md
+
+---
+
+## Statut
+
+✅ TERMINÉ
 
 ---
 
@@ -300,23 +386,47 @@ Maintenir la documentation synchronisée avec le code.
 
 ## Objectif
 
-Préparer la release v0.0.2-alpha.
+Préparer la release officielle v0.0.2-alpha.
 
-### Tâches
+---
+
+## Code
 
 - [ ] Vérification warnings MSVC
 
 - [ ] Nettoyage du code
+
   - [ ] FFAGS → FLAGS
   - [ ] hight → high
 
-- [ ] Nettoyage dépôt Git
+- [ ] Uniformisation du style
+
+---
+
+## Compilation
+
+- [ ] Validation Build Debug
+- [ ] Validation Build Release
+
+---
+
+## Dépôt
+
+- [ ] Vérification structure du dépôt
+- [ ] Vérification documentation finale
+- [ ] Validation des fichiers ROM
+
+---
+
+## Tests
 
 - [ ] Premiers tests automatisés
 
-### Statut
+---
 
-⬜ Non commencé
+## Statut
+
+🟨 EN COURS
 
 ---
 
@@ -325,56 +435,75 @@ Préparer la release v0.0.2-alpha.
 ## Étape actuelle
 
 ```txt
-LOT G
-
-Documentation Stack
-↓
-Documentation SP
-↓
-Documentation FLAGS
-↓
-Azure-8 Technical Specification v0.0.2
-```
-
-## Ensuite
-
-```txt
 LOT H
 
 Qualité
 ```
 
+---
+
 ## Puis
 
 ```txt
-Release v0.0.2-alpha
+Release
+
+v0.0.2-alpha
+```
+
+---
+
+## Ensuite
+
+```txt
+Début du développement
+
+v0.0.3
 ```
 
 ---
 
 # Critères de validation de la v0.0.2
 
+## Architecture
+
 - [x] Mémoire validée
 - [x] Stack validée
 - [x] Stack Pointer validé
-
 - [x] FLAGS validés
 
+---
+
+## Debug
+
 - [x] Debug validé
+
+---
+
+## ROMs
 
 - [x] nop.rom validée
 - [x] halt.rom validée
 - [x] invalid.rom validée
 
-- [ ] Documentation complète
-- [ ] Validation du dépôt
-- [ ] Tests automatisés
+---
+
+## Documentation
+
+- [x] Documentation complète
+
+---
+
+## Release
+
+- [ ] Validation finale du dépôt
+- [ ] Validation qualité
+- [ ] Tag Git
 
 ---
 
 # Objectif de la v0.0.3
 
-Introduction des premières instructions de manipulation de données :
+Premières instructions de manipulation de données :
 
 ```asm
 MOV
@@ -402,6 +531,7 @@ ADD
 SUB
 
 CMP
+
 JZ
 JNZ
 ```
@@ -430,12 +560,44 @@ Lot C       : ✅ Terminé
 Lot D       : ✅ Terminé
 Lot E       : ✅ Terminé
 Lot F       : ✅ Terminé
+Lot G       : ✅ Terminé
+Lot H       : 🟨 En cours
 
 Priorité :
 
-Lot G - Documentation
+Lot H - Qualité
 ```
 
 ---
 
-**Le développement du cœur d'Azure‑8 et la validation des ROMs fondamentales sont désormais terminés. La v0.0.2 entre dans sa phase finale de documentation et de préparation à la release avant le démarrage de la v0.0.3.**
+# Résumé
+
+La version v0.0.2-alpha est désormais fonctionnellement complète.
+
+Les fondations d'Azure-8 sont terminées :
+
+```txt
+✓ Mémoire 16 bits
+✓ Stack
+✓ Stack Pointer
+✓ FLAGS
+✓ Debug
+✓ ROMs de validation
+✓ Documentation
+```
+
+Les derniers travaux concernent uniquement la qualité, la validation finale du dépôt et la préparation de la release officielle.
+
+Une fois le Lot H terminé, le projet pourra être publié sous le tag :
+
+```txt
+v0.0.2-alpha
+```
+
+avant le démarrage du développement de la version :
+
+```txt
+v0.0.3
+```
+
+consacrée aux premières instructions de manipulation de données.

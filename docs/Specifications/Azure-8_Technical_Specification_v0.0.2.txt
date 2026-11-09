@@ -1,0 +1,402 @@
+==================================================
+AZURE-8 TECHNICAL SPECIFICATION
+==================================================
+
+Version :
+v0.0.2-alpha
+
+Statut :
+En développement
+
+Projet :
+AzureEngine
+
+==================================================
+PRÉSENTATION
+==================================================
+
+Azure-8 est la première architecture officielle
+du projet AzureEngine.
+
+Azure-8 est un processeur 8 bits conçu comme
+une plateforme simple, documentée et évolutive
+destinée à l'apprentissage, à l'expérimentation
+et au développement rétro.
+
+La version v0.0.2 introduit :
+
+- adressage mémoire 16 bits
+- système de pile
+- Stack Pointer
+- registre FLAGS
+- outils avancés de débogage
+
+==================================================
+ARCHITECTURE CPU
+==================================================
+
+Registres utilisateur :
+
+A       8 bits
+B       8 bits
+C       8 bits
+D       8 bits
+
+FLAGS   8 bits
+
+Registres système :
+
+PC      16 bits
+SP      16 bits
+
+==================================================
+MÉMOIRE
+==================================================
+
+RAM :
+
+64 Ko
+
+Organisation :
+
+0000h
+↓
+FFFFh
+
+Taille totale :
+
+65536 octets
+
+==================================================
+LECTURE ET ÉCRITURE MÉMOIRE
+==================================================
+
+Fonctions disponibles :
+
+Read8()
+Write8()
+
+Read16()
+Write16()
+
+==================================================
+FORMAT 16 BITS
+==================================================
+
+Azure-8 utilise :
+
+Little Endian
+
+Exemple :
+
+1234h
+
+Mémoire :
+
+0000h = 34h
+0001h = 12h
+
+==================================================
+PILE
+==================================================
+
+Zone réservée :
+
+STACK_BOTTOM = FE00h
+STACK_TOP    = FFFFh
+
+Pile :
+
+FE00h
+↓
+FFFFh
+
+Capacité :
+
+512 octets
+
+==================================================
+OPÉRATIONS DE PILE
+==================================================
+
+8 bits :
+
+Push8()
+Pop8()
+
+16 bits :
+
+Push16()
+Pop16()
+
+==================================================
+STACK POINTER
+==================================================
+
+Registre :
+
+SP
+
+Taille :
+
+16 bits
+
+Valeur après Reset :
+
+FFFFh
+
+Pile descendante :
+
+Push :
+
+Écriture
+↓
+SP--
+
+Pop :
+
+SP++
+↓
+Lecture
+
+==================================================
+PROTECTION DE PILE
+==================================================
+
+Erreurs détectées :
+
+Stack Overflow
+Stack Underflow
+
+Actions :
+
+Arrêt immédiat du CPU
+
+==================================================
+FLAGS
+==================================================
+
+Taille :
+
+8 bits
+
+Organisation :
+
+Bit 0 : Zero Flag
+Bit 1 : Carry Flag
+Bit 2 : Negative Flag
+Bit 3 : Overflow Flag
+
+Bits 4 à 7 réservés
+
+==================================================
+FONCTIONS FLAGS
+==================================================
+
+SetFlag()
+ClearFlag()
+
+IsFlagSet()
+GetFlags()
+
+UpdateZeroFlag()
+UpdateCarryFlag()
+
+UpdateNegativeFlag()
+UpdateOverflowFlag()
+
+==================================================
+CYCLE CPU
+==================================================
+
+Cycle d'exécution :
+
+Fetch
+↓
+Decode
+↓
+Execute
+
+Lecture opcode :
+
+FetchByte()
+
+Décodage :
+
+switch(opcode)
+
+==================================================
+JEU D'INSTRUCTIONS
+==================================================
+
+00h
+
+NOP
+
+Aucune opération.
+
+--------------------------------------------------
+
+FFh
+
+HLT
+
+Arrêt du processeur.
+
+==================================================
+ROM
+==================================================
+
+Chargement :
+
+ROM binaire
+
+Validation :
+
+nop.rom
+halt.rom
+invalid.rom
+
+==================================================
+DEBUG
+==================================================
+
+Affichages :
+
+PC
+SP
+FLAGS
+OPCODE
+
+Fonctions :
+
+DumpStack()
+
+DumpRegister()
+
+DumpMemory()
+
+==================================================
+EXEMPLE D'EXÉCUTION
+==================================================
+
+ROM :
+
+00
+00
+00
+FF
+
+Résultat :
+
+ROM Loaded
+
+PC=0000 SP=FFFF FLAGS=00 OPCODE=00
+PC=0001 SP=FFFF FLAGS=00 OPCODE=00
+PC=0002 SP=FFFF FLAGS=00 OPCODE=00
+PC=0003 SP=FFFF FLAGS=00 OPCODE=FF
+
+CPU HALTED
+
+Execution Completed
+
+==================================================
+VALIDATION V0.0.2
+==================================================
+
+Mémoire
+
+[✓] Read8()
+[✓] Write8()
+
+[✓] Read16()
+[✓] Write16()
+
+Pile
+
+[✓] Push8()
+[✓] Pop8()
+
+[✓] Push16()
+[✓] Pop16()
+
+Stack Pointer
+
+[✓] Overflow
+[✓] Underflow
+
+FLAGS
+
+[✓] Zero
+[✓] Carry
+[✓] Negative
+[✓] Overflow
+
+Debug
+
+[✓] DumpStack()
+[✓] DumpRegister()
+[✓] DumpMemory()
+
+ROMs
+
+[✓] nop.rom
+[✓] halt.rom
+[✓] invalid.rom
+
+==================================================
+OBJECTIF V0.0.3
+==================================================
+
+Introduction des premières instructions
+de manipulation de données :
+
+MOV
+LOAD
+STORE
+
+Puis :
+
+PUSH
+POP
+
+CALL
+RET
+
+Puis :
+
+INC
+DEC
+
+ADD
+SUB
+
+CMP
+
+JZ
+JNZ
+
+==================================================
+STATUT
+==================================================
+
+Architecture :
+
+Stable
+
+Version :
+
+v0.0.2-alpha
+
+CPU :
+
+8 bits
+
+Mémoire :
+
+64 Ko
+
+État :
+
+Prêt pour finalisation documentation
+et validation qualité.
