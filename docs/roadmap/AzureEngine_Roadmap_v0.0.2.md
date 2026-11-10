@@ -2,15 +2,15 @@
 
 > Version cible : **v0.0.2-alpha**
 >
-> Statut : **Pré-release**
+> Statut : **Validation finale**
 >
 > Version précédente : **v0.0.1-alpha**
 >
 > Architecture : **CPU 8 bits / Adressage mémoire 16 bits**
 >
-> Progression estimée : **99.5 %**
+> Progression estimée : **99.8 %**
 >
-> Priorité actuelle : **Lot H - Qualité**
+> Priorité actuelle : **Validation finale du dépôt et préparation de la release**
 
 ---
 
@@ -26,9 +26,9 @@ Cette version introduit :
 - le registre FLAGS ;
 - les outils avancés de débogage ;
 - les ROMs de validation ;
-- la documentation technique complète.
+- la documentation complète de l'architecture.
 
-L'objectif principal est de stabiliser définitivement Azure-8 avant l'arrivée des premières instructions de manipulation de données prévues pour la v0.0.3.
+L'objectif principal est de stabiliser Azure-8 avant l'introduction des premières instructions de manipulation de données prévues pour la v0.0.3.
 
 ---
 
@@ -238,23 +238,17 @@ RAM 64 Ko
 
 ### nop.rom
 
-Statut :
-
 - [x] Créée
 - [x] Testée
 - [x] Validée
 
 ### halt.rom
 
-Statut :
-
 - [x] Créée
 - [x] Testée
 - [x] Validée
 
 ### invalid.rom
-
-Statut :
 
 - [x] Créée
 - [x] Testée
@@ -346,11 +340,19 @@ Préparer la release officielle v0.0.2-alpha.
 ## Compilation
 
 - [x] Build Debug
-- [ ] Build Release
+- [x] Build Release
 
 - [x] Vérification warnings MSVC (Debug)
+- [x] Vérification warnings MSVC (Release)
 
-Résultat Debug :
+### Résultat Debug
+
+```txt
+0 erreur
+0 warning
+```
+
+### Résultat Release
 
 ```txt
 0 erreur
@@ -375,7 +377,7 @@ Résultat Debug :
 
 ## Statut
 
-🟨 EN COURS
+🟨 VALIDATION FINALE
 
 ---
 
@@ -384,19 +386,11 @@ Résultat Debug :
 ## Étape actuelle
 
 ```txt
-LOT H
+Validation finale
 
-Qualité
-```
+↓
 
----
-
-## Puis
-
-```txt
-Release
-
-v0.0.2-alpha
+Release v0.0.2-alpha
 ```
 
 ---
@@ -435,9 +429,10 @@ AzureEngine v0.0.3
 ## Qualité
 
 - [x] Build Debug validé
-- [ ] Build Release validé
+- [x] Build Release validé
 
 - [x] Validation warnings MSVC (Debug)
+- [x] Validation warnings MSVC (Release)
 
 ## Release
 
@@ -497,7 +492,7 @@ FLAGS       : 8 bits
 
 RAM         : 64 Ko
 
-Progression : ~99.5 %
+Progression : ~99.8 %
 
 Lot A       : ✅ Terminé
 Lot B       : ✅ Terminé
@@ -506,13 +501,12 @@ Lot D       : ✅ Terminé
 Lot E       : ✅ Terminé
 Lot F       : ✅ Terminé
 Lot G       : ✅ Terminé
-Lot H       : 🟨 En cours
+
+Lot H       : 🟨 Validation finale
 
 Priorité :
 
-Build Release
-↓
-Validation finale
+Validation finale du dépôt
 ↓
 Tag Git v0.0.2-alpha
 ```
@@ -523,7 +517,7 @@ Tag Git v0.0.2-alpha
 
 Azure-8 v0.0.2 est désormais fonctionnellement complet.
 
-Les fondations de l'architecture sont validées :
+Les fondations de l'architecture sont entièrement validées :
 
 ```txt
 ✓ Mémoire 16 bits
@@ -531,22 +525,27 @@ Les fondations de l'architecture sont validées :
 ✓ Stack Pointer
 ✓ FLAGS
 ✓ Debug avancé
-✓ ROMs de validation
+
+✓ ROMs fondamentales validées
+
 ✓ Documentation complète
+
 ✓ Build Debug
+✓ Build Release
+
 ✓ 0 erreur
 ✓ 0 warning
 ```
 
-Les derniers travaux concernent uniquement la qualité finale, la validation Release et la préparation du tag Git officiel.
+Les derniers travaux concernent uniquement la validation finale du dépôt avant la publication officielle.
 
-Une fois le Build Release validé, le projet sera prêt pour :
+Une fois ces validations terminées, le projet pourra être publié sous le tag :
 
 ```txt
 v0.0.2-alpha
 ```
 
-avant l'ouverture du développement de :
+avant le démarrage du développement de :
 
 ```txt
 AzureEngine v0.0.3
