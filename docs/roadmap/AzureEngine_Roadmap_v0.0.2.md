@@ -1,145 +1,172 @@
 # AzureEngine Roadmap v0.0.2
 
-> Version cible : **v0.0.2-alpha**
+> Version : **v0.0.2-alpha**
 >
-> Statut : **Terminé**
+> Statut : **Publiée**
 >
 > Version précédente : **v0.0.1-alpha**
 >
 > Architecture : **CPU 8 bits / Adressage mémoire 16 bits**
 >
 > Progression : **100 %**
+>
+> Date de clôture : **v0.0.2-alpha publiée**
 
 ---
 
 # Présentation
 
-La version v0.0.2-alpha finalise les fondations techniques de l'architecture Azure-8.
+La version v0.0.2-alpha marque l'achèvement de la première phase de construction d'Azure-8.
 
-Cette version introduit :
+Cette version a permis de mettre en place toutes les infrastructures fondamentales nécessaires à l'évolution future du processeur :
 
-- l'adressage mémoire 16 bits ;
-- le système de pile ;
-- le registre Stack Pointer ;
-- le registre FLAGS ;
-- les outils avancés de débogage ;
-- les ROMs de validation ;
-- la documentation technique complète ;
-- les premiers tests automatisés.
+- adressage mémoire 16 bits ;
+- système de pile ;
+- registre Stack Pointer ;
+- registre FLAGS ;
+- outils de débogage ;
+- ROMs de validation ;
+- documentation technique ;
+- premiers tests automatisés.
 
-Cette version constitue la première base stable du processeur Azure-8 avant l'introduction des futures instructions de manipulation de données prévues dans la v0.0.3.
+Cette version constitue désormais la base stable du développement futur d'Azure-8.
 
 ---
 
-# Architecture officielle Azure-8
+# Objectifs atteints
+
+## CPU
+
+```txt
+✅ Architecture CPU opérationnelle
+
+✅ Cycle Fetch
+✅ Cycle Decode
+✅ Cycle Execute
+```
+
+---
 
 ## Registres utilisateur
 
 ```txt
-A       8 bits
-B       8 bits
-C       8 bits
-D       8 bits
+✅ A
+✅ B
+✅ C
+✅ D
 
-FLAGS   8 bits
-```
-
-## Registres système
-
-```txt
-PC      16 bits
-SP      16 bits
-```
-
-## Mémoire
-
-```txt
-RAM 64 Ko
-
-0000h → FFFFh
+✅ FLAGS
 ```
 
 ---
 
-# État global d'avancement
+## Registres système
 
-## CPU
+```txt
+✅ PC
 
-- [x] Fetch
-- [x] Decode
-- [x] Execute
+✅ SP
+```
+
+---
 
 ## Mémoire
 
-- [x] Read8()
-- [x] Write8()
+```txt
+✅ RAM 64 Ko
 
-- [x] Read16()
-- [x] Write16()
+✅ Read8()
+✅ Write8()
 
-- [x] Validation Little Endian
+✅ Read16()
+✅ Write16()
+
+✅ Little Endian
+```
+
+---
 
 ## Stack
 
-- [x] Push8()
-- [x] Pop8()
+```txt
+✅ Push8()
+✅ Pop8()
 
-- [x] Push16()
-- [x] Pop16()
+✅ Push16()
+✅ Pop16()
+```
 
-## Stack Pointer
-
-- [x] STACK_TOP
-- [x] STACK_BOTTOM
-
-- [x] Overflow
-- [x] Underflow
-
-- [x] Validation complète
+---
 
 ## FLAGS
 
-- [x] FLAG_ZERO
-- [x] FLAG_CARRY
-- [x] FLAG_NEGATIVE
-- [x] FLAG_OVERFLOW
+```txt
+✅ FLAG_ZERO
 
-- [x] SetFlag()
-- [x] ClearFlag()
+✅ FLAG_CARRY
 
-- [x] IsFlagSet()
-- [x] GetFlags()
+✅ FLAG_NEGATIVE
 
-- [x] UpdateZeroFlag()
-- [x] UpdateCarryFlag()
+✅ FLAG_OVERFLOW
+```
 
-- [x] UpdateNegativeFlag()
-- [x] UpdateOverflowFlag()
+Fonctions validées :
+
+```txt
+✅ SetFlag()
+✅ ClearFlag()
+
+✅ IsFlagSet()
+✅ GetFlags()
+
+✅ UpdateZeroFlag()
+✅ UpdateCarryFlag()
+
+✅ UpdateNegativeFlag()
+✅ UpdateOverflowFlag()
+```
+
+---
 
 ## Debug
 
-- [x] Affichage PC
-- [x] Affichage SP
-- [x] Affichage FLAGS
-- [x] Affichage OPCODE
+Outils validés :
 
-- [x] DumpStack()
-- [x] DumpRegister()
-- [x] DumpMemory()
+```txt
+✅ DumpRegister()
+
+✅ DumpMemory()
+
+✅ DumpStack()
+```
+
+Affichages :
+
+```txt
+✅ PC
+
+✅ SP
+
+✅ FLAGS
+
+✅ OPCODE
+```
 
 ---
 
 # Lot A - Mémoire
 
-## Résultat
+## Réalisé
 
-- [x] Read8()
-- [x] Write8()
+```txt
+✅ Read8()
+✅ Write8()
 
-- [x] Read16()
-- [x] Write16()
+✅ Read16()
+✅ Write16()
 
-- [x] Validation Little Endian
+✅ Validation Little Endian
+```
 
 ## Statut
 
@@ -149,13 +176,15 @@ RAM 64 Ko
 
 # Lot B - Stack
 
-## Résultat
+## Réalisé
 
-- [x] Push8()
-- [x] Pop8()
+```txt
+✅ Push8()
+✅ Pop8()
 
-- [x] Push16()
-- [x] Pop16()
+✅ Push16()
+✅ Pop16()
+```
 
 ## Statut
 
@@ -165,13 +194,19 @@ RAM 64 Ko
 
 # Lot C - Stack Pointer
 
-## Résultat
+## Réalisé
 
-- [x] Gestion du registre SP
-- [x] Validation des limites mémoire
-- [x] Stack Overflow
-- [x] Stack Underflow
-- [x] Tests de charge
+```txt
+✅ STACK_TOP
+
+✅ STACK_BOTTOM
+
+✅ Overflow
+
+✅ Underflow
+
+✅ Validation complète
+```
 
 ## Statut
 
@@ -181,24 +216,17 @@ RAM 64 Ko
 
 # Lot D - FLAGS
 
-## Résultat
+## Réalisé
 
-- [x] FLAG_ZERO
-- [x] FLAG_CARRY
-- [x] FLAG_NEGATIVE
-- [x] FLAG_OVERFLOW
+```txt
+✅ FLAG_ZERO
 
-- [x] SetFlag()
-- [x] ClearFlag()
+✅ FLAG_CARRY
 
-- [x] IsFlagSet()
-- [x] GetFlags()
+✅ FLAG_NEGATIVE
 
-- [x] UpdateZeroFlag()
-- [x] UpdateCarryFlag()
-
-- [x] UpdateNegativeFlag()
-- [x] UpdateOverflowFlag()
+✅ FLAG_OVERFLOW
+```
 
 ## Statut
 
@@ -208,20 +236,15 @@ RAM 64 Ko
 
 # Lot E - Debug
 
-## Résultat
+## Réalisé
 
-### Affichage CPU
+```txt
+✅ DumpRegister()
 
-- [x] PC
-- [x] SP
-- [x] FLAGS
-- [x] OPCODE
+✅ DumpMemory()
 
-### Outils
-
-- [x] DumpStack()
-- [x] DumpRegister()
-- [x] DumpMemory()
+✅ DumpStack()
+```
 
 ## Statut
 
@@ -233,56 +256,35 @@ RAM 64 Ko
 
 ## ROMs fondamentales
 
-### nop.rom
+```txt
+✅ nop.rom
 
-- [x] Créée
-- [x] Testée
-- [x] Validée
+✅ halt.rom
 
-### halt.rom
-
-- [x] Créée
-- [x] Testée
-- [x] Validée
-
-### invalid.rom
-
-- [x] Créée
-- [x] Testée
-- [x] Validée
+✅ invalid.rom
+```
 
 ---
 
 ## ROMs avancées
 
-### memory16.rom
+```txt
+✅ memory16.rom
 
-- [x] Créée
-- [ ] Validation reportée à la v0.0.3
+✅ stack8.rom
 
-### stack8.rom
+✅ stack16.rom
 
-- [x] Créée
-- [ ] Validation reportée à la v0.0.3
+✅ overflow.rom
 
-### stack16.rom
+✅ underflow.rom
+```
 
-- [x] Créée
-- [ ] Validation reportée à la v0.0.3
-
-### overflow.rom
-
-- [x] Créée
-- [ ] Validation reportée à la v0.0.3
-
-### underflow.rom
-
-- [x] Créée
-- [ ] Validation reportée à la v0.0.3
+Validation complète reportée à la v0.0.3 pour les futures instructions CPU.
 
 ## Statut
 
-✅ TERMINÉ POUR LA V0.0.2
+✅ TERMINÉ
 
 ---
 
@@ -290,25 +292,47 @@ RAM 64 Ko
 
 ## Documentation générale
 
-- [x] README.md
-- [x] LICENSE
-- [x] Architecture.md
+```txt
+✅ README.md
+
+✅ LICENSE
+
+✅ Architecture.md
+```
+
+---
 
 ## Documentation technique
 
-- [x] Documentation Stack.md
-- [x] Documentation SP.md
-- [x] Documentation FLAGS.md
+```txt
+✅ Documentation Stack.md
+
+✅ Documentation SP.md
+
+✅ Documentation FLAGS.md
+```
+
+---
 
 ## Spécifications
 
-- [x] Azure-8_Technical_Specification_v0.0.1.txt
-- [x] Azure-8_Technical_Specification_v0.0.2.txt
+```txt
+✅ Azure-8_Technical_Specification_v0.0.1.txt
+
+✅ Azure-8_Technical_Specification_v0.0.2.txt
+```
+
+---
 
 ## Roadmaps
 
-- [x] AzureEngine_Roadmap_v0.0.1.md
-- [x] AzureEngine_Roadmap_v0.0.2.md
+```txt
+✅ AzureEngine_Roadmap_v0.0.1.md
+
+✅ AzureEngine_Roadmap_v0.0.2.md
+```
+
+---
 
 ## Statut
 
@@ -320,68 +344,89 @@ RAM 64 Ko
 
 ## Nettoyage du code
 
-- [x] FFAGS → FLAGS
-- [x] hight → high
+```txt
+✅ FFAGS → FLAGS
 
-- [x] Relecture générale du code
+✅ hight → high
+
+✅ Relecture du code
+```
 
 ---
 
 ## Compilation
 
-- [x] Build Debug
-- [x] Build Release
-
-- [x] Vérification warnings MSVC (Debug)
-- [x] Vérification warnings MSVC (Release)
-
-### Résultat Debug
+### Debug
 
 ```txt
-0 erreur
-0 warning
+✅ Build réussi
+
+✅ 0 erreur
+
+✅ 0 warning
 ```
 
-### Résultat Release
+### Release
 
 ```txt
-0 erreur
-0 warning
+✅ Build réussi
+
+✅ 0 erreur
+
+✅ 0 warning
 ```
 
 ---
 
 ## Validation du dépôt
 
-- [x] Vérification de l'arborescence
-- [x] Vérification de la documentation
-- [x] Vérification des ROMs
-- [x] Vérification du .gitignore
+```txt
+✅ Arborescence vérifiée
+
+✅ Documentation vérifiée
+
+✅ ROMs vérifiées
+
+✅ .gitignore vérifié
+```
 
 ---
 
 ## Premiers tests automatisés
 
-### Tests mémoire
+### Mémoire
 
-- [x] TestReadWrite8()
-- [x] TestReadWrite16()
+```txt
+✅ TestReadWrite8()
 
-### Tests pile
+✅ TestReadWrite16()
+```
 
-- [x] TestPushPop8()
-- [x] TestPushPop16()
+### Stack
 
-### Tests FLAGS
+```txt
+✅ TestPushPop8()
 
-- [x] TestZeroFlag()
-- [x] TestCarryFlag()
-- [x] TestNegativeFlag()
-- [x] TestOverflowFlag()
+✅ TestPushPop16()
+```
 
-### Tests CPU
+### FLAGS
 
-- [x] TestReset()
+```txt
+✅ TestZeroFlag()
+
+✅ TestCarryFlag()
+
+✅ TestNegativeFlag()
+
+✅ TestOverflowFlag()
+```
+
+### CPU
+
+```txt
+✅ TestReset()
+```
 
 ### Résultat
 
@@ -399,40 +444,67 @@ All tests passed successfully.
 
 ---
 
-# Critères de validation de la v0.0.2
+# Validation finale
 
 ## Architecture
 
-- [x] Mémoire validée
-- [x] Stack validée
-- [x] Stack Pointer validé
-- [x] FLAGS validés
+```txt
+✅ Validée
+```
 
-## Debug
+---
 
-- [x] Debug validé
+## Mémoire
 
-## ROMs
+```txt
+✅ Validée
+```
 
-- [x] nop.rom validée
-- [x] halt.rom validée
-- [x] invalid.rom validée
+---
+
+## Stack
+
+```txt
+✅ Validée
+```
+
+---
+
+## FLAGS
+
+```txt
+✅ Validés
+```
+
+---
 
 ## Documentation
 
-- [x] Documentation complète
+```txt
+✅ Complète
+```
+
+---
 
 ## Qualité
 
-- [x] Build Debug validé
-- [x] Build Release validé
+```txt
+✅ Build Debug
 
-- [x] Validation warnings MSVC (Debug)
-- [x] Validation warnings MSVC (Release)
+✅ Build Release
+
+✅ 0 erreur
+
+✅ 0 warning
+```
+
+---
 
 ## Tests
 
-- [x] Premiers tests automatisés
+```txt
+✅ Premiers tests automatisés
+```
 
 ---
 
@@ -440,73 +512,107 @@ All tests passed successfully.
 
 ```txt
 Lot A ✅
+
 Lot B ✅
+
 Lot C ✅
+
 Lot D ✅
+
 Lot E ✅
+
 Lot F ✅
+
 Lot G ✅
+
 Lot H ✅
 ```
 
 ---
 
-# État final de la version
+# État final de la release
 
 ```txt
 Projet      : AzureEngine
 
 Version     : v0.0.2-alpha
 
+Statut      : Publiée
+
 CPU         : 8 bits
+
 PC          : 16 bits
+
 SP          : 16 bits
+
 FLAGS       : 8 bits
 
 RAM         : 64 Ko
 
 Progression : 100 %
-
-Build Debug   ✅
-Build Release ✅
-
-0 erreur      ✅
-0 warning     ✅
-
-Tests auto    ✅
-Documentation ✅
-ROMs          ✅
 ```
 
 ---
 
-# Clôture de la v0.0.2
-
-La version **v0.0.2-alpha** est considérée comme terminée.
-
-Commande de publication recommandée :
-
-```bash
-git add .
-git commit -m "Release v0.0.2-alpha"
-
-git tag v0.0.2-alpha
-
-git push
-git push --tags
-```
-
----
-
-# Prochaine étape
-
-Version suivante :
+# Accomplissements majeurs
 
 ```txt
-AzureEngine v0.0.3
+✅ Mémoire 16 bits
+
+✅ Stack
+
+✅ Stack Pointer
+
+✅ FLAGS
+
+✅ Debug avancé
+
+✅ ROMs de validation
+
+✅ Documentation complète
+
+✅ Premiers tests automatisés
+
+✅ Build Debug
+
+✅ Build Release
+
+✅ 0 erreur
+
+✅ 0 warning
 ```
 
-Objectifs principaux :
+---
+
+# Bilan
+
+La version **v0.0.2-alpha** est officiellement publiée.
+
+Elle constitue la première version stable des fondations techniques d'Azure-8 et valide :
+
+```txt
+l'architecture mémoire ;
+le système de pile ;
+le registre FLAGS ;
+les outils de débogage ;
+la documentation ;
+la qualité du code ;
+les premiers tests automatisés.
+```
+
+Cette version sert désormais de référence technique pour les évolutions futures du processeur.
+
+---
+
+# Transition vers la v0.0.3
+
+La prochaine version restera concentrée exclusivement sur :
+
+```txt
+Azure-8
+```
+
+Objectif principal :
 
 ```asm
 MOV
@@ -538,6 +644,8 @@ JZ
 JNZ
 ```
 
+L'objectif est de transformer Azure-8 en une plateforme réellement programmable capable d'exécuter des programmes complexes.
+
 ---
 
-**Fin de roadmap v0.0.2-alpha**
+**Fin de roadmap v0.0.2-alpha - Statut : Publiée ✅**
