@@ -8,9 +8,9 @@
 >
 > Architecture : **CPU 8 bits / Adressage mémoire 16 bits**
 >
-> Progression estimée : **99.8 %**
+> Progression estimée : **99.5 %**
 >
-> Priorité actuelle : **Validation finale du dépôt et préparation de la release**
+> Priorité actuelle : **Finalisation du Lot H - Qualité**
 
 ---
 
@@ -26,9 +26,9 @@ Cette version introduit :
 - le registre FLAGS ;
 - les outils avancés de débogage ;
 - les ROMs de validation ;
-- la documentation complète de l'architecture.
+- la documentation technique complète.
 
-L'objectif principal est de stabiliser Azure-8 avant l'introduction des premières instructions de manipulation de données prévues pour la v0.0.3.
+L'objectif principal de cette version est de stabiliser définitivement Azure-8 avant le démarrage du développement des premières instructions de manipulation de données prévues pour la v0.0.3.
 
 ---
 
@@ -332,8 +332,7 @@ Préparer la release officielle v0.0.2-alpha.
 - [x] FFAGS → FLAGS
 - [x] hight → high
 
-- [ ] Uniformisation du style
-- [ ] Relecture finale du code
+- [x] Relecture générale du code
 
 ---
 
@@ -361,23 +360,39 @@ Préparer la release officielle v0.0.2-alpha.
 
 ---
 
-## Validation
+## Validation du dépôt
 
-- [ ] Validation finale des ROMs
-- [ ] Validation finale de la documentation
-- [ ] Vérification complète du dépôt
+- [x] Vérification de l'arborescence
+- [x] Vérification de la documentation
+- [x] Vérification des ROMs
+- [x] Vérification du .gitignore
 
 ---
 
-## Tests
+## Tests automatisés
 
-- [ ] Premiers tests automatisés
+### Objectif
+
+Mettre en place les premiers tests automatisés du projet.
+
+### Prévus
+
+- [ ] TestMemory
+- [ ] TestRead16
+- [ ] TestWrite16
+- [ ] TestStack
+- [ ] TestFlags
+- [ ] TestReset
+
+### Statut
+
+⬜ NON COMMENCÉ
 
 ---
 
 ## Statut
 
-🟨 VALIDATION FINALE
+🟨 EN COURS
 
 ---
 
@@ -386,11 +401,17 @@ Préparer la release officielle v0.0.2-alpha.
 ## Étape actuelle
 
 ```txt
-Validation finale
+Premiers tests automatisés
+```
 
-↓
+---
 
-Release v0.0.2-alpha
+## Puis
+
+```txt
+Release
+
+v0.0.2-alpha
 ```
 
 ---
@@ -434,9 +455,12 @@ AzureEngine v0.0.3
 - [x] Validation warnings MSVC (Debug)
 - [x] Validation warnings MSVC (Release)
 
+## Tests
+
+- [ ] Premiers tests automatisés
+
 ## Release
 
-- [ ] Validation finale du dépôt
 - [ ] Tag Git v0.0.2-alpha
 
 ---
@@ -492,7 +516,7 @@ FLAGS       : 8 bits
 
 RAM         : 64 Ko
 
-Progression : ~99.8 %
+Progression : ~99.5 %
 
 Lot A       : ✅ Terminé
 Lot B       : ✅ Terminé
@@ -502,11 +526,11 @@ Lot E       : ✅ Terminé
 Lot F       : ✅ Terminé
 Lot G       : ✅ Terminé
 
-Lot H       : 🟨 Validation finale
+Lot H       : 🟨 En cours
 
 Priorité :
 
-Validation finale du dépôt
+Premiers tests automatisés
 ↓
 Tag Git v0.0.2-alpha
 ```
@@ -517,7 +541,7 @@ Tag Git v0.0.2-alpha
 
 Azure-8 v0.0.2 est désormais fonctionnellement complet.
 
-Les fondations de l'architecture sont entièrement validées :
+Les fondations de l'architecture sont validées :
 
 ```txt
 ✓ Mémoire 16 bits
@@ -537,9 +561,9 @@ Les fondations de l'architecture sont entièrement validées :
 ✓ 0 warning
 ```
 
-Les derniers travaux concernent uniquement la validation finale du dépôt avant la publication officielle.
+Le dernier élément bloquant avant la publication officielle est la mise en place des premiers tests automatisés prévus dans le Lot H.
 
-Une fois ces validations terminées, le projet pourra être publié sous le tag :
+Une fois ces tests ajoutés et validés, le projet pourra être publié sous le tag :
 
 ```txt
 v0.0.2-alpha
@@ -550,5 +574,3 @@ avant le démarrage du développement de :
 ```txt
 AzureEngine v0.0.3
 ```
-
-consacrée aux premières instructions de manipulation de données de l'architecture Azure-8.
