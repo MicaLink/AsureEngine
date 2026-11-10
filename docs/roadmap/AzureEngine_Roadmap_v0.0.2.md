@@ -8,7 +8,7 @@
 >
 > Architecture : **CPU 8 bits / Adressage mémoire 16 bits**
 >
-> Progression estimée : **99 %**
+> Progression estimée : **99.5 %**
 >
 > Priorité actuelle : **Lot H - Qualité**
 
@@ -16,7 +16,7 @@
 
 # Présentation
 
-La version v0.0.2-alpha finalise les fondations techniques de la plateforme Azure-8.
+La version v0.0.2-alpha finalise les fondations techniques de l'architecture Azure-8.
 
 Cette version introduit :
 
@@ -26,9 +26,9 @@ Cette version introduit :
 - le registre FLAGS ;
 - les outils avancés de débogage ;
 - les ROMs de validation ;
-- la documentation complète de l'architecture.
+- la documentation technique complète.
 
-L'objectif principal est de stabiliser Azure-8 avant l'arrivée des premières instructions de manipulation de données prévues pour la v0.0.3.
+L'objectif principal est de stabiliser définitivement Azure-8 avant l'arrivée des premières instructions de manipulation de données prévues pour la v0.0.3.
 
 ---
 
@@ -45,16 +45,12 @@ D       8 bits
 FLAGS   8 bits
 ```
 
----
-
 ## Registres système
 
 ```txt
 PC      16 bits
 SP      16 bits
 ```
-
----
 
 ## Mémoire
 
@@ -74,8 +70,6 @@ RAM 64 Ko
 - [x] Decode
 - [x] Execute
 
----
-
 ## Mémoire
 
 - [x] Read8()
@@ -86,8 +80,6 @@ RAM 64 Ko
 
 - [x] Validation Little Endian
 
----
-
 ## Stack
 
 - [x] Push8()
@@ -95,8 +87,6 @@ RAM 64 Ko
 
 - [x] Push16()
 - [x] Pop16()
-
----
 
 ## Stack Pointer
 
@@ -109,8 +99,6 @@ RAM 64 Ko
 - [x] Underflow
 
 - [x] Tests de charge
-
----
 
 ## FLAGS
 
@@ -131,8 +119,6 @@ RAM 64 Ko
 - [x] UpdateNegativeFlag()
 - [x] UpdateOverflowFlag()
 
----
-
 ## Debug
 
 - [x] Affichage PC
@@ -148,7 +134,7 @@ RAM 64 Ko
 
 # Lot A - Mémoire
 
-## Fonctionnalités
+## Résultat
 
 - [x] Read8()
 - [x] Write8()
@@ -156,7 +142,7 @@ RAM 64 Ko
 - [x] Read16()
 - [x] Write16()
 
-- [x] Little Endian
+- [x] Validation Little Endian
 
 ## Statut
 
@@ -166,7 +152,7 @@ RAM 64 Ko
 
 # Lot B - Stack
 
-## Fonctionnalités
+## Résultat
 
 - [x] Push8()
 - [x] Pop8()
@@ -182,13 +168,12 @@ RAM 64 Ko
 
 # Lot C - Stack Pointer
 
-## Fonctionnalités
+## Résultat
 
 - [x] Gestion du registre SP
-- [x] Limites de pile
-- [x] Validation mémoire
-- [x] Détection Overflow
-- [x] Détection Underflow
+- [x] Validation des limites mémoire
+- [x] Stack Overflow
+- [x] Stack Underflow
 - [x] Tests de charge
 
 ## Statut
@@ -199,12 +184,12 @@ RAM 64 Ko
 
 # Lot D - FLAGS
 
-## Fonctionnalités
+## Résultat
 
-- [x] Zero Flag
-- [x] Carry Flag
-- [x] Negative Flag
-- [x] Overflow Flag
+- [x] FLAG_ZERO
+- [x] FLAG_CARRY
+- [x] FLAG_NEGATIVE
+- [x] FLAG_OVERFLOW
 
 - [x] SetFlag()
 - [x] ClearFlag()
@@ -226,7 +211,7 @@ RAM 64 Ko
 
 # Lot E - Debug
 
-## Fonctionnalités
+## Résultat
 
 ### Affichage CPU
 
@@ -253,47 +238,21 @@ RAM 64 Ko
 
 ### nop.rom
 
-Validation :
-
-```asm
-NOP
-NOP
-NOP
-NOP
-HLT
-```
-
 Statut :
 
 - [x] Créée
 - [x] Testée
 - [x] Validée
-
----
 
 ### halt.rom
 
-Validation :
-
-```asm
-HLT
-```
-
 Statut :
 
 - [x] Créée
 - [x] Testée
 - [x] Validée
 
----
-
 ### invalid.rom
-
-Validation :
-
-```txt
-Opcode inconnu
-```
 
 Statut :
 
@@ -330,8 +289,6 @@ Statut :
 - [x] Créée
 - [ ] Validation reportée à la v0.0.3
 
----
-
 ## Statut
 
 ✅ TERMINÉ POUR LA V0.0.2
@@ -340,19 +297,11 @@ Statut :
 
 # Lot G - Documentation
 
-## Objectif
-
-Maintenir la documentation synchronisée avec le code.
-
----
-
 ## Documentation générale
 
 - [x] README.md
 - [x] LICENSE
 - [x] Architecture.md
-
----
 
 ## Documentation technique
 
@@ -360,21 +309,15 @@ Maintenir la documentation synchronisée avec le code.
 - [x] Documentation SP.md
 - [x] Documentation FLAGS.md
 
----
-
 ## Spécifications
 
 - [x] Azure-8_Technical_Specification_v0.0.1.txt
 - [x] Azure-8_Technical_Specification_v0.0.2.txt
 
----
-
 ## Roadmaps
 
 - [x] AzureEngine_Roadmap_v0.0.1.md
 - [x] AzureEngine_Roadmap_v0.0.2.md
-
----
 
 ## Statut
 
@@ -390,31 +333,37 @@ Préparer la release officielle v0.0.2-alpha.
 
 ---
 
-## Code
+## Nettoyage du code
 
-- [ ] Vérification warnings MSVC
-
-- [ ] Nettoyage du code
-
-  - [ ] FFAGS → FLAGS
-  - [ ] hight → high
+- [x] FFAGS → FLAGS
+- [x] hight → high
 
 - [ ] Uniformisation du style
+- [ ] Relecture finale du code
 
 ---
 
 ## Compilation
 
-- [ ] Validation Build Debug
-- [ ] Validation Build Release
+- [x] Build Debug
+- [ ] Build Release
+
+- [x] Vérification warnings MSVC (Debug)
+
+Résultat Debug :
+
+```txt
+0 erreur
+0 warning
+```
 
 ---
 
-## Dépôt
+## Validation
 
-- [ ] Vérification structure du dépôt
-- [ ] Vérification documentation finale
-- [ ] Validation des fichiers ROM
+- [ ] Validation finale des ROMs
+- [ ] Validation finale de la documentation
+- [ ] Vérification complète du dépôt
 
 ---
 
@@ -455,9 +404,7 @@ v0.0.2-alpha
 ## Ensuite
 
 ```txt
-Début du développement
-
-v0.0.3
+AzureEngine v0.0.3
 ```
 
 ---
@@ -471,13 +418,9 @@ v0.0.3
 - [x] Stack Pointer validé
 - [x] FLAGS validés
 
----
-
 ## Debug
 
 - [x] Debug validé
-
----
 
 ## ROMs
 
@@ -485,19 +428,21 @@ v0.0.3
 - [x] halt.rom validée
 - [x] invalid.rom validée
 
----
-
 ## Documentation
 
 - [x] Documentation complète
 
----
+## Qualité
+
+- [x] Build Debug validé
+- [ ] Build Release validé
+
+- [x] Validation warnings MSVC (Debug)
 
 ## Release
 
 - [ ] Validation finale du dépôt
-- [ ] Validation qualité
-- [ ] Tag Git
+- [ ] Tag Git v0.0.2-alpha
 
 ---
 
@@ -552,7 +497,7 @@ FLAGS       : 8 bits
 
 RAM         : 64 Ko
 
-Progression : ~99 %
+Progression : ~99.5 %
 
 Lot A       : ✅ Terminé
 Lot B       : ✅ Terminé
@@ -565,39 +510,46 @@ Lot H       : 🟨 En cours
 
 Priorité :
 
-Lot H - Qualité
+Build Release
+↓
+Validation finale
+↓
+Tag Git v0.0.2-alpha
 ```
 
 ---
 
 # Résumé
 
-La version v0.0.2-alpha est désormais fonctionnellement complète.
+Azure-8 v0.0.2 est désormais fonctionnellement complet.
 
-Les fondations d'Azure-8 sont terminées :
+Les fondations de l'architecture sont validées :
 
 ```txt
 ✓ Mémoire 16 bits
 ✓ Stack
 ✓ Stack Pointer
 ✓ FLAGS
-✓ Debug
+✓ Debug avancé
 ✓ ROMs de validation
-✓ Documentation
+✓ Documentation complète
+✓ Build Debug
+✓ 0 erreur
+✓ 0 warning
 ```
 
-Les derniers travaux concernent uniquement la qualité, la validation finale du dépôt et la préparation de la release officielle.
+Les derniers travaux concernent uniquement la qualité finale, la validation Release et la préparation du tag Git officiel.
 
-Une fois le Lot H terminé, le projet pourra être publié sous le tag :
+Une fois le Build Release validé, le projet sera prêt pour :
 
 ```txt
 v0.0.2-alpha
 ```
 
-avant le démarrage du développement de la version :
+avant l'ouverture du développement de :
 
 ```txt
-v0.0.3
+AzureEngine v0.0.3
 ```
 
-consacrée aux premières instructions de manipulation de données.
+consacrée aux premières instructions de manipulation de données de l'architecture Azure-8.

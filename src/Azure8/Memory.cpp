@@ -48,8 +48,8 @@ u16 Memory::Read16(u16 address) const
 void Memory::Write16(u16 address, u16 value)
 {
     const u8 low = static_cast<u8>(value & 0xFF);
-    const u8 hight = static_cast<u8>((value >> 8) & 0xFF);
+    const u8 high = static_cast<u8>((value >> 8) & 0xFF);
 
     Write8(address, low);
-    Write8(address + 1, hight);
+    Write8(address + 1, high);
 }
