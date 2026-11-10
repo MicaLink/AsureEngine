@@ -48,6 +48,32 @@
             "problemMatcher": [
                 "$msCompile"
             ]
+        },
+        {
+            "label": "Build Tests",
+            "type": "shell",
+            "command": "cl",
+            "args": [
+                "/EHsc",
+                "/std:c++17",
+                "/nologo",
+
+                "/Febuild\\AzureEngineTests.exe",
+
+                "tests\\main.cpp",
+
+                "tests\\TestCPU.cpp",
+                "tests\\TestFlags.cpp",
+                "tests\\TestMemory.cpp",
+                "tests\\TestStack.cpp",
+
+                "src\\Azure8\\CPU.cpp",
+                "src\\Azure8\\Memory.cpp",
+                "src\\Azure8\\Emulator.cpp"
+            ],
+            "problemMatcher": [
+                "$msCompile"
+            ]
         }
     ]
 }

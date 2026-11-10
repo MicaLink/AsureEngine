@@ -2,15 +2,13 @@
 
 > Version cible : **v0.0.2-alpha**
 >
-> Statut : **Validation finale**
+> Statut : **Terminé**
 >
 > Version précédente : **v0.0.1-alpha**
 >
 > Architecture : **CPU 8 bits / Adressage mémoire 16 bits**
 >
-> Progression estimée : **99.5 %**
->
-> Priorité actuelle : **Finalisation du Lot H - Qualité**
+> Progression : **100 %**
 
 ---
 
@@ -26,9 +24,10 @@ Cette version introduit :
 - le registre FLAGS ;
 - les outils avancés de débogage ;
 - les ROMs de validation ;
-- la documentation technique complète.
+- la documentation technique complète ;
+- les premiers tests automatisés.
 
-L'objectif principal de cette version est de stabiliser définitivement Azure-8 avant le démarrage du développement des premières instructions de manipulation de données prévues pour la v0.0.3.
+Cette version constitue la première base stable du processeur Azure-8 avant l'introduction des futures instructions de manipulation de données prévues dans la v0.0.3.
 
 ---
 
@@ -93,12 +92,10 @@ RAM 64 Ko
 - [x] STACK_TOP
 - [x] STACK_BOTTOM
 
-- [x] Validation complète
-
 - [x] Overflow
 - [x] Underflow
 
-- [x] Tests de charge
+- [x] Validation complète
 
 ## FLAGS
 
@@ -321,12 +318,6 @@ RAM 64 Ko
 
 # Lot H - Qualité
 
-## Objectif
-
-Préparer la release officielle v0.0.2-alpha.
-
----
-
 ## Nettoyage du code
 
 - [x] FFAGS → FLAGS
@@ -369,58 +360,42 @@ Préparer la release officielle v0.0.2-alpha.
 
 ---
 
-## Tests automatisés
+## Premiers tests automatisés
 
-### Objectif
+### Tests mémoire
 
-Mettre en place les premiers tests automatisés du projet.
+- [x] TestReadWrite8()
+- [x] TestReadWrite16()
 
-### Prévus
+### Tests pile
 
-- [ ] TestMemory
-- [ ] TestRead16
-- [ ] TestWrite16
-- [ ] TestStack
-- [ ] TestFlags
-- [ ] TestReset
+- [x] TestPushPop8()
+- [x] TestPushPop16()
 
-### Statut
+### Tests FLAGS
 
-⬜ NON COMMENCÉ
+- [x] TestZeroFlag()
+- [x] TestCarryFlag()
+- [x] TestNegativeFlag()
+- [x] TestOverflowFlag()
+
+### Tests CPU
+
+- [x] TestReset()
+
+### Résultat
+
+```txt
+AzureEngine Tests
+
+All tests passed successfully.
+```
 
 ---
 
 ## Statut
 
-🟨 EN COURS
-
----
-
-# Ordre de développement
-
-## Étape actuelle
-
-```txt
-Premiers tests automatisés
-```
-
----
-
-## Puis
-
-```txt
-Release
-
-v0.0.2-alpha
-```
-
----
-
-## Ensuite
-
-```txt
-AzureEngine v0.0.3
-```
+✅ TERMINÉ
 
 ---
 
@@ -457,17 +432,81 @@ AzureEngine v0.0.3
 
 ## Tests
 
-- [ ] Premiers tests automatisés
-
-## Release
-
-- [ ] Tag Git v0.0.2-alpha
+- [x] Premiers tests automatisés
 
 ---
 
-# Objectif de la v0.0.3
+# Résultat final
 
-Premières instructions de manipulation de données :
+```txt
+Lot A ✅
+Lot B ✅
+Lot C ✅
+Lot D ✅
+Lot E ✅
+Lot F ✅
+Lot G ✅
+Lot H ✅
+```
+
+---
+
+# État final de la version
+
+```txt
+Projet      : AzureEngine
+
+Version     : v0.0.2-alpha
+
+CPU         : 8 bits
+PC          : 16 bits
+SP          : 16 bits
+FLAGS       : 8 bits
+
+RAM         : 64 Ko
+
+Progression : 100 %
+
+Build Debug   ✅
+Build Release ✅
+
+0 erreur      ✅
+0 warning     ✅
+
+Tests auto    ✅
+Documentation ✅
+ROMs          ✅
+```
+
+---
+
+# Clôture de la v0.0.2
+
+La version **v0.0.2-alpha** est considérée comme terminée.
+
+Commande de publication recommandée :
+
+```bash
+git add .
+git commit -m "Release v0.0.2-alpha"
+
+git tag v0.0.2-alpha
+
+git push
+git push --tags
+```
+
+---
+
+# Prochaine étape
+
+Version suivante :
+
+```txt
+AzureEngine v0.0.3
+```
+
+Objectifs principaux :
 
 ```asm
 MOV
@@ -495,82 +534,10 @@ ADD
 SUB
 
 CMP
-
 JZ
 JNZ
 ```
 
 ---
 
-# État actuel
-
-```txt
-Projet      : AzureEngine
-
-Version     : v0.0.2-alpha
-
-CPU         : 8 bits
-PC          : 16 bits
-SP          : 16 bits
-FLAGS       : 8 bits
-
-RAM         : 64 Ko
-
-Progression : ~99.5 %
-
-Lot A       : ✅ Terminé
-Lot B       : ✅ Terminé
-Lot C       : ✅ Terminé
-Lot D       : ✅ Terminé
-Lot E       : ✅ Terminé
-Lot F       : ✅ Terminé
-Lot G       : ✅ Terminé
-
-Lot H       : 🟨 En cours
-
-Priorité :
-
-Premiers tests automatisés
-↓
-Tag Git v0.0.2-alpha
-```
-
----
-
-# Résumé
-
-Azure-8 v0.0.2 est désormais fonctionnellement complet.
-
-Les fondations de l'architecture sont validées :
-
-```txt
-✓ Mémoire 16 bits
-✓ Stack
-✓ Stack Pointer
-✓ FLAGS
-✓ Debug avancé
-
-✓ ROMs fondamentales validées
-
-✓ Documentation complète
-
-✓ Build Debug
-✓ Build Release
-
-✓ 0 erreur
-✓ 0 warning
-```
-
-Le dernier élément bloquant avant la publication officielle est la mise en place des premiers tests automatisés prévus dans le Lot H.
-
-Une fois ces tests ajoutés et validés, le projet pourra être publié sous le tag :
-
-```txt
-v0.0.2-alpha
-```
-
-avant le démarrage du développement de :
-
-```txt
-AzureEngine v0.0.3
-```
+**Fin de roadmap v0.0.2-alpha**
