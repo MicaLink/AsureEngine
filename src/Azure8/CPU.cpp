@@ -10,6 +10,7 @@ namespace
     //-------------------------------------------------
 
     constexpr u8 OPCODE_NOP = 0x00;
+    constexpr u8 OPCODE_MOV = 0x10;
     constexpr u8 OPCODE_HLT = 0xFF;
 
     //-------------------------------------------------
@@ -66,6 +67,24 @@ u16 CPU::GetSP() const
 u8 CPU::GetFlags() const
 {
     return FLAGS;
+}
+
+//-----------------------------------------------------
+// GetRegister
+//-----------------------------------------------------
+
+u8& CPU::GetRegister(u8 reg)
+{
+    switch (reg)
+    {
+        case 0x00: return A;
+        case 0x01: return B;
+        case 0x02: return C;
+        case 0x03: return D;
+    
+        default:
+            return A;
+    }
 }
 
 //-----------------------------------------------------
@@ -322,16 +341,28 @@ void CPU::Step(Memory& memory)
     switch (opcode)
     {
         case OPCODE_NOP:
+        {
             break;
-    
+        }
+        case OPCODE_MOV:
+        {
+            const u8 destination = FetchByte(memory);
+            const u8 source = FetchByte(memory);
+
+            GetRegister(destination) = GetRegister(source);
+            break;
+        }
         case OPCODE_HLT:
+        {
             printf("CPU HALTED\n");
             m_Halted = true;
             break;
-        
+        }
         default:
+        {
             printf("UNKNOWN OPCODE %02X\n", opcode);
             m_Halted = true;
             break;
+        }
     }
 }

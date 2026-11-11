@@ -2,28 +2,31 @@
 
 > Version cible : **v0.0.3-alpha**
 >
-> Statut : **Planification**
+> Statut : **En développement**
 >
 > Version précédente : **v0.0.2-alpha**
 >
 > Architecture : **CPU 8 bits / Adressage mémoire 16 bits**
 >
-> Priorité actuelle : **Instructions de manipulation de données**
+> Progression : **5 %**
 >
-> Progression : **0 %**
+> Priorité actuelle : **Lot A - Instructions de données**
 
 ---
 
 # Présentation
 
-La version v0.0.3-alpha marque une étape importante dans le développement d'Azure-8.
+La version v0.0.3-alpha marque le début de la seconde phase de développement d'Azure-8.
 
-Les versions précédentes ont permis de construire les fondations techniques :
+Les versions précédentes ont permis de construire et stabiliser toute l'infrastructure fondamentale du processeur :
 
 ```txt
 CPU
 RAM
 ROM Loader
+
+Read8()
+Write8()
 
 Read16()
 Write16()
@@ -38,13 +41,13 @@ Debug
 Tests automatisés
 ```
 
-L'objectif de la v0.0.3 est de transformer Azure-8 en un processeur réellement programmable.
+L'objectif de la v0.0.3 est désormais de transformer Azure-8 en une plateforme réellement programmable.
 
 ---
 
 # Philosophie
 
-Cette version reste fidèle aux principes fondateurs du projet :
+Azure-8 continue d'être développé selon les principes fondamentaux du projet AzureEngine :
 
 ```txt
 Assembler autant que possible
@@ -53,11 +56,13 @@ C avant C++
 
 C++ simple et maîtrisé
 
-Architecture claire
-
-Faible niveau d'abstraction
+Architecture compréhensible
 
 Contrôle maximal du matériel émulé
+
+Développement progressif
+
+Documentation systématique
 ```
 
 ---
@@ -68,18 +73,75 @@ Permettre à un programme Azure-8 de :
 
 ```txt
 Lire des données
+
 Écrire des données
+
 Déplacer des données
+
+Manipuler la pile
+
 Effectuer des calculs
+
 Effectuer des branchements
-Utiliser la pile
+```
+
+---
+
+# État actuel du CPU
+
+## Instructions disponibles
+
+```txt
+00h  NOP
+
+10h  MOV
+
+FFh  HLT
+```
+
+---
+
+## MOV
+
+Première instruction de manipulation de données.
+
+Format :
+
+```asm
+MOV Destination, Source
+```
+
+Exemple :
+
+```asm
+MOV A, B
+```
+
+Encodage :
+
+```txt
+10h
+
+Byte 0 : Opcode
+
+Byte 1 : Destination
+
+Byte 2 : Source
+```
+
+Statut :
+
+```txt
+✅ Opcode
+
+✅ Décodage
+
+✅ Exécution
 ```
 
 ---
 
 # Ordre de développement
-
-La roadmap v0.0.3 est divisée en plusieurs lots.
 
 ```txt
 Lot A - Instructions de données
@@ -97,41 +159,40 @@ Lot G - Tests automatisés
 
 ## Objectif
 
-Introduire les premières instructions manipulant des données.
+Introduire les premières instructions permettant de manipuler des données.
 
 ---
 
-## Instruction MOV
+## MOV
 
-Objectif :
+### Description
 
-```txt
-Copier une valeur entre registres.
-```
+Copie une valeur d'un registre vers un autre.
 
-Exemples :
+Exemple :
 
 ```asm
 MOV A, B
-MOV C, D
 ```
 
-À réaliser :
+### Réalisation
 
-- [ ] Opcode
-- [ ] Décodeur
-- [ ] Exécution
-- [ ] Tests
+- [x] Opcode
+- [x] Décodage
+- [x] Exécution
+
+### Reste à faire
+
+- [ ] mov.rom
+- [ ] Test automatisé
 
 ---
 
-## Instruction LOAD
+## LOAD
 
-Objectif :
+### Description
 
-```txt
-Charger une valeur depuis la mémoire.
-```
+Charger une valeur mémoire vers un registre.
 
 Exemple :
 
@@ -139,22 +200,20 @@ Exemple :
 LOAD A, 1000h
 ```
 
-À réaliser :
+### Réalisation
 
 - [ ] Opcode
-- [ ] Décodeur
+- [ ] Décodage
 - [ ] Exécution
 - [ ] Tests
 
 ---
 
-## Instruction STORE
+## STORE
 
-Objectif :
+### Description
 
-```txt
-Écrire une valeur en mémoire.
-```
+Écrire un registre en mémoire.
 
 Exemple :
 
@@ -162,10 +221,10 @@ Exemple :
 STORE A, 1000h
 ```
 
-À réaliser :
+### Réalisation
 
 - [ ] Opcode
-- [ ] Décodeur
+- [ ] Décodage
 - [ ] Exécution
 - [ ] Tests
 
@@ -173,7 +232,7 @@ STORE A, 1000h
 
 ## Statut
 
-⬜ Non commencé
+🟨 EN COURS
 
 ---
 
@@ -181,73 +240,57 @@ STORE A, 1000h
 
 ## Objectif
 
-Préparer la gestion des sous-routines.
+Permettre la manipulation de la pile par le jeu d'instructions.
 
 ---
 
-## Instruction PUSH
-
-Exemple :
+## PUSH
 
 ```asm
 PUSH A
 ```
 
-À réaliser :
-
 - [ ] Opcode
-- [ ] Décodeur
+- [ ] Décodage
 - [ ] Exécution
 - [ ] Tests
 
 ---
 
-## Instruction POP
-
-Exemple :
+## POP
 
 ```asm
 POP A
 ```
 
-À réaliser :
-
 - [ ] Opcode
-- [ ] Décodeur
+- [ ] Décodage
 - [ ] Exécution
 - [ ] Tests
 
 ---
 
-## Instruction CALL
-
-Exemple :
+## CALL
 
 ```asm
 CALL 1000h
 ```
 
-À réaliser :
-
 - [ ] Opcode
-- [ ] Décodeur
+- [ ] Décodage
 - [ ] Exécution
 - [ ] Tests
 
 ---
 
-## Instruction RET
-
-Exemple :
+## RET
 
 ```asm
 RET
 ```
 
-À réaliser :
-
 - [ ] Opcode
-- [ ] Décodeur
+- [ ] Décodage
 - [ ] Exécution
 - [ ] Tests
 
@@ -274,7 +317,7 @@ INC A
 ```
 
 - [ ] Implémentation
-- [ ] FLAGS
+- [ ] Gestion FLAGS
 - [ ] Tests
 
 ---
@@ -286,7 +329,7 @@ DEC A
 ```
 
 - [ ] Implémentation
-- [ ] FLAGS
+- [ ] Gestion FLAGS
 - [ ] Tests
 
 ---
@@ -313,7 +356,7 @@ SUB A, B
 ```
 
 - [ ] Implémentation
-- [ ] FLAGS
+- [ ] Gestion FLAGS
 - [ ] Tests
 
 ---
@@ -344,10 +387,21 @@ CMP A, B
 
 ---
 
+## JMP
+
+```asm
+JMP Adresse
+```
+
+- [ ] Implémentation
+- [ ] Tests
+
+---
+
 ## JZ
 
 ```asm
-JZ Label
+JZ Adresse
 ```
 
 - [ ] Implémentation
@@ -358,18 +412,7 @@ JZ Label
 ## JNZ
 
 ```asm
-JNZ Label
-```
-
-- [ ] Implémentation
-- [ ] Tests
-
----
-
-## JMP
-
-```asm
-JMP Label
+JNZ Adresse
 ```
 
 - [ ] Implémentation
@@ -387,74 +430,21 @@ JMP Label
 
 ## Objectif
 
-Valider les nouvelles instructions.
+Valider chaque nouvelle instruction.
 
 ---
 
-### memory16.rom
+### ROMs existantes
 
-Validation :
-
-```txt
-LOAD
-STORE
-```
-
-- [ ] Validation
+- [ ] memory16.rom
+- [ ] stack8.rom
+- [ ] stack16.rom
+- [ ] overflow.rom
+- [ ] underflow.rom
 
 ---
 
-### stack8.rom
-
-Validation :
-
-```txt
-PUSH
-POP
-```
-
-- [ ] Validation
-
----
-
-### stack16.rom
-
-Validation :
-
-```txt
-CALL
-RET
-```
-
-- [ ] Validation
-
----
-
-### overflow.rom
-
-Validation :
-
-```txt
-Dépassement pile
-```
-
-- [ ] Validation
-
----
-
-### underflow.rom
-
-Validation :
-
-```txt
-Sous-dépassement pile
-```
-
-- [ ] Validation
-
----
-
-## Nouvelles ROMs
+### Nouvelles ROMs
 
 - [ ] mov.rom
 - [ ] load_store.rom
@@ -473,23 +463,23 @@ Sous-dépassement pile
 
 ## Objectif
 
-Maintenir la documentation synchronisée avec l'évolution du CPU.
+Maintenir la documentation synchronisée avec le code.
 
 ---
 
-### Mise à jour
+### Documentation
 
-- [ ] Architecture.md
+- [ ] Mise à jour Architecture.md
 
-- [ ] Documentation FLAGS.md
+- [ ] Mise à jour Documentation Stack.md
 
-- [ ] Documentation Stack.md
+- [ ] Mise à jour Documentation FLAGS.md
 
-- [ ] Documentation SP.md
+- [ ] Azure-8_Instruction_Set_v0.0.3.md
 
 - [ ] Azure-8_Technical_Specification_v0.0.3.txt
 
-- [ ] README.md
+- [ ] Mise à jour README.md
 
 ---
 
@@ -507,33 +497,49 @@ Maintenir la documentation synchronisée avec l'évolution du CPU.
 
 ---
 
-### Mémoire
+### Instructions de données
 
-- [ ] LOAD
-- [ ] STORE
+- [ ] Test MOV
 
-### Pile
+- [ ] Test LOAD
 
-- [ ] PUSH
-- [ ] POP
+- [ ] Test STORE
 
-- [ ] CALL
-- [ ] RET
+---
 
-### Arithmétique
+### Instructions pile
 
-- [ ] INC
-- [ ] DEC
+- [ ] Test PUSH
 
-- [ ] ADD
-- [ ] SUB
+- [ ] Test POP
 
-### Branchement
+- [ ] Test CALL
 
-- [ ] CMP
-- [ ] JZ
-- [ ] JNZ
-- [ ] JMP
+- [ ] Test RET
+
+---
+
+### Instructions arithmétiques
+
+- [ ] Test INC
+
+- [ ] Test DEC
+
+- [ ] Test ADD
+
+- [ ] Test SUB
+
+---
+
+### Branchements
+
+- [ ] Test CMP
+
+- [ ] Test JMP
+
+- [ ] Test JZ
+
+- [ ] Test JNZ
 
 ---
 
@@ -545,75 +551,75 @@ Maintenir la documentation synchronisée avec l'évolution du CPU.
 
 # Critères de validation
 
-Pour clôturer la version v0.0.3 :
+## CPU
 
-### CPU
+### Données
 
-- [ ] MOV
+- [x] MOV
+
 - [ ] LOAD
+
 - [ ] STORE
 
+### Pile
+
 - [ ] PUSH
+
 - [ ] POP
 
 - [ ] CALL
+
 - [ ] RET
 
+### Arithmétique
+
 - [ ] INC
+
 - [ ] DEC
 
 - [ ] ADD
+
 - [ ] SUB
 
+### Branchements
+
 - [ ] CMP
+
+- [ ] JMP
+
 - [ ] JZ
+
 - [ ] JNZ
-
-### ROMs
-
-- [ ] ROMs validées
-
-### Documentation
-
-- [ ] Documentation complète
-
-### Build
-
-- [ ] Build Debug
-- [ ] Build Release
-
-- [ ] 0 erreur
-- [ ] 0 warning
-
-### Tests
-
-- [ ] Tests automatisés
 
 ---
 
-# Vision après la v0.0.3
+## Documentation
 
-Une fois Azure-8 doté d'un jeu d'instructions fonctionnel, les prochaines étapes du projet pourront être envisagées :
+- [ ] Documentation complète
 
-```txt
-AzureASM
+---
 
-Premiers programmes complets
+## ROMs
 
-Jeu de démonstration
+- [ ] ROMs validées
 
-IDE minimal
+---
 
-SDK Azure-8
-```
+## Compilation
 
-Mais la priorité reste exclusivement :
+- [ ] Build Debug
 
-```txt
-Azure-8
-```
+- [ ] Build Release
 
-jusqu'à obtention d'une plateforme réellement programmable et stable.
+- [ ] 0 erreur
+
+- [ ] 0 warning
+
+---
+
+## Tests
+
+- [ ] Tests automatisés complets
 
 ---
 
@@ -624,22 +630,53 @@ Projet      : AzureEngine
 
 Version     : v0.0.3-alpha
 
-Architecture :
+CPU         : 8 bits
 
-CPU 8 bits
-RAM 64 Ko
+PC          : 16 bits
+
+SP          : 16 bits
+
+FLAGS       : 8 bits
+
+RAM         : 64 Ko
+
+Progression : 5 %
+
+État :
+
+MOV implémenté
 
 Priorité :
 
-MOV
+MOV ROM
+↓
+MOV Test
+↓
 LOAD
+↓
 STORE
-
-Progression :
-
-0 %
 ```
 
 ---
 
-**Objectif principal de la v0.0.3 : transformer Azure-8 d'une architecture expérimentale validée en une plateforme réellement programmable pouvant exécuter des programmes non triviaux.**
+# Objectif de la v0.0.3
+
+À la fin de cette version, Azure-8 devra être capable d'exécuter un programme du type :
+
+```asm
+LOAD A, 1000h
+
+LOAD B, 1001h
+
+ADD A, B
+
+STORE A, 2000h
+
+HLT
+```
+
+Cette version transformera Azure-8 d'une infrastructure validée en un processeur capable d'exécuter de véritables programmes.
+
+---
+
+**Fin de roadmap v0.0.3-alpha**
