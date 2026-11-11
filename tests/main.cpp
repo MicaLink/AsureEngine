@@ -34,6 +34,7 @@ void TestReset();
 //-----------------------------------------------------
 
 void TestMOV();
+void TestLOAD();
 
 //-----------------------------------------------------
 // Main
@@ -87,6 +88,7 @@ int main()
     printf("Running Instruction Tests...\n");
 
     TestMOV();
+    TestLOAD();
 
     printf("Instruction Tests Passed\n\n");
 

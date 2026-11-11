@@ -80,7 +80,9 @@
                 "tests\\TestFlags.cpp",
                 "tests\\TestMemory.cpp",
                 "tests\\TestStack.cpp",
+
                 "tests\\TestInstructionMOV.cpp",
+                "tests\\TestInstructionLOAD.cpp",
 
                 "src\\Azure8\\CPU.cpp",
                 "src\\Azure8\\Memory.cpp",

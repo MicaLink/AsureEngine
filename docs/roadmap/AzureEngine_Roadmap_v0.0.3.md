@@ -8,17 +8,17 @@
 >
 > Architecture : **CPU 8 bits / Adressage mémoire 16 bits**
 >
-> Progression : **10 %**
+> Progression : **20 %**
 >
-> Priorité actuelle : **LOAD**
+> Priorité actuelle : **STORE**
 
 ---
 
 # Présentation
 
-La version v0.0.3-alpha marque le début de la transformation d'Azure-8 en un processeur réellement programmable.
+La version v0.0.3-alpha marque la transformation d'Azure-8 en un processeur réellement programmable.
 
-La v0.0.2 a permis de construire et valider toute l'infrastructure fondamentale :
+La v0.0.2 a permis de construire l'infrastructure fondamentale :
 
 ```txt
 CPU
@@ -41,13 +41,13 @@ Debug
 Tests automatisés
 ```
 
-La v0.0.3 ajoute progressivement les premières instructions utiles permettant de manipuler des données, accéder à la mémoire et exécuter des programmes plus complexes.
+La v0.0.3 ajoute progressivement les premières instructions de manipulation de données et de mémoire.
 
 ---
 
 # Philosophie
 
-Azure-8 continue d'être développé selon les principes fondamentaux d'AzureEngine :
+Azure-8 continue d'être développé selon les principes du projet AzureEngine :
 
 ```txt
 Assembler autant que possible
@@ -60,7 +60,8 @@ Architecture claire
 
 Développement progressif
 
-Compréhension totale du matériel émulé
+Compréhension complète
+du matériel émulé
 
 Documentation systématique
 ```
@@ -96,6 +97,8 @@ Effectuer des branchements
 
 10h  MOV
 
+11h  LOAD
+
 FFh  HLT
 ```
 
@@ -121,6 +124,8 @@ FFh  HLT
 ✅ Debug
 
 ✅ ROM Loader
+
+✅ Tests automatisés
 ```
 
 ---
@@ -159,22 +164,8 @@ Permettre à Azure-8 de manipuler des données et d'interagir avec la mémoire.
 
 Copie une valeur d'un registre vers un autre.
 
-Exemple :
-
 ```asm
 MOV A, B
-```
-
-### Encodage
-
-```txt
-10h
-
-Byte 0 : Opcode
-
-Byte 1 : Destination
-
-Byte 2 : Source
 ```
 
 ### Validation
@@ -186,11 +177,9 @@ Byte 2 : Source
 - [x] Test automatisé
 - [x] mov.rom validée
 
-### Résultat
+### Statut
 
-```txt
-MOV terminé et validé.
-```
+✅ TERMINÉ
 
 ---
 
@@ -199,8 +188,6 @@ MOV terminé et validé.
 ### Description
 
 Charge une valeur mémoire dans un registre.
-
-Exemple :
 
 ```asm
 LOAD A, 1000h
@@ -220,17 +207,17 @@ Byte 2 : Adresse Low
 Byte 3 : Adresse High
 ```
 
-### Réalisation
+### Validation
 
-- [ ] Opcode
-- [ ] Décodage
-- [ ] Exécution
-- [ ] Test automatisé
-- [ ] load.rom
+- [x] Opcode
+- [x] Décodage
+- [x] Exécution
+- [x] Test automatisé
+- [x] load.rom validée
 
-### Priorité
+### Statut
 
-🔥 PRIORITÉ ACTUELLE
+✅ TERMINÉ
 
 ---
 
@@ -239,8 +226,6 @@ Byte 3 : Adresse High
 ### Description
 
 Écrit la valeur d'un registre dans la mémoire.
-
-Exemple :
 
 ```asm
 STORE A, 1000h
@@ -268,21 +253,19 @@ Byte 3 : Adresse High
 - [ ] Test automatisé
 - [ ] store.rom
 
+### Statut
+
+🟨 PRIORITÉ ACTUELLE
+
 ---
 
-## Statut
+## Statut du Lot A
 
 🟨 EN COURS
 
 ---
 
 # Lot B - Pile avancée
-
-## Objectif
-
-Ajouter des instructions manipulant directement la pile.
-
----
 
 ## PUSH
 
@@ -293,7 +276,8 @@ PUSH A
 - [ ] Opcode
 - [ ] Décodage
 - [ ] Exécution
-- [ ] Tests
+- [ ] Test
+- [ ] push.rom
 
 ---
 
@@ -306,7 +290,8 @@ POP A
 - [ ] Opcode
 - [ ] Décodage
 - [ ] Exécution
-- [ ] Tests
+- [ ] Test
+- [ ] pop.rom
 
 ---
 
@@ -319,7 +304,8 @@ CALL 1000h
 - [ ] Opcode
 - [ ] Décodage
 - [ ] Exécution
-- [ ] Tests
+- [ ] Test
+- [ ] call.rom
 
 ---
 
@@ -332,7 +318,8 @@ RET
 - [ ] Opcode
 - [ ] Décodage
 - [ ] Exécution
-- [ ] Tests
+- [ ] Test
+- [ ] ret.rom
 
 ---
 
@@ -344,12 +331,6 @@ RET
 
 # Lot C - Arithmétique
 
-## Objectif
-
-Ajouter les premières opérations mathématiques.
-
----
-
 ## INC
 
 ```asm
@@ -357,8 +338,9 @@ INC A
 ```
 
 - [ ] Implémentation
-- [ ] FLAGS
-- [ ] Tests
+- [ ] Gestion FLAGS
+- [ ] Test
+- [ ] inc.rom
 
 ---
 
@@ -369,8 +351,9 @@ DEC A
 ```
 
 - [ ] Implémentation
-- [ ] FLAGS
-- [ ] Tests
+- [ ] Gestion FLAGS
+- [ ] Test
+- [ ] dec.rom
 
 ---
 
@@ -381,11 +364,9 @@ ADD A, B
 ```
 
 - [ ] Implémentation
-- [ ] FLAG_ZERO
-- [ ] FLAG_CARRY
-- [ ] FLAG_NEGATIVE
-- [ ] FLAG_OVERFLOW
-- [ ] Tests
+- [ ] Gestion FLAGS
+- [ ] Test
+- [ ] add.rom
 
 ---
 
@@ -396,8 +377,9 @@ SUB A, B
 ```
 
 - [ ] Implémentation
-- [ ] FLAGS
-- [ ] Tests
+- [ ] Gestion FLAGS
+- [ ] Test
+- [ ] sub.rom
 
 ---
 
@@ -409,12 +391,6 @@ SUB A, B
 
 # Lot D - Comparaisons et branchements
 
-## Objectif
-
-Permettre l'exécution conditionnelle.
-
----
-
 ## CMP
 
 ```asm
@@ -423,7 +399,8 @@ CMP A, B
 
 - [ ] Implémentation
 - [ ] FLAGS
-- [ ] Tests
+- [ ] Test
+- [ ] cmp.rom
 
 ---
 
@@ -434,7 +411,8 @@ JMP Adresse
 ```
 
 - [ ] Implémentation
-- [ ] Tests
+- [ ] Test
+- [ ] jmp.rom
 
 ---
 
@@ -445,7 +423,8 @@ JZ Adresse
 ```
 
 - [ ] Implémentation
-- [ ] Tests
+- [ ] Test
+- [ ] jz.rom
 
 ---
 
@@ -456,7 +435,8 @@ JNZ Adresse
 ```
 
 - [ ] Implémentation
-- [ ] Tests
+- [ ] Test
+- [ ] jnz.rom
 
 ---
 
@@ -472,47 +452,94 @@ JNZ Adresse
 
 ```txt
 ✅ nop.rom
-
 ✅ halt.rom
-
 ✅ invalid.rom
 
 ✅ mov.rom
+✅ load.rom
 ```
 
 ---
 
-## ROMs à réaliser
+## ROMs existantes à revalider plus tard
 
-- [ ] load.rom
-- [ ] store.rom
+```txt
+⬜ memory16.rom
 
-- [ ] arithmetic.rom
+⬜ stack8.rom
 
-- [ ] branch.rom
+⬜ stack16.rom
 
-- [ ] stack8.rom
-- [ ] stack16.rom
+⬜ overflow.rom
+
+⬜ underflow.rom
+```
+
+Validation reportée jusqu'à l'implémentation complète des nouvelles instructions.
+
+---
+
+## ROMs à créer
+
+### Données
+
+```txt
+⬜ store.rom
+```
+
+### Pile
+
+```txt
+⬜ push.rom
+⬜ pop.rom
+
+⬜ call.rom
+⬜ ret.rom
+```
+
+### Arithmétique
+
+```txt
+⬜ inc.rom
+⬜ dec.rom
+
+⬜ add.rom
+⬜ sub.rom
+```
+
+### Branchements
+
+```txt
+⬜ cmp.rom
+
+⬜ jmp.rom
+
+⬜ jz.rom
+
+⬜ jnz.rom
+```
 
 ---
 
 ## Statut
 
-🟨 En cours
+🟨 EN COURS
 
 ---
 
 # Lot F - Documentation
 
-## Documentation
+## À mettre à jour
 
-- [ ] Mise à jour Architecture.md
+```txt
+⬜ Architecture.md
 
-- [ ] Azure-8_Instruction_Set_v0.0.3.md
+⬜ Azure-8_Instruction_Set_v0.0.3.md
 
-- [ ] Azure-8_Technical_Specification_v0.0.3.txt
+⬜ Azure-8_Technical_Specification_v0.0.3.txt
 
-- [ ] Mise à jour README.md
+⬜ README.md
+```
 
 ---
 
@@ -524,47 +551,59 @@ JNZ Adresse
 
 # Lot G - Tests automatisés
 
-## Validés
+## Tests validés
 
 ```txt
 ✅ TestMOV
+
+✅ TestLOAD
 ```
 
 ---
 
 ## À réaliser
 
-### Mémoire
+### Données
 
-- [ ] TestLOAD
-- [ ] TestSTORE
+```txt
+⬜ TestSTORE
+```
 
 ### Pile
 
-- [ ] TestPUSH
-- [ ] TestPOP
-- [ ] TestCALL
-- [ ] TestRET
+```txt
+⬜ TestPUSH
+⬜ TestPOP
+
+⬜ TestCALL
+⬜ TestRET
+```
 
 ### Arithmétique
 
-- [ ] TestINC
-- [ ] TestDEC
-- [ ] TestADD
-- [ ] TestSUB
+```txt
+⬜ TestINC
+⬜ TestDEC
+
+⬜ TestADD
+⬜ TestSUB
+```
 
 ### Branchements
 
-- [ ] TestCMP
-- [ ] TestJMP
-- [ ] TestJZ
-- [ ] TestJNZ
+```txt
+⬜ TestCMP
+
+⬜ TestJMP
+⬜ TestJZ
+⬜ TestJNZ
+```
 
 ---
 
 ## Statut
 
-🟨 En cours
+🟨 EN COURS
 
 ---
 
@@ -572,65 +611,88 @@ JNZ Adresse
 
 ## Instructions de données
 
-- [x] MOV
+```txt
+✅ MOV
 
-- [ ] LOAD
-- [ ] STORE
+✅ LOAD
+
+⬜ STORE
+```
 
 ---
 
 ## Pile
 
-- [ ] PUSH
-- [ ] POP
-- [ ] CALL
-- [ ] RET
+```txt
+⬜ PUSH
+⬜ POP
+
+⬜ CALL
+⬜ RET
+```
 
 ---
 
 ## Arithmétique
 
-- [ ] INC
-- [ ] DEC
-- [ ] ADD
-- [ ] SUB
+```txt
+⬜ INC
+⬜ DEC
+
+⬜ ADD
+⬜ SUB
+```
 
 ---
 
 ## Branchements
 
-- [ ] CMP
-- [ ] JMP
-- [ ] JZ
-- [ ] JNZ
+```txt
+⬜ CMP
+
+⬜ JMP
+⬜ JZ
+⬜ JNZ
+```
 
 ---
 
 ## ROMs
 
-- [ ] ROMs validées
+```txt
+⬜ Toutes les ROMs validées
+```
 
 ---
 
 ## Documentation
 
-- [ ] Documentation complète
+```txt
+⬜ Documentation complète
+```
 
 ---
 
 ## Compilation
 
-- [ ] Build Debug
-- [ ] Build Release
+```txt
+⬜ Build Debug
 
-- [ ] 0 erreur
-- [ ] 0 warning
+⬜ Build Release
+
+⬜ 0 erreur
+
+⬜ 0 warning
+```
 
 ---
 
 ## Tests
 
-- [ ] Tests automatisés complets
+```txt
+⬜ Couverture complète
+des tests automatisés
+```
 
 ---
 
@@ -651,11 +713,12 @@ FLAGS       : 8 bits
 
 RAM         : 64 Ko
 
-Progression : 10 %
+Progression : 20 %
 
+NOP         ✅
 MOV         ✅
+LOAD        ✅
 
-LOAD        ⬜
 STORE       ⬜
 ```
 
@@ -664,38 +727,36 @@ STORE       ⬜
 # Priorité immédiate
 
 ```txt
-1. LOAD
+1. STORE
 
-2. load.rom
+2. TestSTORE
 
-3. TestLOAD
+3. store.rom
 
-4. STORE
+4. Validation STORE
 
-5. store.rom
+5. PUSH
 
-6. TestSTORE
+6. POP
 ```
 
 ---
 
 # Objectif de la v0.0.3
 
-À la fin de cette version, Azure-8 devra être capable d'exécuter un programme tel que :
+À la fin de cette version, Azure-8 devra être capable d'exécuter :
 
 ```asm
-LOAD A, 1000h
+LOAD  A, 1000h
 
-LOAD B, 1001h
-
-ADD A, B
+ADD   A, B
 
 STORE A, 2000h
 
 HLT
 ```
 
-Cette version transformera Azure-8 d'une architecture de validation technique en un processeur capable d'exécuter de véritables programmes.
+Cette version transformera Azure-8 d'une infrastructure validée en un processeur programmable capable d'exécuter de véritables programmes.
 
 ---
 

@@ -8,7 +8,7 @@ int main()
     // Configuration
     //-------------------------------------------------
 
-    constexpr const char* ROM_PATH = "roms/invalid.rom";
+    constexpr const char* ROM_PATH = "roms/invalide.rom";
 
     //-------------------------------------------------
     // Init
