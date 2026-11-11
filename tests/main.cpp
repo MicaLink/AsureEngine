@@ -35,6 +35,7 @@ void TestReset();
 
 void TestMOV();
 void TestLOAD();
+void TestSTORE();
 
 //-----------------------------------------------------
 // Main
@@ -89,6 +90,7 @@ int main()
 
     TestMOV();
     TestLOAD();
+    TestSTORE();
 
     printf("Instruction Tests Passed\n\n");
 

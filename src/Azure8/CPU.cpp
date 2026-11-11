@@ -13,6 +13,7 @@ namespace
 
     constexpr u8 OPCODE_MOV = 0x10;
     constexpr u8 OPCODE_LOAD = 0x11;
+    constexpr u8 OPCODE_STORE = 0x12;
 
     constexpr u8 OPCODE_HLT = 0xFF;
 
@@ -363,6 +364,16 @@ void CPU::Step(Memory& memory)
             const u16 address = static_cast<u16>(low | (high << 8));
 
             GetRegister(reg) = memory.Read8(address);
+            break;
+        }
+        case OPCODE_STORE:
+        {
+            const u8 reg = FetchByte(memory);
+            const u8 low = FetchByte(memory);
+            const u8 high = FetchByte(memory);
+            const u16 address = static_cast<u16>(low | (high << 8));
+
+            memory.Write8(address, GetRegister(reg));
             break;
         }
         case OPCODE_HLT:

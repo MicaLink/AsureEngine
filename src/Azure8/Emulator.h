@@ -16,6 +16,7 @@ public:
     void Run();
 
     Memory& GetMemory();
+    CPU& GetCPU();
 private:
     CPU m_CPU;
     Memory m_Memory;

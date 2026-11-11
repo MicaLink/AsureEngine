@@ -83,6 +83,7 @@
 
                 "tests\\TestInstructionMOV.cpp",
                 "tests\\TestInstructionLOAD.cpp",
+                "tests\\TestInstructionSTORE.cpp",
 
                 "src\\Azure8\\CPU.cpp",
                 "src\\Azure8\\Memory.cpp",

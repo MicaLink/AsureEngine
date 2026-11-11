@@ -4,40 +4,53 @@
 
 int main()
 {
-    //-------------------------------------------------
-    // Configuration
-    //-------------------------------------------------
-
-    constexpr const char* ROM_PATH = "roms/invalide.rom";
-
-    //-------------------------------------------------
-    // Init
-    //-------------------------------------------------
-
     Emulator emulator;
 
     emulator.Reset();
 
-    //-------------------------------------------------
-    // Load ROM
-    //-------------------------------------------------
-
-    if (!emulator.LoadROM(ROM_PATH))
+    if (!emulator.LoadROM("roms/store.rom"))
     {
-        printf("FAILED TO LOAD ROM\n");
+        printf("Unable to load ROM\n");
 
         return 1;
     }
 
-    printf("\nROM LOADED : %s\n\n", ROM_PATH);
+    //-------------------------------------------------
+    // Préparation
+    //-------------------------------------------------
+
+    emulator.GetMemory().Write8(0x1000, 0);
+    emulator.GetCPU().GetRegister(0x00) = 42;
 
     //-------------------------------------------------
-    // Debug
+    // Validation
     //-------------------------------------------------
+
+    printf("\n");
+    printf("========================================\n");
+    printf("Azure-8 STORE Validation\n");
+    printf("========================================\n");
+    printf("\n");
+
+    printf(
+        "Memory[1000h] before execution = %u\n",
+        emulator.GetMemory().Read8(0x1000));
+
+    printf("\n");
 
     emulator.Run();
 
-    printf("\nEXECUTION COMPLETED\n");
+    printf("\n");
+
+    printf(
+        "Memory[1000h] after execution = %u\n",
+        emulator.GetMemory().Read8(0x1000));
+
+    printf("\n");
+
+    printf("========================================\n");
+    printf("STORE ROM Validation Completed\n");
+    printf("========================================\n");
 
     return 0;
 }

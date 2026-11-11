@@ -11,6 +11,11 @@ Memory& Emulator::GetMemory()
     return m_Memory;
 }
 
+CPU& Emulator::GetCPU()
+{
+    return m_CPU;
+}
+
 //-----------------------------------------------------
 // LoadROM
 //-----------------------------------------------------
