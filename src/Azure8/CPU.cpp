@@ -15,6 +15,8 @@ namespace
     constexpr u8 OPCODE_LOAD = 0x11;
     constexpr u8 OPCODE_STORE = 0x12;
 
+    constexpr u8 OPCODE_PUSH = 0x20;
+
     constexpr u8 OPCODE_HLT = 0xFF;
 
     //-------------------------------------------------
@@ -361,6 +363,7 @@ void CPU::Step(Memory& memory)
             const u8 reg = FetchByte(memory);
             const u8 low = FetchByte(memory);
             const u8 high = FetchByte(memory);
+
             const u16 address = static_cast<u16>(low | (high << 8));
 
             GetRegister(reg) = memory.Read8(address);
@@ -371,21 +374,32 @@ void CPU::Step(Memory& memory)
             const u8 reg = FetchByte(memory);
             const u8 low = FetchByte(memory);
             const u8 high = FetchByte(memory);
+
             const u16 address = static_cast<u16>(low | (high << 8));
 
             memory.Write8(address, GetRegister(reg));
             break;
         }
+        case OPCODE_PUSH:
+        {
+            const u8 reg = FetchByte(memory);
+
+            Push8(memory, GetRegister(reg));
+            break;
+        }
         case OPCODE_HLT:
         {
             printf("CPU HALTED\n");
+
             m_Halted = true;
             break;
         }
         default:
         {
             printf("UNKNOWN OPCODE %02X\n", opcode);
+
             m_Halted = true;
+
             break;
         }
     }

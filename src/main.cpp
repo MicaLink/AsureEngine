@@ -4,22 +4,35 @@
 
 int main()
 {
+    //-------------------------------------------------
+    // Configuration
+    //-------------------------------------------------
+
+    constexpr const char* ROM_PATH = "roms/push.rom";
+
+    //-------------------------------------------------
+    // Init
+    //-------------------------------------------------
+
     Emulator emulator;
 
     emulator.Reset();
 
-    if (!emulator.LoadROM("roms/store.rom"))
+    //-------------------------------------------------
+    // Load ROM
+    //-------------------------------------------------
+
+    if (!emulator.LoadROM(ROM_PATH))
     {
-        printf("Unable to load ROM\n");
+        printf("FAILED TO LOAD ROM\n");
 
         return 1;
     }
 
     //-------------------------------------------------
-    // Préparation
+    // Initialisation
     //-------------------------------------------------
 
-    emulator.GetMemory().Write8(0x1000, 0);
     emulator.GetCPU().GetRegister(0x00) = 42;
 
     //-------------------------------------------------
@@ -28,13 +41,17 @@ int main()
 
     printf("\n");
     printf("========================================\n");
-    printf("Azure-8 STORE Validation\n");
+    printf("Azure-8 PUSH Validation\n");
     printf("========================================\n");
     printf("\n");
 
-    printf(
-        "Memory[1000h] before execution = %u\n",
-        emulator.GetMemory().Read8(0x1000));
+    printf("Register A = %u\n",
+           emulator.GetCPU().GetRegister(0x00));
+
+    printf("\n");
+
+    printf("SP before execution = %04X\n",
+           emulator.GetCPU().GetSP());
 
     printf("\n");
 
@@ -42,14 +59,18 @@ int main()
 
     printf("\n");
 
-    printf(
-        "Memory[1000h] after execution = %u\n",
-        emulator.GetMemory().Read8(0x1000));
+    printf("SP after execution = %04X\n",
+           emulator.GetCPU().GetSP());
+
+    printf("\n");
+
+    printf("Memory[FFFFh] = %u\n",
+           emulator.GetMemory().Read8(0xFFFF));
 
     printf("\n");
 
     printf("========================================\n");
-    printf("STORE ROM Validation Completed\n");
+    printf("PUSH ROM Validation Completed\n");
     printf("========================================\n");
 
     return 0;

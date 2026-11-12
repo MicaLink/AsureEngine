@@ -8,48 +8,25 @@
 >
 > Architecture : **CPU 8 bits / Adressage mémoire 16 bits**
 >
-> Progression : **30 %**
+> Progression : **35 %**
 >
-> Priorité actuelle : **Lot B - Pile avancée**
+> Priorité actuelle : **POP**
 
 ---
 
 # Présentation
 
-La version v0.0.3-alpha marque la transition d'Azure-8 vers une architecture réellement programmable.
+La version v0.0.3-alpha poursuit la transformation d'Azure-8 en un processeur réellement programmable.
 
-La version v0.0.2 a permis de construire l'ensemble des fondations techniques :
+Après la mise en place complète de l'infrastructure dans la v0.0.2, cette version se concentre sur l'ajout progressif des instructions du processeur.
 
-```txt
-CPU
-
-RAM
-
-ROM Loader
-
-Read8()
-Write8()
-
-Read16()
-Write16()
-
-Stack
-Stack Pointer
-
-FLAGS
-
-Debug
-
-Tests automatisés
-```
-
-La version v0.0.3 étend désormais le processeur avec ses premières instructions de manipulation de données, première étape avant l'arrivée des opérations de pile, de calcul et de branchement.
+Les premières instructions de manipulation de données sont désormais entièrement validées.
 
 ---
 
 # Philosophie
 
-Azure-8 continue d'être développé selon les principes fondateurs du projet AzureEngine :
+Azure-8 continue d'être développé selon les principes du projet AzureEngine :
 
 ```txt
 Assembler autant que possible
@@ -60,32 +37,11 @@ C++ simple et maîtrisé
 
 Architecture claire
 
+Compréhension du matériel
+
 Développement progressif
 
-Compréhension complète
-du matériel émulé
-
 Documentation systématique
-```
-
----
-
-# Objectif principal
-
-Permettre à Azure-8 de :
-
-```txt
-Déplacer des données
-
-Lire la mémoire
-
-Écrire la mémoire
-
-Manipuler la pile
-
-Effectuer des calculs
-
-Effectuer des branchements
 ```
 
 ---
@@ -98,17 +54,17 @@ Effectuer des branchements
 00h  NOP
 
 10h  MOV
-
 11h  LOAD
-
 12h  STORE
+
+20h  PUSH
 
 FFh  HLT
 ```
 
 ---
 
-## Infrastructure disponible
+## Infrastructure validée
 
 ```txt
 ✅ RAM 64 Ko
@@ -125,9 +81,9 @@ FFh  HLT
 
 ✅ FLAGS
 
-✅ Debug
-
 ✅ ROM Loader
+
+✅ Debug
 
 ✅ Tests automatisés
 ```
@@ -158,13 +114,11 @@ Lot G - Tests automatisés
 
 ## Objectif
 
-Permettre les premiers échanges de données entre registres et mémoire.
+Manipuler et transférer des données entre registres et mémoire.
 
 ---
 
 ## MOV
-
-### Description
 
 ```asm
 MOV A, B
@@ -194,8 +148,6 @@ MOV A, B
 
 ## LOAD
 
-### Description
-
 ```asm
 LOAD A, 1000h
 ```
@@ -221,8 +173,6 @@ LOAD A, 1000h
 ---
 
 ## STORE
-
-### Description
 
 ```asm
 STORE A, 1000h
@@ -258,7 +208,7 @@ Memory[1000h] after execution = 42
 
 ---
 
-## Bilan du Lot A
+## Résultat du Lot A
 
 Premier cycle complet de données validé :
 
@@ -272,23 +222,9 @@ STORE B, 1001h
 HLT
 ```
 
-Résultat :
-
-```txt
-Lecture mémoire
-
-↓
-
-Manipulation registre
-
-↓
-
-Écriture mémoire
-```
-
 ### Statut
 
-✅ TERMINÉ
+✅ LOT A TERMINÉ
 
 ---
 
@@ -298,7 +234,7 @@ Manipulation registre
 
 Exposer la pile au jeu d'instructions Azure-8.
 
-L'infrastructure est déjà disponible :
+Infrastructure déjà validée :
 
 ```txt
 ✅ Push8()
@@ -324,13 +260,47 @@ L'infrastructure est déjà disponible :
 PUSH A
 ```
 
-### Réalisation
+Opcode :
 
-- [ ] Opcode
-- [ ] Décodage
-- [ ] Exécution
-- [ ] Test automatisé
-- [ ] push.rom
+```txt
+20h
+```
+
+### Validation
+
+```txt
+✅ Opcode
+
+✅ Décodage
+
+✅ Exécution
+
+✅ Test automatisé
+
+✅ push.rom validée
+```
+
+### Validation ROM
+
+```txt
+A = 42
+
+↓
+
+PUSH A
+
+↓
+
+Memory[FFFF] = 42
+
+↓
+
+SP = FFFE
+```
+
+### Statut
+
+✅ TERMINÉ
 
 ---
 
@@ -340,29 +310,51 @@ PUSH A
 POP A
 ```
 
+Opcode proposé :
+
+```txt
+21h
+```
+
 ### Réalisation
 
-- [ ] Opcode
-- [ ] Décodage
-- [ ] Exécution
-- [ ] Test automatisé
-- [ ] pop.rom
+```txt
+⬜ Opcode
+
+⬜ Décodage
+
+⬜ Exécution
+
+⬜ Test automatisé
+
+⬜ pop.rom
+```
+
+### Statut
+
+🟨 PRIORITÉ ACTUELLE
 
 ---
 
 ## CALL
 
 ```asm
-CALL 1000h
+CALL Adresse
 ```
 
 ### Réalisation
 
-- [ ] Opcode
-- [ ] Décodage
-- [ ] Exécution
-- [ ] Test automatisé
-- [ ] call.rom
+```txt
+⬜ Opcode
+
+⬜ Décodage
+
+⬜ Exécution
+
+⬜ Test automatisé
+
+⬜ call.rom
+```
 
 ---
 
@@ -374,17 +366,23 @@ RET
 
 ### Réalisation
 
-- [ ] Opcode
-- [ ] Décodage
-- [ ] Exécution
-- [ ] Test automatisé
-- [ ] ret.rom
+```txt
+⬜ Opcode
+
+⬜ Décodage
+
+⬜ Exécution
+
+⬜ Test automatisé
+
+⬜ ret.rom
+```
 
 ---
 
-## Statut
+## Statut du Lot B
 
-🟨 PRIORITÉ ACTUELLE
+🟨 EN COURS
 
 ---
 
@@ -396,10 +394,15 @@ RET
 INC A
 ```
 
-- [ ] Implémentation
-- [ ] FLAGS
-- [ ] Test
-- [ ] inc.rom
+```txt
+⬜ Implémentation
+
+⬜ Gestion FLAGS
+
+⬜ Test
+
+⬜ inc.rom
+```
 
 ---
 
@@ -409,10 +412,15 @@ INC A
 DEC A
 ```
 
-- [ ] Implémentation
-- [ ] FLAGS
-- [ ] Test
-- [ ] dec.rom
+```txt
+⬜ Implémentation
+
+⬜ Gestion FLAGS
+
+⬜ Test
+
+⬜ dec.rom
+```
 
 ---
 
@@ -422,10 +430,15 @@ DEC A
 ADD A, B
 ```
 
-- [ ] Implémentation
-- [ ] Gestion FLAGS
-- [ ] Test
-- [ ] add.rom
+```txt
+⬜ Implémentation
+
+⬜ Gestion FLAGS
+
+⬜ Test
+
+⬜ add.rom
+```
 
 ---
 
@@ -435,10 +448,15 @@ ADD A, B
 SUB A, B
 ```
 
-- [ ] Implémentation
-- [ ] Gestion FLAGS
-- [ ] Test
-- [ ] sub.rom
+```txt
+⬜ Implémentation
+
+⬜ Gestion FLAGS
+
+⬜ Test
+
+⬜ sub.rom
+```
 
 ---
 
@@ -456,10 +474,15 @@ SUB A, B
 CMP A, B
 ```
 
-- [ ] Implémentation
-- [ ] FLAGS
-- [ ] Test
-- [ ] cmp.rom
+```txt
+⬜ Implémentation
+
+⬜ FLAGS
+
+⬜ Test
+
+⬜ cmp.rom
+```
 
 ---
 
@@ -469,9 +492,13 @@ CMP A, B
 JMP Adresse
 ```
 
-- [ ] Implémentation
-- [ ] Test
-- [ ] jmp.rom
+```txt
+⬜ Implémentation
+
+⬜ Test
+
+⬜ jmp.rom
+```
 
 ---
 
@@ -481,9 +508,13 @@ JMP Adresse
 JZ Adresse
 ```
 
-- [ ] Implémentation
-- [ ] Test
-- [ ] jz.rom
+```txt
+⬜ Implémentation
+
+⬜ Test
+
+⬜ jz.rom
+```
 
 ---
 
@@ -493,9 +524,13 @@ JZ Adresse
 JNZ Adresse
 ```
 
-- [ ] Implémentation
-- [ ] Test
-- [ ] jnz.rom
+```txt
+⬜ Implémentation
+
+⬜ Test
+
+⬜ jnz.rom
+```
 
 ---
 
@@ -521,6 +556,8 @@ JNZ Adresse
 ✅ load.rom
 
 ✅ store.rom
+
+✅ push.rom
 ```
 
 ---
@@ -539,8 +576,6 @@ JNZ Adresse
 ⬜ underflow.rom
 ```
 
-Ces ROMs seront revalidées une fois le jeu d'instructions de pile terminé.
-
 ---
 
 ## ROMs à créer
@@ -548,8 +583,6 @@ Ces ROMs seront revalidées une fois le jeu d'instructions de pile terminé.
 ### Pile
 
 ```txt
-⬜ push.rom
-
 ⬜ pop.rom
 
 ⬜ call.rom
@@ -613,7 +646,7 @@ Ces ROMs seront revalidées une fois le jeu d'instructions de pile terminé.
 
 # Lot G - Tests automatisés
 
-## Tests validés
+## Validés
 
 ```txt
 ✅ TestMOV
@@ -621,17 +654,17 @@ Ces ROMs seront revalidées une fois le jeu d'instructions de pile terminé.
 ✅ TestLOAD
 
 ✅ TestSTORE
+
+✅ TestPUSH
 ```
 
 ---
 
-## Tests à réaliser
+## À réaliser
 
 ### Pile
 
 ```txt
-⬜ TestPUSH
-
 ⬜ TestPOP
 
 ⬜ TestCALL
@@ -688,7 +721,7 @@ Ces ROMs seront revalidées une fois le jeu d'instructions de pile terminé.
 ## Pile
 
 ```txt
-⬜ PUSH
+✅ PUSH
 
 ⬜ POP
 
@@ -727,45 +760,6 @@ Ces ROMs seront revalidées une fois le jeu d'instructions de pile terminé.
 
 ---
 
-## ROMs
-
-```txt
-⬜ Toutes les ROMs validées
-```
-
----
-
-## Documentation
-
-```txt
-⬜ Documentation complète
-```
-
----
-
-## Compilation
-
-```txt
-⬜ Build Debug
-
-⬜ Build Release
-
-⬜ 0 erreur
-
-⬜ 0 warning
-```
-
----
-
-## Tests
-
-```txt
-⬜ Couverture complète
-des tests automatisés
-```
-
----
-
 # État actuel
 
 ```txt
@@ -783,7 +777,7 @@ FLAGS       : 8 bits
 
 RAM         : 64 Ko
 
-Progression : 30 %
+Progression : 35 %
 ```
 
 ---
@@ -797,12 +791,17 @@ Progression : 30 %
 
 ✅ STORE
 
-✅ 3 nouvelles ROMs validées
+✅ PUSH
 
-✅ 3 nouveaux tests automatisés validés
+✅ 4 nouvelles ROMs validées
 
-✅ Premier cycle complet
-   mémoire → registres → mémoire
+✅ 4 nouveaux tests automatisés validés
+
+✅ Premier accès mémoire complet
+
+✅ Première écriture mémoire complète
+
+✅ Première utilisation de la pile via une instruction CPU
 ```
 
 ---
@@ -812,21 +811,17 @@ Progression : 30 %
 ```txt
 Lot B
 
-1. PUSH
+1. POP
 
-2. TestPUSH
+2. TestPOP
 
-3. push.rom
+3. pop.rom
 
-4. Validation PUSH
+4. Validation POP
 
-5. POP
+5. CALL
 
-6. TestPOP
-
-7. pop.rom
-
-8. Validation POP
+6. RET
 ```
 
 ---
@@ -847,7 +842,23 @@ STORE A, 2000h
 HLT
 ```
 
-Cette version transformera Azure-8 en une architecture programmable capable d'exécuter de véritables programmes.
+puis :
+
+```asm
+CALL Routine
+
+...
+
+Routine:
+
+PUSH A
+
+POP A
+
+RET
+```
+
+Cette version transformera Azure-8 en un processeur programmable capable d'exécuter de véritables programmes structurés.
 
 ---
 
