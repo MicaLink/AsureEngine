@@ -20,6 +20,8 @@ namespace
     constexpr u8 OPCODE_CALL = 0x22;
     constexpr u8 OPCODE_RET = 0x23;
 
+    constexpr u8 OPCODE_INC = 0x30;
+
     constexpr u8 OPCODE_HLT = 0xFF;
 
     //-------------------------------------------------
@@ -428,6 +430,18 @@ void CPU::Step(Memory& memory)
             printf("CPU HALTED\n");
 
             m_Halted = true;
+            break;
+        }
+        case OPCODE_INC:
+        {
+            const u8 reg = FetchByte(memory);
+
+            u8& value = GetRegister(reg);
+
+            value++;
+
+            UpdateZeroFlag(value);
+            UpdateNegativeFlag(value);
             break;
         }
         default:

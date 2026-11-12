@@ -42,6 +42,8 @@ void TestPOP();
 void TestCALL();
 void TestRET();
 
+void TestINC();
+
 //-----------------------------------------------------
 // Main
 //-----------------------------------------------------
@@ -101,6 +103,8 @@ int main()
     TestPOP();
     TestCALL();
     TestRET();
+
+    TestINC();
 
     printf("Instruction Tests Passed\n\n");
 
