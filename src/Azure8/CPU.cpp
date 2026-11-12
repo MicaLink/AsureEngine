@@ -17,6 +17,7 @@ namespace
 
     constexpr u8 OPCODE_PUSH = 0x20;
     constexpr u8 OPCODE_POP = 0x21;
+    constexpr u8 OPCODE_CALL = 0x22;
 
     constexpr u8 OPCODE_HLT = 0xFF;
 
@@ -65,6 +66,15 @@ bool CPU::IsHalted() const
 u16 CPU::GetSP() const
 {
     return SP;
+}
+
+//-----------------------------------------------------
+// GetSP
+//-----------------------------------------------------
+
+u16 CPU::GetPC() const
+{
+    return PC;
 }
 
 //-----------------------------------------------------
@@ -393,6 +403,18 @@ void CPU::Step(Memory& memory)
             const u8 reg = FetchByte(memory);
 
             GetRegister(reg) = Pop8(memory);
+            break;
+        }
+        case OPCODE_CALL:
+        {
+            const u8 low = FetchByte(memory);
+            const u8 high = FetchByte(memory);
+
+            const u16 address = static_cast<u16>(low | (high << 8));
+
+            Push16(memory, PC);
+
+            PC = address;
             break;
         }
         case OPCODE_HLT:

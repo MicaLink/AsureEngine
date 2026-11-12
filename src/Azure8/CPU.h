@@ -76,6 +76,7 @@ public:
     //-------------------------------------------------
 
     u16 GetSP() const;
+    u16 GetPC() const;
 
     bool HasStackOverflow() const;
     bool HasStackUnderflow() const;
