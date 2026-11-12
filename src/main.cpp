@@ -8,7 +8,7 @@ int main()
     // Configuration
     //-------------------------------------------------
 
-    constexpr const char* ROM_PATH = "roms/call.rom";
+    constexpr const char* ROM_PATH = "roms/ret.rom";
 
     //-------------------------------------------------
     // Init
@@ -35,7 +35,7 @@ int main()
 
     printf("\n");
     printf("========================================\n");
-    printf("Azure-8 CALL Validation\n");
+    printf("Azure-8 RET Validation\n");
     printf("========================================\n");
     printf("\n");
 
@@ -74,7 +74,7 @@ int main()
     printf("\n");
 
     printf("========================================\n");
-    printf("CALL ROM Validation Completed\n");
+    printf("RET ROM Validation Completed\n");
     printf("========================================\n");
 
     return 0;

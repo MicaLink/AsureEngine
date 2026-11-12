@@ -8,60 +8,79 @@
 >
 > Architecture : **CPU 8 bits / Adressage mémoire 16 bits**
 >
-> Progression : **50 %**
+> Progression : **60 %**
 >
-> Priorité actuelle : **RET**
+> Priorité actuelle : **Lot C - Arithmétique**
+>
+> Prochaine instruction : **INC (0x30)**
 
 ---
 
 # Présentation
 
-La version v0.0.3-alpha transforme progressivement Azure-8 en un processeur programmable.
+La version v0.0.3-alpha marque une étape majeure dans l'évolution d'Azure-8.
 
-Après la mise en place complète de l'infrastructure lors de la v0.0.2, cette version apporte les premières instructions utilisables :
+Les systèmes fondamentaux sont désormais opérationnels :
 
 ```txt
-Manipulation des registres
+✅ Mémoire
 
-Lecture mémoire
+✅ Registres
 
-Écriture mémoire
+✅ Pile
+
+✅ Sous-routines
+
+✅ Chargement ROM
+
+✅ Tests automatisés
+```
+
+Azure-8 peut désormais exécuter de véritables programmes structurés utilisant :
+
+```txt
+Mémoire
+
+↓
+
+Registres
+
+↓
 
 Pile
 
+↓
+
 Sous-routines
 ```
-
-La moitié de la roadmap est désormais validée.
 
 ---
 
 # Philosophie
 
-Azure-8 continue d'être développé selon les principes du projet AzureEngine :
+AzureEngine continue de suivre les principes suivants :
 
 ```txt
 Assembler autant que possible
 
 C avant C++
 
-Architecture simple
+Code simple et lisible
 
-Code facilement lisible
+Architecture facilement compréhensible
 
-Compréhension complète
-du matériel émulé
+Développement incrémental
 
-Développement progressif
+Validation systématique
 
-Documentation systématique
+Documentation continue
 ```
 
 ---
 
 # État actuel du processeur
 
-## Instructions validées
+## Jeu d'instructions validé
 
 ```txt
 00h  NOP
@@ -73,6 +92,7 @@ Documentation systématique
 20h  PUSH
 21h  POP
 22h  CALL
+23h  RET
 
 FFh  HLT
 ```
@@ -94,6 +114,12 @@ FFh  HLT
 
 ✅ Stack Pointer
 
+✅ Push8()
+✅ Pop8()
+
+✅ Push16()
+✅ Pop16()
+
 ✅ FLAGS
 
 ✅ ROM Loader
@@ -108,19 +134,19 @@ FFh  HLT
 # Ordre de développement
 
 ```txt
-Lot A - Instructions de données
+✅ Lot A - Instructions de données
 
-Lot B - Pile avancée
+✅ Lot B - Pile avancée
 
-Lot C - Arithmétique
+⬜ Lot C - Arithmétique
 
-Lot D - Comparaisons et branchements
+⬜ Lot D - Comparaisons et branchements
 
-Lot E - ROMs de validation
+⬜ Lot E - ROMs de validation
 
-Lot F - Documentation
+⬜ Lot F - Documentation
 
-Lot G - Tests automatisés
+⬜ Lot G - Tests automatisés
 ```
 
 ---
@@ -133,19 +159,17 @@ Lot G - Tests automatisés
 MOV A, B
 ```
 
-### Validation
-
 ```txt
 ✅ Opcode
+
 ✅ Décodage
+
 ✅ Exécution
+
 ✅ TestMOV
+
 ✅ mov.rom
 ```
-
-### Statut
-
-✅ TERMINÉ
 
 ---
 
@@ -155,19 +179,17 @@ MOV A, B
 LOAD A, 1000h
 ```
 
-### Validation
-
 ```txt
 ✅ Opcode
+
 ✅ Décodage
+
 ✅ Exécution
+
 ✅ TestLOAD
+
 ✅ load.rom
 ```
-
-### Statut
-
-✅ TERMINÉ
 
 ---
 
@@ -177,81 +199,29 @@ LOAD A, 1000h
 STORE A, 1000h
 ```
 
-### Validation
-
 ```txt
 ✅ Opcode
+
 ✅ Décodage
+
 ✅ Exécution
+
 ✅ TestSTORE
+
 ✅ store.rom
 ```
 
-### Validation ROM
-
-```txt
-Memory[1000h] before execution = 0
-
-↓
-
-STORE A, 1000h
-
-↓
-
-Memory[1000h] after execution = 42
-```
-
-### Statut
-
-✅ TERMINÉ
-
 ---
 
-## Résultat
+## Statut
 
-Premier cycle complet mémoire ↔ registres validé.
-
-```asm
-LOAD  A, 1000h
-
-MOV   B, A
-
-STORE B, 1001h
-
-HLT
-```
-
-### Statut
-
+```txt
 ✅ LOT A TERMINÉ
+```
 
 ---
 
 # Lot B - Pile avancée
-
-## Objectif
-
-Permettre aux instructions Azure-8 d'utiliser directement la pile.
-
-Infrastructure disponible :
-
-```txt
-✅ Push8()
-
-✅ Pop8()
-
-✅ Push16()
-
-✅ Pop16()
-
-✅ Stack Pointer
-
-✅ Overflow
-
-✅ Underflow
-```
-
----
 
 ## PUSH
 
@@ -259,43 +229,17 @@ Infrastructure disponible :
 PUSH A
 ```
 
-Opcode :
-
-```txt
-20h
-```
-
-### Validation
-
 ```txt
 ✅ Opcode
+
 ✅ Décodage
+
 ✅ Exécution
+
 ✅ TestPUSH
+
 ✅ push.rom
 ```
-
-### Validation ROM
-
-```txt
-A = 42
-
-↓
-
-PUSH A
-
-↓
-
-Memory[FFFF] = 42
-
-↓
-
-SP = FFFE
-```
-
-### Statut
-
-✅ TERMINÉ
 
 ---
 
@@ -305,43 +249,17 @@ SP = FFFE
 POP B
 ```
 
-Opcode :
-
-```txt
-21h
-```
-
-### Validation
-
 ```txt
 ✅ Opcode
+
 ✅ Décodage
+
 ✅ Exécution
+
 ✅ TestPOP
+
 ✅ pop.rom
 ```
-
-### Validation ROM
-
-```txt
-Memory[FFFF] = 42
-
-↓
-
-POP B
-
-↓
-
-B = 42
-
-↓
-
-SP = FFFF
-```
-
-### Statut
-
-✅ TERMINÉ
 
 ---
 
@@ -351,22 +269,14 @@ SP = FFFF
 CALL Adresse
 ```
 
-Opcode :
-
-```txt
-22h
-```
-
-### Validation
-
 ```txt
 ✅ Opcode
 
 ✅ Décodage
 
-✅ Sauvegarde adresse retour
-
 ✅ Push16()
+
+✅ Sauvegarde adresse retour
 
 ✅ Modification du PC
 
@@ -374,40 +284,6 @@ Opcode :
 
 ✅ call.rom
 ```
-
-### Validation ROM
-
-```txt
-CALL 0004h
-
-↓
-
-Push16(0003h)
-
-↓
-
-PC = 0004h
-
-↓
-
-HLT
-```
-
-Résultat :
-
-```txt
-Stack[FFFE] = 03
-
-Stack[FFFF] = 00
-
-SP = FFFD
-
-PC = 0005
-```
-
-### Statut
-
-✅ TERMINÉ
 
 ---
 
@@ -417,23 +293,98 @@ PC = 0005
 RET
 ```
 
-Opcode prévu :
-
 ```txt
-23h
+✅ Opcode
+
+✅ Décodage
+
+✅ Pop16()
+
+✅ Restauration du PC
+
+✅ TestRET
+
+✅ ret.rom
 ```
 
-### Objectif
+---
 
-```txt
-Récupérer l'adresse de retour
+## Validation ROM complète
 
-Restaurer PC
+Sous-routine validée :
 
-Revenir à l'appelant
+```asm
+CALL Routine
+
+Routine:
+RET
 ```
 
-### Réalisation
+Résultat :
+
+```txt
+✅ Push16()
+
+✅ Pop16()
+
+✅ Adresse de retour
+
+✅ Contrôle de flux
+
+✅ Sous-routine complète
+```
+
+---
+
+## Statut
+
+```txt
+✅ LOT B TERMINÉ
+```
+
+---
+
+# Lot C - Arithmétique
+
+## Objectif
+
+Ajouter les premières capacités de calcul au processeur.
+
+Les premières instructions arithmétiques serviront également à valider :
+
+```txt
+FLAG_ZERO
+
+FLAG_NEGATIVE
+
+FLAG_CARRY
+
+FLAG_OVERFLOW
+```
+
+---
+
+## INC
+
+### Description
+
+```asm
+INC A
+```
+
+### Opcode prévu
+
+```txt
+30h
+```
+
+### Fonction
+
+```txt
+A = A + 1
+```
+
+### Validation
 
 ```txt
 ⬜ Opcode
@@ -442,9 +393,13 @@ Revenir à l'appelant
 
 ⬜ Exécution
 
-⬜ TestRET
+⬜ FLAG_ZERO
 
-⬜ ret.rom
+⬜ FLAG_NEGATIVE
+
+⬜ TestINC
+
+⬜ inc.rom
 ```
 
 ### Statut
@@ -453,45 +408,33 @@ Revenir à l'appelant
 
 ---
 
-## État du Lot B
-
-```txt
-✅ PUSH
-
-✅ POP
-
-✅ CALL
-
-⬜ RET
-```
-
-### Progression
-
-```txt
-75 %
-```
-
----
-
-# Lot C - Arithmétique
-
-## INC
-
-```txt
-⬜ Implémentation
-⬜ FLAGS
-⬜ Test
-⬜ inc.rom
-```
-
----
-
 ## DEC
 
+### Description
+
+```asm
+DEC A
+```
+
+### Opcode prévu
+
 ```txt
-⬜ Implémentation
+31h
+```
+
+### Validation
+
+```txt
+⬜ Opcode
+
+⬜ Décodage
+
+⬜ Exécution
+
 ⬜ FLAGS
-⬜ Test
+
+⬜ TestDEC
+
 ⬜ dec.rom
 ```
 
@@ -499,10 +442,37 @@ Revenir à l'appelant
 
 ## ADD
 
+### Description
+
+```asm
+ADD A, B
+```
+
+### Opcode prévu
+
 ```txt
-⬜ Implémentation
-⬜ FLAGS
-⬜ Test
+32h
+```
+
+### Validation
+
+```txt
+⬜ Opcode
+
+⬜ Décodage
+
+⬜ Exécution
+
+⬜ FLAG_ZERO
+
+⬜ FLAG_NEGATIVE
+
+⬜ FLAG_CARRY
+
+⬜ FLAG_OVERFLOW
+
+⬜ TestADD
+
 ⬜ add.rom
 ```
 
@@ -510,10 +480,31 @@ Revenir à l'appelant
 
 ## SUB
 
+### Description
+
+```asm
+SUB A, B
+```
+
+### Opcode prévu
+
 ```txt
-⬜ Implémentation
+33h
+```
+
+### Validation
+
+```txt
+⬜ Opcode
+
+⬜ Décodage
+
+⬜ Exécution
+
 ⬜ FLAGS
-⬜ Test
+
+⬜ TestSUB
+
 ⬜ sub.rom
 ```
 
@@ -521,7 +512,9 @@ Revenir à l'appelant
 
 ## Statut
 
-⬜ Non commencé
+```txt
+⬜ NON COMMENCÉ
+```
 
 ---
 
@@ -531,8 +524,11 @@ Revenir à l'appelant
 
 ```txt
 ⬜ Implémentation
+
 ⬜ FLAGS
-⬜ Test
+
+⬜ TestCMP
+
 ⬜ cmp.rom
 ```
 
@@ -542,7 +538,9 @@ Revenir à l'appelant
 
 ```txt
 ⬜ Implémentation
-⬜ Test
+
+⬜ TestJMP
+
 ⬜ jmp.rom
 ```
 
@@ -552,7 +550,9 @@ Revenir à l'appelant
 
 ```txt
 ⬜ Implémentation
-⬜ Test
+
+⬜ TestJZ
+
 ⬜ jz.rom
 ```
 
@@ -562,7 +562,9 @@ Revenir à l'appelant
 
 ```txt
 ⬜ Implémentation
-⬜ Test
+
+⬜ TestJNZ
+
 ⬜ jnz.rom
 ```
 
@@ -570,7 +572,9 @@ Revenir à l'appelant
 
 ## Statut
 
-⬜ Non commencé
+```txt
+⬜ NON COMMENCÉ
+```
 
 ---
 
@@ -596,6 +600,8 @@ Revenir à l'appelant
 ✅ pop.rom
 
 ✅ call.rom
+
+✅ ret.rom
 ```
 
 ---
@@ -617,12 +623,6 @@ Revenir à l'appelant
 ---
 
 ## ROMs à créer
-
-### Pile
-
-```txt
-⬜ ret.rom
-```
 
 ### Arithmétique
 
@@ -668,7 +668,7 @@ Revenir à l'appelant
 
 # Lot G - Tests automatisés
 
-## Validés
+## Tests validés
 
 ```txt
 ✅ TestMOV
@@ -682,17 +682,13 @@ Revenir à l'appelant
 ✅ TestPOP
 
 ✅ TestCALL
+
+✅ TestRET
 ```
 
 ---
 
 ## À réaliser
-
-### Pile
-
-```txt
-⬜ TestRET
-```
 
 ### Arithmétique
 
@@ -743,7 +739,7 @@ Revenir à l'appelant
 
 ✅ CALL
 
-⬜ RET
+✅ RET
 ```
 
 ---
@@ -793,7 +789,7 @@ FLAGS       : 8 bits
 
 RAM         : 64 Ko
 
-Progression : 50 %
+Progression : 60 %
 ```
 
 ---
@@ -813,19 +809,19 @@ Progression : 50 %
 
 ✅ CALL
 
-✅ 6 nouvelles instructions validées
+✅ RET
 
-✅ 6 tests automatisés validés
+✅ 7 nouvelles instructions validées
 
-✅ 6 ROMs validées
+✅ 7 tests automatisés validés
 
-✅ Gestion mémoire
+✅ 7 ROMs validées
 
-✅ Gestion registres
+✅ Mémoire
 
-✅ Gestion pile
+✅ Pile
 
-✅ Premier mécanisme de sous-routine
+✅ Sous-routines
 ```
 
 ---
@@ -833,15 +829,21 @@ Progression : 50 %
 # Priorité immédiate
 
 ```txt
-Lot B
+Lot C
 
-1. RET
+1. INC
 
-2. TestRET
+2. TestINC
 
-3. ret.rom
+3. inc.rom
 
-4. Validation RET
+4. Validation ROM
+
+5. DEC
+
+6. TestDEC
+
+7. dec.rom
 ```
 
 ---
@@ -849,22 +851,6 @@ Lot B
 # Objectif de la v0.0.3
 
 À la fin de cette version, Azure-8 devra être capable d'exécuter :
-
-```asm
-CALL Routine
-
-...
-
-Routine:
-
-PUSH A
-
-POP A
-
-RET
-```
-
-puis :
 
 ```asm
 LOAD  A, 1000h
@@ -878,7 +864,21 @@ STORE A, 2000h
 HLT
 ```
 
-Cette version transformera Azure-8 en un processeur programmable capable d'exécuter de véritables programmes structurés.
+et :
+
+```asm
+CALL Routine
+
+Routine:
+
+PUSH A
+
+POP A
+
+RET
+```
+
+Cette version transformera Azure-8 en un processeur programmable capable d'exécuter des programmes structurés complets.
 
 ---
 

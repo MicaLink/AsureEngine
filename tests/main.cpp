@@ -40,6 +40,7 @@ void TestSTORE();
 void TestPUSH();
 void TestPOP();
 void TestCALL();
+void TestRET();
 
 //-----------------------------------------------------
 // Main
@@ -99,6 +100,7 @@ int main()
     TestPUSH();
     TestPOP();
     TestCALL();
+    TestRET();
 
     printf("Instruction Tests Passed\n\n");
 

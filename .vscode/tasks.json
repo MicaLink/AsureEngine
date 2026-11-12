@@ -88,6 +88,7 @@
                 "tests\\TestInstructionPUSH.cpp",
                 "tests\\TestInstructionPOP.cpp",
                 "tests\\TestInstructionCALL.cpp",
+                "tests\\TestInstructionRET.cpp",
 
                 "src\\Azure8\\CPU.cpp",
                 "src\\Azure8\\Memory.cpp",

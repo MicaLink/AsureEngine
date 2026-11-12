@@ -18,6 +18,7 @@ namespace
     constexpr u8 OPCODE_PUSH = 0x20;
     constexpr u8 OPCODE_POP = 0x21;
     constexpr u8 OPCODE_CALL = 0x22;
+    constexpr u8 OPCODE_RET = 0x23;
 
     constexpr u8 OPCODE_HLT = 0xFF;
 
@@ -415,6 +416,11 @@ void CPU::Step(Memory& memory)
             Push16(memory, PC);
 
             PC = address;
+            break;
+        }
+        case OPCODE_RET:
+        {
+            PC = Pop16(memory);
             break;
         }
         case OPCODE_HLT:
