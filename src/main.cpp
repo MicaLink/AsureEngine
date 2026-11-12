@@ -8,7 +8,7 @@ int main()
     // Configuration
     //-------------------------------------------------
 
-    constexpr const char* ROM_PATH = "roms/push.rom";
+    constexpr const char* ROM_PATH = "roms/pop.rom";
 
     //-------------------------------------------------
     // Init
@@ -33,7 +33,7 @@ int main()
     // Initialisation
     //-------------------------------------------------
 
-    emulator.GetCPU().GetRegister(0x00) = 42;
+    emulator.GetCPU().Push8(emulator.GetMemory(), 42);
 
     //-------------------------------------------------
     // Validation
@@ -41,17 +41,17 @@ int main()
 
     printf("\n");
     printf("========================================\n");
-    printf("Azure-8 PUSH Validation\n");
+    printf("Azure-8 POP Validation\n");
     printf("========================================\n");
     printf("\n");
 
-    printf("Register A = %u\n",
-           emulator.GetCPU().GetRegister(0x00));
+    printf(
+        "SP before execution = %04X\n",
+        emulator.GetCPU().GetSP());
 
-    printf("\n");
-
-    printf("SP before execution = %04X\n",
-           emulator.GetCPU().GetSP());
+    printf(
+        "Memory[FFFFh] = %u\n",
+        emulator.GetMemory().Read8(0xFFFF));
 
     printf("\n");
 
@@ -59,18 +59,18 @@ int main()
 
     printf("\n");
 
-    printf("SP after execution = %04X\n",
-           emulator.GetCPU().GetSP());
+    printf(
+        "SP after execution = %04X\n",
+        emulator.GetCPU().GetSP());
 
-    printf("\n");
-
-    printf("Memory[FFFFh] = %u\n",
-           emulator.GetMemory().Read8(0xFFFF));
+    printf(
+        "Register B = %u\n",
+        emulator.GetCPU().GetRegister(0x01));
 
     printf("\n");
 
     printf("========================================\n");
-    printf("PUSH ROM Validation Completed\n");
+    printf("POP ROM Validation Completed\n");
     printf("========================================\n");
 
     return 0;

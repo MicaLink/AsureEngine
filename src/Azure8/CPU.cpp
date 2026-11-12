@@ -16,6 +16,7 @@ namespace
     constexpr u8 OPCODE_STORE = 0x12;
 
     constexpr u8 OPCODE_PUSH = 0x20;
+    constexpr u8 OPCODE_POP = 0x21;
 
     constexpr u8 OPCODE_HLT = 0xFF;
 
@@ -385,6 +386,13 @@ void CPU::Step(Memory& memory)
             const u8 reg = FetchByte(memory);
 
             Push8(memory, GetRegister(reg));
+            break;
+        }
+        case OPCODE_POP:
+        {
+            const u8 reg = FetchByte(memory);
+
+            GetRegister(reg) = Pop8(memory);
             break;
         }
         case OPCODE_HLT:
