@@ -91,6 +91,7 @@
                 "tests\\TestInstructionRET.cpp",
 
                 "tests\\TestInstructionINC.cpp",
+                "tests\\TestInstructionDEC.cpp",
 
                 "src\\Azure8\\CPU.cpp",
                 "src\\Azure8\\Memory.cpp",

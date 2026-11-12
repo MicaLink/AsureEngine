@@ -21,6 +21,7 @@ namespace
     constexpr u8 OPCODE_RET = 0x23;
 
     constexpr u8 OPCODE_INC = 0x30;
+    constexpr u8 OPCODE_DEC = 0x31;
 
     constexpr u8 OPCODE_HLT = 0xFF;
 
@@ -440,6 +441,18 @@ void CPU::Step(Memory& memory)
 
             value++;
 
+            UpdateZeroFlag(value);
+            UpdateNegativeFlag(value);
+            break;
+        }
+        case OPCODE_DEC:
+        {
+            const u8 reg = FetchByte(memory);
+
+            u8& value = GetRegister(reg);
+
+            value--;
+            
             UpdateZeroFlag(value);
             UpdateNegativeFlag(value);
             break;

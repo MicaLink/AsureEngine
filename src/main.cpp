@@ -8,7 +8,7 @@ int main()
     // Configuration
     //-------------------------------------------------
 
-    constexpr const char* ROM_PATH = "roms/inc.rom";
+    constexpr const char* ROM_PATH = "roms/dec.rom";
 
     //-------------------------------------------------
     // Init
@@ -29,11 +29,11 @@ int main()
         return 1;
     }
 
-     //-------------------------------------------------
+    //-------------------------------------------------
     // Initialisation
     //-------------------------------------------------
 
-    emulator.GetCPU().GetRegister(0x00) = 41;
+    emulator.GetCPU().GetRegister(0x00) = 42;
 
     //-------------------------------------------------
     // Validation
@@ -41,7 +41,7 @@ int main()
 
     printf("\n");
     printf("========================================\n");
-    printf("Azure-8 INC Validation\n");
+    printf("Azure-8 DEC Validation\n");
     printf("========================================\n");
     printf("\n");
 
@@ -70,7 +70,7 @@ int main()
     printf("\n");
 
     printf("========================================\n");
-    printf("INC ROM Validation Completed\n");
+    printf("DEC ROM Validation Completed\n");
     printf("========================================\n");
 
     return 0;
