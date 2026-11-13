@@ -8,7 +8,7 @@ int main()
     // Configuration
     //-------------------------------------------------
 
-    constexpr const char* ROM_PATH = "roms/add.rom";
+    constexpr const char* ROM_PATH = "roms/sub.rom";
 
     //-------------------------------------------------
     // Init
@@ -33,9 +33,9 @@ int main()
     // Initialisation
     //-------------------------------------------------
 
-    emulator.GetCPU().GetRegister(0x00) = 10; // A
+    emulator.GetCPU().GetRegister(0x00) = 50; // A
 
-    emulator.GetCPU().GetRegister(0x01) = 32; // B
+    emulator.GetCPU().GetRegister(0x01) = 8;  // B
 
     //-------------------------------------------------
     // Validation
@@ -43,7 +43,7 @@ int main()
 
     printf("\n");
     printf("========================================\n");
-    printf("Azure-8 ADD Validation\n");
+    printf("Azure-8 SUB Validation\n");
     printf("========================================\n");
     printf("\n");
 
@@ -80,7 +80,7 @@ int main()
     printf("\n");
 
     printf("========================================\n");
-    printf("ADD ROM Validation Completed\n");
+    printf("SUB ROM Validation Completed\n");
     printf("========================================\n");
 
     return 0;
