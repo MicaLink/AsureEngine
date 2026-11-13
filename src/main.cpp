@@ -8,7 +8,7 @@ int main()
     // Configuration
     //-------------------------------------------------
 
-    constexpr const char* ROM_PATH = "roms/sub.rom";
+    constexpr const char* ROM_PATH = "roms/cmp.rom";
 
     //-------------------------------------------------
     // Init
@@ -29,13 +29,12 @@ int main()
         return 1;
     }
 
-    //-------------------------------------------------
+   //-------------------------------------------------
     // Initialisation
     //-------------------------------------------------
 
-    emulator.GetCPU().GetRegister(0x00) = 50; // A
-
-    emulator.GetCPU().GetRegister(0x01) = 8;  // B
+    emulator.GetCPU().GetRegister(0x00) = 42; // A
+    emulator.GetCPU().GetRegister(0x01) = 42; // B
 
     //-------------------------------------------------
     // Validation
@@ -43,7 +42,7 @@ int main()
 
     printf("\n");
     printf("========================================\n");
-    printf("Azure-8 SUB Validation\n");
+    printf("Azure-8 CMP Validation\n");
     printf("========================================\n");
     printf("\n");
 
@@ -79,8 +78,30 @@ int main()
 
     printf("\n");
 
+    printf("ZERO     = %s\n",
+        (emulator.GetCPU().GetFlags() & FLAG_ZERO)
+            ? "SET"
+            : "CLEAR");
+
+    printf("CARRY    = %s\n",
+        (emulator.GetCPU().GetFlags() & FLAG_CARRY)
+            ? "SET"
+            : "CLEAR");
+
+    printf("NEGATIVE = %s\n",
+        (emulator.GetCPU().GetFlags() & FLAG_NEGATIVE)
+            ? "SET"
+            : "CLEAR");
+
+    printf("OVERFLOW = %s\n",
+        (emulator.GetCPU().GetFlags() & FLAG_OVERFLOW)
+            ? "SET"
+            : "CLEAR");
+
+    printf("\n");
+
     printf("========================================\n");
-    printf("SUB ROM Validation Completed\n");
+    printf("CMP ROM Validation Completed\n");
     printf("========================================\n");
 
     return 0;

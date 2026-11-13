@@ -47,6 +47,8 @@ void TestDEC();
 void TestADD();
 void TestSUB();
 
+void TestCMP();
+
 //-----------------------------------------------------
 // Main
 //-----------------------------------------------------
@@ -111,6 +113,8 @@ int main()
     TestDEC();
     TestADD();
     TestSUB();
+
+    TestCMP();
 
     printf("Instruction Tests Passed\n\n");
 

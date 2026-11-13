@@ -25,6 +25,8 @@ namespace
     constexpr u8 OPCODE_ADD = 0x32;
     constexpr u8 OPCODE_SUB = 0x33;
 
+    constexpr u8 OPCODE_CMP = 0x40;
+
     constexpr u8 OPCODE_HLT = 0xFF;
 
     //-------------------------------------------------
@@ -467,8 +469,12 @@ void CPU::Step(Memory& memory)
             u8& destination = GetRegister(dst);
 
             const u8 source = GetRegister(src);
+            
+            const u16 result = static_cast<u16>(destination) + static_cast<u16>(source);
 
-            destination = static_cast<u8>(destination + source);
+            UpdateCarryFlag(result > 0xFF);
+
+            destination = static_cast<u8>(result);
 
             UpdateZeroFlag(destination);
             UpdateNegativeFlag(destination);
@@ -483,10 +489,33 @@ void CPU::Step(Memory& memory)
 
             const u8 source = GetRegister(src);
 
-            destination = static_cast<u8>(destination - source);
+            const bool borrow = destination < source;
+
+            const u8 result = static_cast<u8>(destination - source);
+
+            UpdateCarryFlag(borrow);
+
+            destination = result;
 
             UpdateZeroFlag(destination);
             UpdateNegativeFlag(destination);
+            break;
+        }
+        case OPCODE_CMP:
+        {
+            const u8 reg1 = FetchByte(memory);
+            const u8 reg2 = FetchByte(memory);
+            const u8 value1 = GetRegister(reg1);
+            const u8 value2 = GetRegister(reg2);
+
+            const bool borrow = value1 < value2;
+
+            const u8 result = static_cast<u8>(value1 - value2);
+
+            UpdateCarryFlag(borrow);
+            UpdateZeroFlag(result);
+            UpdateNegativeFlag(result);
+            printf("CMP : %u - %u = %02X FLAGS=%02X\n", value1, value2, result, FLAGS);
             break;
         }
         default:

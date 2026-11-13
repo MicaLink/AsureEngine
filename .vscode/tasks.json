@@ -95,6 +95,8 @@
                 "tests\\TestInstructionADD.cpp",
                 "tests\\TestInstructionSUB.cpp",
 
+                "tests\\TestInstructionCMP.cpp",
+
                 "src\\Azure8\\CPU.cpp",
                 "src\\Azure8\\Memory.cpp",
                 "src\\Azure8\\Emulator.cpp"

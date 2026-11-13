@@ -2,150 +2,161 @@
 
 > Version cible : **v0.0.3-alpha**
 >
-> Statut : **En développement avancé**
+> Statut : **Développement avancé**
 >
-> Version précédente : **v0.0.2-alpha**
+> Architecture : **Azure-8**
 >
-> Architecture : **CPU 8 bits / Adressage mémoire 16 bits**
+> Progression estimée : **90 %**
 >
-> Progression : **80 %**
->
-> Priorité actuelle : **CMP (0x40)**
+> Priorité actuelle : **JMP (0x41)**
 >
 > Lot actif : **Lot D - Comparaisons et branchements**
 
 ---
 
-# Présentation
+# Vision de la version v0.0.3
 
-La version v0.0.3-alpha a désormais validé l'ensemble du cœur d'exécution de base d'Azure‑8.
+La version v0.0.3 a pour objectif de transformer Azure‑8 en un processeur réellement programmable.
 
-Les fonctionnalités suivantes sont désormais opérationnelles :
-
-```txt
-✅ Registres
-
-✅ Mémoire
-
-✅ Pile
-
-✅ Sous-routines
-
-✅ Arithmétique
-
-✅ Chargement ROM
-
-✅ Tests automatisés
-```
-
-Azure‑8 peut maintenant :
+À l'issue de cette version, Azure‑8 devra maîtriser :
 
 ```txt
-Lire des données
+Manipulation de données
 
-↓
+Mémoire
 
-Les manipuler
+Pile
 
-↓
+Sous-routines
 
-Effectuer des calculs
+Arithmétique
 
-↓
+Comparaisons
 
-Utiliser la pile
-
-↓
-
-Exécuter des sous-routines
+Branchements
 ```
-
-La prochaine étape consiste à introduire la logique de décision du processeur.
 
 ---
 
 # État actuel du processeur
 
-## Jeu d'instructions validé
-
-### Système
+## Registres généraux
 
 ```txt
-00h NOP
+A
+B
+C
+D
+```
 
-FFh HLT
+Codage :
+
+```txt
+00h = A
+
+01h = B
+
+02h = C
+
+03h = D
 ```
 
 ---
 
-### Données
+## Registres système
 
 ```txt
-10h MOV
+PC
 
-11h LOAD
+SP
 
-12h STORE
+FLAGS
 ```
 
 ---
 
-### Pile
+## FLAGS
 
 ```txt
-20h PUSH
+Bit 0 = ZERO
 
-21h POP
+Bit 1 = CARRY
 
-22h CALL
+Bit 2 = NEGATIVE
 
-23h RET
+Bit 3 = OVERFLOW
+```
+
+Définition actuelle :
+
+```cpp
+FLAG_ZERO     = (1 << 0);
+
+FLAG_CARRY    = (1 << 1);
+
+FLAG_NEGATIVE = (1 << 2);
+
+FLAG_OVERFLOW = (1 << 3);
 ```
 
 ---
 
-### Arithmétique
+# Jeu d'instructions validé
+
+## Contrôle CPU
 
 ```txt
-30h INC
+✅ NOP  (00h)
 
-31h DEC
-
-32h ADD
-
-33h SUB
+✅ HLT  (FFh)
 ```
 
 ---
 
-# Infrastructure validée
+## Données
 
 ```txt
-✅ RAM 64 Ko
+✅ MOV   (10h)
 
-✅ Read8()
-✅ Write8()
+✅ LOAD  (11h)
 
-✅ Read16()
-✅ Write16()
+✅ STORE (12h)
+```
 
-✅ Push8()
-✅ Pop8()
+---
 
-✅ Push16()
-✅ Pop16()
+## Pile
 
-✅ Program Counter
+```txt
+✅ PUSH (20h)
 
-✅ Stack Pointer
+✅ POP  (21h)
 
-✅ FLAGS
+✅ CALL (22h)
 
-✅ ROM Loader
+✅ RET  (23h)
+```
 
-✅ Debug
+---
 
-✅ Tests automatisés
+## Arithmétique
+
+```txt
+✅ INC (30h)
+
+✅ DEC (31h)
+
+✅ ADD (32h)
+
+✅ SUB (33h)
+```
+
+---
+
+## Comparaison
+
+```txt
+✅ CMP (40h)
 ```
 
 ---
@@ -153,7 +164,7 @@ FFh HLT
 # État des lots
 
 ```txt
-✅ Lot A - Instructions de données
+✅ Lot A - Données
 
 ✅ Lot B - Pile avancée
 
@@ -168,61 +179,101 @@ FFh HLT
 
 ---
 
-# Lot A - Instructions de données
+# Lot A - Données
 
-## Instructions validées
+## MOV
 
 ```txt
-✅ MOV
+✅ Implémentation
 
-✅ LOAD
+✅ TestMOV
 
-✅ STORE
+✅ mov.rom
 ```
 
-## ROMs validées
+---
+
+## LOAD
 
 ```txt
-✅ mov.rom
+✅ Implémentation
+
+✅ TestLOAD
 
 ✅ load.rom
+```
+
+---
+
+## STORE
+
+```txt
+✅ Implémentation
+
+✅ TestSTORE
 
 ✅ store.rom
 ```
 
+---
+
 ## Statut
 
 ```txt
-✅ TERMINÉ
+✅ LOT A TERMINÉ
 ```
 
 ---
 
 # Lot B - Pile avancée
 
-## Instructions validées
+## PUSH
 
 ```txt
-✅ PUSH
+✅ Implémentation
 
-✅ POP
+✅ TestPUSH
 
-✅ CALL
-
-✅ RET
+✅ push.rom
 ```
 
-## ROMs validées
+---
+
+## POP
 
 ```txt
-✅ push.rom
+✅ Implémentation
+
+✅ TestPOP
 
 ✅ pop.rom
+```
+
+---
+
+## CALL
+
+```txt
+✅ Implémentation
+
+✅ TestCALL
 
 ✅ call.rom
+```
+
+---
+
+## RET
+
+```txt
+✅ Implémentation
+
+✅ TestRET
 
 ✅ ret.rom
 ```
+
+---
 
 ## Validation obtenue
 
@@ -242,10 +293,12 @@ FFh HLT
 ✅ Contrôle de flux
 ```
 
+---
+
 ## Statut
 
 ```txt
-✅ TERMINÉ
+✅ LOT B TERMINÉ
 ```
 
 ---
@@ -255,11 +308,7 @@ FFh HLT
 ## INC
 
 ```txt
-✅ Opcode
-
-✅ Décodage
-
-✅ Exécution
+✅ Implémentation
 
 ✅ TestINC
 
@@ -271,11 +320,7 @@ FFh HLT
 ## DEC
 
 ```txt
-✅ Opcode
-
-✅ Décodage
-
-✅ Exécution
+✅ Implémentation
 
 ✅ TestDEC
 
@@ -287,18 +332,14 @@ FFh HLT
 ## ADD
 
 ```txt
-✅ Opcode
-
-✅ Décodage
-
-✅ Exécution
+✅ Implémentation
 
 ✅ TestADD
 
 ✅ add.rom
 ```
 
-Validation ROM :
+Validation :
 
 ```txt
 10 + 32 = 42
@@ -309,18 +350,14 @@ Validation ROM :
 ## SUB
 
 ```txt
-✅ Opcode
-
-✅ Décodage
-
-✅ Exécution
+✅ Implémentation
 
 ✅ TestSUB
 
 ✅ sub.rom
 ```
 
-Validation ROM :
+Validation :
 
 ```txt
 50 - 8 = 42
@@ -328,17 +365,7 @@ Validation ROM :
 
 ---
 
-## Statut du Lot C
-
-```txt
-✅ INC
-
-✅ DEC
-
-✅ ADD
-
-✅ SUB
-```
+## Statut
 
 ```txt
 ✅ LOT C TERMINÉ
@@ -348,66 +375,92 @@ Validation ROM :
 
 # Lot D - Comparaisons et branchements
 
-## Objectif
-
-Ajouter la logique décisionnelle du processeur.
-
-Ce lot permettra :
-
-```txt
-Comparaisons
-
-Conditions
-
-Branches
-
-Boucles
-
-Contrôle de flux avancé
-```
-
----
-
 ## CMP
 
-### Description
-
-```asm
-CMP A, B
-```
-
-### Opcode proposé
+### Opcode
 
 ```txt
 40h
 ```
 
-### Fonction
+### Validation
 
 ```txt
-Effectuer A - B
+✅ Opcode
 
-Mettre à jour les FLAGS
+✅ Décodage
 
-Ne modifier aucun registre
+✅ Lecture des registres
+
+✅ Comparaison
+
+✅ FLAG_ZERO
+
+✅ FLAG_NEGATIVE
+
+✅ FLAG_CARRY
+
+✅ TestCMP
+
+✅ cmp.rom
+```
+
+### Validation ROM
+
+```txt
+A = 42
+
+B = 42
+
+↓
+
+CMP A, B
+
+↓
+
+FLAGS = 01h
+
+ZERO     = SET
+
+CARRY    = CLEAR
+
+NEGATIVE = CLEAR
+
+OVERFLOW = CLEAR
+```
+
+### Statut
+
+```txt
+✅ TERMINÉ
+```
+
+---
+
+## JMP
+
+### Opcode
+
+```txt
+41h
+```
+
+### Description
+
+```asm
+JMP Adresse
 ```
 
 ### Validation
 
 ```txt
-⬜ Opcode
+⬜ Implémentation
 
-⬜ Décodage
+⬜ TestJMP
 
-⬜ Exécution
+⬜ jmp.rom
 
-⬜ FLAG_ZERO
-
-⬜ FLAG_NEGATIVE
-
-⬜ TestCMP
-
-⬜ cmp.rom
+⬜ Validation ROM
 ```
 
 ### Statut
@@ -418,37 +471,13 @@ Ne modifier aucun registre
 
 ---
 
-## JMP
-
-### Description
-
-```asm
-JMP Adresse
-```
-
-### Opcode proposé
-
-```txt
-41h
-```
-
-### Validation
-
-```txt
-⬜ Opcode
-
-⬜ Décodage
-
-⬜ Modification PC
-
-⬜ TestJMP
-
-⬜ jmp.rom
-```
-
----
-
 ## JZ
+
+### Opcode
+
+```txt
+42h
+```
 
 ### Description
 
@@ -456,35 +485,29 @@ JMP Adresse
 JZ Adresse
 ```
 
-### Opcode proposé
-
-```txt
-42h
-```
-
-### Fonction
-
-```txt
-Saut si FLAG_ZERO = 1
-```
-
 ### Validation
 
 ```txt
-⬜ Opcode
-
-⬜ Décodage
+⬜ Implémentation
 
 ⬜ Lecture FLAG_ZERO
 
 ⬜ TestJZ
 
 ⬜ jz.rom
+
+⬜ Validation ROM
 ```
 
 ---
 
 ## JNZ
+
+### Opcode
+
+```txt
+43h
+```
 
 ### Description
 
@@ -492,38 +515,26 @@ Saut si FLAG_ZERO = 1
 JNZ Adresse
 ```
 
-### Opcode proposé
-
-```txt
-43h
-```
-
-### Fonction
-
-```txt
-Saut si FLAG_ZERO = 0
-```
-
 ### Validation
 
 ```txt
-⬜ Opcode
-
-⬜ Décodage
+⬜ Implémentation
 
 ⬜ Lecture FLAG_ZERO
 
 ⬜ TestJNZ
 
 ⬜ jnz.rom
+
+⬜ Validation ROM
 ```
 
 ---
 
-## Progression Lot D
+## Progression du Lot D
 
 ```txt
-⬜ CMP
+✅ CMP
 
 ⬜ JMP
 
@@ -564,6 +575,8 @@ Saut si FLAG_ZERO = 0
 ✅ add.rom
 
 ✅ sub.rom
+
+✅ cmp.rom
 ```
 
 ---
@@ -571,8 +584,6 @@ Saut si FLAG_ZERO = 0
 # ROMs à créer
 
 ```txt
-⬜ cmp.rom
-
 ⬜ jmp.rom
 
 ⬜ jz.rom
@@ -606,6 +617,8 @@ Saut si FLAG_ZERO = 0
 ✅ TestADD
 
 ✅ TestSUB
+
+✅ TestCMP
 ```
 
 ---
@@ -613,35 +626,11 @@ Saut si FLAG_ZERO = 0
 # Tests automatisés à réaliser
 
 ```txt
-⬜ TestCMP
-
 ⬜ TestJMP
 
 ⬜ TestJZ
 
 ⬜ TestJNZ
-```
-
----
-
-# État actuel
-
-```txt
-Projet      : AzureEngine
-
-Version     : v0.0.3-alpha
-
-CPU         : 8 bits
-
-PC          : 16 bits
-
-SP          : 16 bits
-
-FLAGS       : 8 bits
-
-RAM         : 64 Ko
-
-Progression : 80 %
 ```
 
 ---
@@ -671,19 +660,51 @@ Progression : 80 %
 
 ✅ SUB
 
-✅ 11 nouvelles instructions validées
+✅ CMP
 
-✅ 11 tests automatisés validés
+✅ 12 instructions validées
 
-✅ 11 ROMs validées
+✅ 12 tests automatisés validés
 
-✅ Gestion mémoire
+✅ 12 ROMs validées
 
-✅ Gestion pile
+✅ Mémoire
+
+✅ Pile
 
 ✅ Sous-routines
 
-✅ Arithmétique complète de base
+✅ Arithmétique
+
+✅ Comparaison
+```
+
+---
+
+# État actuel
+
+```txt
+Projet       : AzureEngine
+
+Architecture : Azure-8
+
+Version      : v0.0.3-alpha
+
+CPU          : 8 bits
+
+PC           : 16 bits
+
+SP           : 16 bits
+
+RAM          : 64 Ko
+
+FLAGS        :
+    ZERO
+    CARRY
+    NEGATIVE
+    OVERFLOW
+
+Progression  : 90 %
 ```
 
 ---
@@ -691,41 +712,37 @@ Progression : 80 %
 # Priorité immédiate
 
 ```txt
-Lot D
+1. Implémenter JMP
 
-1. CMP
+2. Créer TestJMP
 
-2. TestCMP
+3. Créer jmp.rom
 
-3. cmp.rom
+4. Valider jmp.rom
 
-4. Validation ROM
+5. Implémenter JZ
 
-5. JMP
+6. Créer TestJZ
 
-6. TestJMP
-
-7. jmp.rom
-
-8. Validation ROM
+7. Créer jz.rom
 ```
 
 ---
 
-# Objectif de la v0.0.3
+# Objectif de fin de version
 
-À la fin de cette version, Azure‑8 devra être capable d'exécuter :
+À la fin de la v0.0.3, Azure‑8 devra pouvoir exécuter :
 
 ```asm
 LOAD A, 1000h
 
 LOAD B, 1001h
 
-ADD A, B
-
 CMP A, B
 
 JZ Equal
+
+ADD A, B
 
 JMP End
 
@@ -738,7 +755,19 @@ End:
 HLT
 ```
 
-Cette version transformera Azure‑8 en un processeur programmable capable d'exécuter des calculs, des comparaisons et des branchements conditionnels.
+Cette démonstration validera simultanément :
+
+```txt
+Mémoire
+
+Arithmétique
+
+Comparaison
+
+Branchement conditionnel
+
+Contrôle de flux
+```
 
 ---
 
