@@ -44,6 +44,7 @@ void TestRET();
 
 void TestINC();
 void TestDEC();
+void TestADD();
 
 //-----------------------------------------------------
 // Main
@@ -107,6 +108,7 @@ int main()
 
     TestINC();
     TestDEC();
+    TestADD();
 
     printf("Instruction Tests Passed\n\n");
 

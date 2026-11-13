@@ -8,9 +8,9 @@
 >
 > Architecture : **CPU 8 bits / Adressage mémoire 16 bits**
 >
-> Progression : **70 %**
+> Progression : **75 %**
 >
-> Priorité actuelle : **ADD (0x32)**
+> Priorité actuelle : **SUB (0x33)**
 >
 > Lot actif : **Lot C - Arithmétique**
 
@@ -18,9 +18,9 @@
 
 # Présentation
 
-La version v0.0.3-alpha marque l'entrée d'Azure‑8 dans sa première phase de calcul.
+La version v0.0.3-alpha poursuit la transformation d'Azure‑8 en un processeur programmable complet.
 
-Les fondations du processeur sont désormais terminées :
+Les fondations majeures sont maintenant terminées :
 
 ```txt
 ✅ Registres
@@ -31,19 +31,21 @@ Les fondations du processeur sont désormais terminées :
 
 ✅ Sous-routines
 
+✅ Arithmétique élémentaire
+
 ✅ Chargement ROM
 
 ✅ Tests automatisés
 ```
 
-Azure‑8 est maintenant capable de :
+Azure‑8 peut désormais :
 
 ```txt
 Lire la mémoire
 
 ↓
 
-Manipuler les registres
+Manipuler des données
 
 ↓
 
@@ -55,51 +57,57 @@ Exécuter des sous-routines
 
 ↓
 
-Effectuer des opérations arithmétiques simples
+Effectuer des opérations arithmétiques
 ```
 
 ---
 
-# Philosophie
+# Jeu d'instructions validé
 
-AzureEngine continue de suivre ses principes :
+## Système
 
 ```txt
-Assembler autant que possible
+00h NOP
 
-C avant C++
-
-Code simple
-
-Architecture lisible
-
-Validation systématique
-
-Documentation continue
+FFh HLT
 ```
 
 ---
 
-# Jeu d'instructions actuel
-
-## Instructions validées
+## Données
 
 ```txt
-00h  NOP
+10h MOV
 
-10h  MOV
-11h  LOAD
-12h  STORE
+11h LOAD
 
-20h  PUSH
-21h  POP
-22h  CALL
-23h  RET
+12h STORE
+```
 
-30h  INC
-31h  DEC
+---
 
-FFh  HLT
+## Pile
+
+```txt
+20h PUSH
+
+21h POP
+
+22h CALL
+
+23h RET
+```
+
+---
+
+## Arithmétique
+
+```txt
+30h INC
+
+31h DEC
+
+32h ADD
 ```
 
 ---
@@ -115,17 +123,15 @@ FFh  HLT
 ✅ Read16()
 ✅ Write16()
 
-✅ Stack
-
 ✅ Push8()
 ✅ Pop8()
 
 ✅ Push16()
 ✅ Pop16()
 
-✅ Program Counter
-
 ✅ Stack Pointer
+
+✅ Program Counter
 
 ✅ FLAGS
 
@@ -149,145 +155,91 @@ FFh  HLT
 
 ⬜ Lot D - Comparaisons et branchements
 
-⬜ Lot E - ROMs de validation
+⬜ Lot E - Documentation
 
-⬜ Lot F - Documentation
-
-⬜ Lot G - Tests automatisés
+⬜ Lot F - Finalisation v0.0.3
 ```
 
 ---
 
 # Lot A - Instructions de données
 
-## MOV
+## Validation
 
 ```txt
-✅ Opcode
-✅ Décodage
-✅ Exécution
-✅ TestMOV
+✅ MOV
+
+✅ LOAD
+
+✅ STORE
+```
+
+## ROMs validées
+
+```txt
 ✅ mov.rom
-```
 
----
-
-## LOAD
-
-```txt
-✅ Opcode
-✅ Décodage
-✅ Exécution
-✅ TestLOAD
 ✅ load.rom
-```
 
----
-
-## STORE
-
-```txt
-✅ Opcode
-✅ Décodage
-✅ Exécution
-✅ TestSTORE
 ✅ store.rom
 ```
-
----
 
 ## Statut
 
 ```txt
-✅ LOT A TERMINÉ
+✅ TERMINÉ
 ```
 
 ---
 
 # Lot B - Pile avancée
 
-## PUSH
+## Validation
 
 ```txt
-✅ Opcode
-✅ Décodage
-✅ Exécution
-✅ TestPUSH
+✅ PUSH
+
+✅ POP
+
+✅ CALL
+
+✅ RET
+```
+
+## ROMs validées
+
+```txt
 ✅ push.rom
-```
 
----
-
-## POP
-
-```txt
-✅ Opcode
-✅ Décodage
-✅ Exécution
-✅ TestPOP
 ✅ pop.rom
-```
 
----
-
-## CALL
-
-```txt
-✅ Opcode
-✅ Décodage
-✅ Push16()
-✅ Sauvegarde de l'adresse de retour
-✅ Modification du PC
-✅ TestCALL
 ✅ call.rom
-```
 
----
-
-## RET
-
-```txt
-✅ Opcode
-✅ Décodage
-✅ Pop16()
-✅ Restauration du PC
-✅ TestRET
 ✅ ret.rom
 ```
 
----
-
-## Validation complète
-
-Sous-routine validée :
-
-```asm
-CALL Routine
-
-Routine:
-RET
-```
-
-Validation obtenue :
+## Validation obtenue
 
 ```txt
-✅ Adresse de retour
+✅ Push8()
+
+✅ Pop8()
 
 ✅ Push16()
 
 ✅ Pop16()
 
-✅ Contrôle de flux
+✅ Sous-routines
 
-✅ Sous-routines fonctionnelles
+✅ Sauvegarde adresse de retour
+
+✅ Retour à l'appelant
 ```
-
----
 
 ## Statut
 
 ```txt
-✅ LOT B TERMINÉ
+✅ TERMINÉ
 ```
 
 ---
@@ -296,29 +248,11 @@ Validation obtenue :
 
 ## Objectif
 
-Introduire les premières capacités de calcul.
-
-Les instructions de ce lot permettront de valider :
-
-```txt
-FLAG_ZERO
-
-FLAG_NEGATIVE
-
-FLAG_CARRY
-
-FLAG_OVERFLOW
-```
+Ajouter les capacités de calcul fondamentales.
 
 ---
 
 ## INC
-
-### Description
-
-```asm
-INC A
-```
 
 ### Opcode
 
@@ -326,12 +260,6 @@ INC A
 30h
 ```
 
-### Fonction
-
-```txt
-A = A + 1
-```
-
 ### Validation
 
 ```txt
@@ -341,42 +269,22 @@ A = A + 1
 
 ✅ Exécution
 
-✅ FLAG_ZERO
-
-✅ FLAG_NEGATIVE
+✅ FLAGS
 
 ✅ TestINC
 
 ✅ inc.rom
 ```
 
-### Validation ROM
-
-```txt
-A = 41
-
-↓
-
-INC A
-
-↓
-
-A = 42
-```
-
 ### Statut
 
+```txt
 ✅ TERMINÉ
+```
 
 ---
 
 ## DEC
-
-### Description
-
-```asm
-DEC A
-```
 
 ### Opcode
 
@@ -384,12 +292,6 @@ DEC A
 31h
 ```
 
-### Fonction
-
-```txt
-A = A - 1
-```
-
 ### Validation
 
 ```txt
@@ -399,42 +301,22 @@ A = A - 1
 
 ✅ Exécution
 
-✅ FLAG_ZERO
-
-✅ FLAG_NEGATIVE
+✅ FLAGS
 
 ✅ TestDEC
 
 ✅ dec.rom
 ```
 
-### Validation ROM
-
-```txt
-A = 42
-
-↓
-
-DEC A
-
-↓
-
-A = 41
-```
-
 ### Statut
 
+```txt
 ✅ TERMINÉ
+```
 
 ---
 
 ## ADD
-
-### Description
-
-```asm
-ADD A, B
-```
 
 ### Opcode
 
@@ -444,45 +326,55 @@ ADD A, B
 
 ### Fonction
 
-```txt
-A = A + B
+```asm
+ADD A, B
 ```
 
 ### Validation
 
 ```txt
-⬜ Opcode
+✅ Opcode
 
-⬜ Décodage
+✅ Décodage
 
-⬜ Exécution
+✅ Exécution
 
-⬜ FLAG_ZERO
+✅ Lecture source
 
-⬜ FLAG_NEGATIVE
+✅ Lecture destination
 
-⬜ FLAG_CARRY
+✅ Écriture résultat
 
-⬜ FLAG_OVERFLOW
+✅ TestADD
 
-⬜ TestADD
+✅ add.rom
+```
 
-⬜ add.rom
+### Validation ROM
+
+```txt
+A = 10
+
+B = 32
+
+↓
+
+ADD A, B
+
+↓
+
+A = 42
 ```
 
 ### Statut
 
-🟨 PRIORITÉ ACTUELLE
+```txt
+✅ TERMINÉ
+```
 
 ---
 
 ## SUB
-
-### Description
-
-```asm
-SUB A, B
-```
 
 ### Opcode
 
@@ -492,8 +384,8 @@ SUB A, B
 
 ### Fonction
 
-```txt
-A = A - B
+```asm
+SUB A, B
 ```
 
 ### Validation
@@ -520,18 +412,20 @@ A = A - B
 
 ### Statut
 
-⬜ NON COMMENCÉ
+```txt
+🟨 PRIORITÉ ACTUELLE
+```
 
 ---
 
-## Statut du Lot C
+## État du Lot C
 
 ```txt
 ✅ INC
 
 ✅ DEC
 
-⬜ ADD
+✅ ADD
 
 ⬜ SUB
 ```
@@ -539,7 +433,7 @@ A = A - B
 Progression :
 
 ```txt
-50 %
+75 %
 ```
 
 ---
@@ -550,8 +444,11 @@ Progression :
 
 ```txt
 ⬜ Implémentation
+
 ⬜ FLAGS
+
 ⬜ TestCMP
+
 ⬜ cmp.rom
 ```
 
@@ -561,7 +458,9 @@ Progression :
 
 ```txt
 ⬜ Implémentation
+
 ⬜ TestJMP
+
 ⬜ jmp.rom
 ```
 
@@ -571,7 +470,9 @@ Progression :
 
 ```txt
 ⬜ Implémentation
+
 ⬜ TestJZ
+
 ⬜ jz.rom
 ```
 
@@ -581,7 +482,9 @@ Progression :
 
 ```txt
 ⬜ Implémentation
+
 ⬜ TestJNZ
+
 ⬜ jnz.rom
 ```
 
@@ -621,6 +524,8 @@ Progression :
 ✅ inc.rom
 
 ✅ dec.rom
+
+✅ add.rom
 ```
 
 ---
@@ -630,8 +535,6 @@ Progression :
 ## Arithmétique
 
 ```txt
-⬜ add.rom
-
 ⬜ sub.rom
 ```
 
@@ -669,23 +572,17 @@ Progression :
 ✅ TestINC
 
 ✅ TestDEC
+
+✅ TestADD
 ```
 
 ---
 
 # Tests automatisés à réaliser
 
-## Arithmétique
-
 ```txt
-⬜ TestADD
-
 ⬜ TestSUB
-```
 
-## Branchements
-
-```txt
 ⬜ TestCMP
 
 ⬜ TestJMP
@@ -693,62 +590,6 @@ Progression :
 ⬜ TestJZ
 
 ⬜ TestJNZ
-```
-
----
-
-# Critères de validation
-
-## Données
-
-```txt
-✅ MOV
-
-✅ LOAD
-
-✅ STORE
-```
-
----
-
-## Pile
-
-```txt
-✅ PUSH
-
-✅ POP
-
-✅ CALL
-
-✅ RET
-```
-
----
-
-## Arithmétique
-
-```txt
-✅ INC
-
-✅ DEC
-
-⬜ ADD
-
-⬜ SUB
-```
-
----
-
-## Branchements
-
-```txt
-⬜ CMP
-
-⬜ JMP
-
-⬜ JZ
-
-⬜ JNZ
 ```
 
 ---
@@ -770,7 +611,7 @@ FLAGS       : 8 bits
 
 RAM         : 64 Ko
 
-Progression : 70 %
+Progression : 75 %
 ```
 
 ---
@@ -796,11 +637,13 @@ Progression : 70 %
 
 ✅ DEC
 
-✅ 9 nouvelles instructions validées
+✅ ADD
 
-✅ 9 tests automatisés validés
+✅ 10 nouvelles instructions validées
 
-✅ 9 ROMs validées
+✅ 10 tests automatisés validés
+
+✅ 10 ROMs validées
 
 ✅ Gestion mémoire
 
@@ -808,7 +651,7 @@ Progression : 70 %
 
 ✅ Sous-routines
 
-✅ Premières opérations arithmétiques
+✅ Arithmétique élémentaire
 ```
 
 ---
@@ -818,56 +661,48 @@ Progression : 70 %
 ```txt
 Lot C
 
-1. ADD
+1. SUB
 
-2. TestADD
+2. TestSUB
 
-3. add.rom
+3. sub.rom
 
 4. Validation ROM
-
-5. SUB
-
-6. TestSUB
-
-7. sub.rom
-
-8. Validation ROM
 ```
 
 ---
 
-# Objectif de la v0.0.3
+# Étape suivante
 
-À la fin de cette version, Azure‑8 devra être capable d'exécuter :
+Une fois SUB terminé :
 
-```asm
-LOAD  A, 1000h
+```txt
+✅ INC
 
-LOAD  B, 1001h
+✅ DEC
 
-ADD   A, B
+✅ ADD
 
-STORE A, 2000h
-
-HLT
+✅ SUB
 ```
 
-ainsi que :
+le Lot C sera entièrement terminé.
 
-```asm
-CALL Routine
+Nous pourrons alors ouvrir :
 
-Routine:
+```txt
+Lot D
 
-PUSH A
+CMP
 
-POP A
+JMP
 
-RET
+JZ
+
+JNZ
 ```
 
-Cette version transformera Azure‑8 en un processeur programmable disposant de mémoire, pile, sous-routines et calcul arithmétique.
+et donner à Azure‑8 son premier véritable mécanisme de décision et de branchement conditionnel.
 
 ---
 

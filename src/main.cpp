@@ -8,7 +8,7 @@ int main()
     // Configuration
     //-------------------------------------------------
 
-    constexpr const char* ROM_PATH = "roms/dec.rom";
+    constexpr const char* ROM_PATH = "roms/add.rom";
 
     //-------------------------------------------------
     // Init
@@ -33,7 +33,9 @@ int main()
     // Initialisation
     //-------------------------------------------------
 
-    emulator.GetCPU().GetRegister(0x00) = 42;
+    emulator.GetCPU().GetRegister(0x00) = 10; // A
+
+    emulator.GetCPU().GetRegister(0x01) = 32; // B
 
     //-------------------------------------------------
     // Validation
@@ -41,13 +43,17 @@ int main()
 
     printf("\n");
     printf("========================================\n");
-    printf("Azure-8 DEC Validation\n");
+    printf("Azure-8 ADD Validation\n");
     printf("========================================\n");
     printf("\n");
 
     printf(
         "Register A before execution = %u\n",
         emulator.GetCPU().GetRegister(0x00));
+
+    printf(
+        "Register B before execution = %u\n",
+        emulator.GetCPU().GetRegister(0x01));
 
     printf(
         "FLAGS before execution = %02X\n",
@@ -64,13 +70,17 @@ int main()
         emulator.GetCPU().GetRegister(0x00));
 
     printf(
+        "Register B after execution = %u\n",
+        emulator.GetCPU().GetRegister(0x01));
+
+    printf(
         "FLAGS after execution = %02X\n",
         emulator.GetCPU().GetFlags());
 
     printf("\n");
 
     printf("========================================\n");
-    printf("DEC ROM Validation Completed\n");
+    printf("ADD ROM Validation Completed\n");
     printf("========================================\n");
 
     return 0;

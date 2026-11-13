@@ -22,6 +22,7 @@ namespace
 
     constexpr u8 OPCODE_INC = 0x30;
     constexpr u8 OPCODE_DEC = 0x31;
+    constexpr u8 OPCODE_ADD = 0x32;
 
     constexpr u8 OPCODE_HLT = 0xFF;
 
@@ -455,6 +456,21 @@ void CPU::Step(Memory& memory)
             
             UpdateZeroFlag(value);
             UpdateNegativeFlag(value);
+            break;
+        }
+        case OPCODE_ADD:
+        {
+            const u8 dst = FetchByte(memory);
+            const u8 src = FetchByte(memory);
+
+            u8& destination = GetRegister(dst);
+
+            const u8 source = GetRegister(src);
+
+            destination = static_cast<u8>(destination + source);
+
+            UpdateZeroFlag(destination);
+            UpdateNegativeFlag(destination);
             break;
         }
         default:
