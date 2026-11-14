@@ -8,36 +8,36 @@
 >
 > Architecture : **CPU 8 bits / Adressage mémoire 16 bits**
 >
-> Progression : **95 %**
+> Progression : **96 %**
 >
 > État fonctionnel : **Terminé**
 >
-> État release : **En cours de validation**
+> État release : **Validation finale en cours**
 >
-> Objectif : **Préparer le tag Git v0.0.3-alpha**
+> Objectif : **Publication du tag Git v0.0.3-alpha**
 
 ---
 
 # Présentation
 
-La version v0.0.3-alpha marque l'achèvement fonctionnel du premier processeur programmable Azure‑8.
+La version v0.0.3-alpha marque l'achèvement de la première version programmable d'Azure‑8.
 
-Tous les objectifs du jeu d'instructions ont été atteints et validés par tests automatisés et ROMs dédiées.
+L'ensemble du jeu d'instructions défini dans la spécification v0.0.3 a été implémenté, testé et validé.
 
-Cependant, avant de publier officiellement la release et de créer le tag Git correspondant, une phase finale de validation doit être réalisée :
+Avant publication officielle de la release, une dernière phase de validation qualité est en cours afin de garantir :
 
 ```txt
-Validation des ROMs héritées de la v0.0.2
+Validation des ROMs historiques
 
-Audit complet du code source
+Audit du code source
 
-Audit complet de la documentation
+Audit de la documentation
 
-Validation du dépôt
+Audit du dépôt Git
 
-Validation Debug
+Validation Build Debug
 
-Validation Release
+Validation Build Release
 ```
 
 ---
@@ -55,7 +55,7 @@ Validation Release
 
 ✅ Execute
 
-✅ Jeu d'instructions v0.0.3 complet
+✅ Jeu d'instructions complet
 ```
 
 ---
@@ -114,8 +114,6 @@ Validation Release
 ✅ Push16()
 
 ✅ Pop16()
-
-✅ Gestion du Stack Pointer
 ```
 
 ---
@@ -146,7 +144,7 @@ Validation Release
 
 ---
 
-## Données
+## Instructions de données
 
 ```txt
 ✅ MOV   (10h)
@@ -158,7 +156,7 @@ Validation Release
 
 ---
 
-## Pile
+## Gestion de pile
 
 ```txt
 ✅ PUSH (20h)
@@ -208,6 +206,8 @@ Validation Release
 
 # Lot A - Instructions de données
 
+## Réalisé
+
 ```txt
 ✅ MOV
 
@@ -216,7 +216,7 @@ Validation Release
 ✅ STORE
 ```
 
-Validation :
+## Validation
 
 ```txt
 ✅ mov.rom
@@ -226,7 +226,7 @@ Validation :
 ✅ store.rom
 ```
 
-Statut :
+## Statut
 
 ```txt
 ✅ TERMINÉ
@@ -235,6 +235,8 @@ Statut :
 ---
 
 # Lot B - Pile avancée
+
+## Réalisé
 
 ```txt
 ✅ PUSH
@@ -246,7 +248,7 @@ Statut :
 ✅ RET
 ```
 
-Validation :
+## Validation
 
 ```txt
 ✅ push.rom
@@ -258,7 +260,7 @@ Validation :
 ✅ ret.rom
 ```
 
-Statut :
+## Statut
 
 ```txt
 ✅ TERMINÉ
@@ -267,6 +269,8 @@ Statut :
 ---
 
 # Lot C - Arithmétique
+
+## Réalisé
 
 ```txt
 ✅ INC
@@ -278,7 +282,7 @@ Statut :
 ✅ SUB
 ```
 
-Validation :
+## Validation
 
 ```txt
 ✅ inc.rom
@@ -290,7 +294,7 @@ Validation :
 ✅ sub.rom
 ```
 
-Statut :
+## Statut
 
 ```txt
 ✅ TERMINÉ
@@ -299,6 +303,8 @@ Statut :
 ---
 
 # Lot D - Comparaisons et branchements
+
+## Réalisé
 
 ```txt
 ✅ CMP
@@ -310,7 +316,7 @@ Statut :
 ✅ JNZ
 ```
 
-Validation :
+## Validation
 
 ```txt
 ✅ cmp.rom
@@ -322,10 +328,68 @@ Validation :
 ✅ jnz.rom
 ```
 
-Statut :
+## Statut
 
 ```txt
 ✅ TERMINÉ
+```
+
+---
+
+# Héritage technique de la v0.0.2
+
+Les fondations techniques validées durant la v0.0.2 sont toujours présentes et utilisées par Azure‑8.
+
+## Mémoire
+
+```txt
+✅ Read8()
+
+✅ Write8()
+
+✅ Read16()
+
+✅ Write16()
+
+✅ Little Endian
+```
+
+---
+
+## Stack
+
+```txt
+✅ Push8()
+
+✅ Pop8()
+
+✅ Push16()
+
+✅ Pop16()
+```
+
+---
+
+## Sécurité
+
+```txt
+✅ Détection Overflow
+
+✅ Détection Underflow
+```
+
+---
+
+## FLAGS
+
+```txt
+✅ ZERO
+
+✅ CARRY
+
+✅ NEGATIVE
+
+✅ OVERFLOW
 ```
 
 ---
@@ -380,15 +444,53 @@ Statut :
 
 ---
 
-# ROMs à valider avant publication
+## ROMs d'infrastructure validées
 
-Ces ROMs ont été créées durant la v0.0.2 mais n'ont jamais bénéficié d'une validation ROM documentée.
+### memory16.rom
 
-## Lot E1 - ROMs d'infrastructure
+Validation effectuée :
 
 ```txt
-⬜ memory16.rom
+LOAD A, 1234h
 
+STORE A, 5678h
+
+HLT
+```
+
+Résultat obtenu :
+
+```txt
+Memory[1234] = 42
+
+Memory[5678] = 42
+```
+
+Validation :
+
+```txt
+✅ Adressage 16 bits
+
+✅ Little Endian
+
+✅ LOAD
+
+✅ STORE
+
+✅ Accès mémoire distant
+```
+
+Statut :
+
+```txt
+✅ VALIDÉE
+```
+
+---
+
+# ROMs restant à valider
+
+```txt
 ⬜ stack8.rom
 
 ⬜ stack16.rom
@@ -396,16 +498,6 @@ Ces ROMs ont été créées durant la v0.0.2 mais n'ont jamais bénéficié d'un
 ⬜ overflow.rom
 
 ⬜ underflow.rom
-```
-
-Objectif :
-
-```txt
-Validation par exécution réelle
-
-Documentation des résultats
-
-Archivage des preuves
 ```
 
 ---
@@ -472,10 +564,10 @@ All tests passed successfully.
 
 # Lot E - Validation finale de release
 
-## E1 - Validation ROM historique
+## E1 - Validation des ROMs historiques
 
 ```txt
-⬜ memory16.rom
+✅ memory16.rom
 
 ⬜ stack8.rom
 
@@ -484,6 +576,12 @@ All tests passed successfully.
 ⬜ overflow.rom
 
 ⬜ underflow.rom
+```
+
+Progression :
+
+```txt
+1 / 5 validée
 ```
 
 ---
@@ -509,180 +607,123 @@ All tests passed successfully.
 ### Tests
 
 ```txt
-⬜ TestCPU.cpp
-
-⬜ TestFlags.cpp
-
-⬜ TestMemory.cpp
-
-⬜ TestStack.cpp
-
-⬜ Tous les TestInstruction*.cpp
+⬜ Tous les fichiers de tests
 ```
-
-Contrôles :
-
-```txt
-⬜ St*le
-
-⬜ Cohérence
-
-⬜ Commentaires
-
-⬜*Nommage
-
-⬜ Code mort
-
-⬜ Warnings
-`*`
 
 ---
 
-## E3 - Audit de la docume*tation
-
-### Développement
+## E3 - Audit documentation
 
 ```txt
-* Architecture.md
+⬜ Architecture.md
 
 ⬜ Build.md
 
-⬜ Co*ingStyle.md
+⬜ CodingStyle.md
 
 ⬜ Contributing.md
-```*
-### Technique
 
-```txt
-⬜ Documenta*ion FLAGS.md
+⬜ FLAGS.md
 
-⬜ Documentation SP.m*
+⬜ SP.md
 
-⬜ Documentation Stack.md
-```
+⬜ Stack.md
 
-##* Spécifications
-
-```txt
-⬜ Azure-8_*nstruction_Set_v0.0.3.md
-
-⬜ Azure-*_Technical_Specification_v0.0.2.tx*
-```
-
-### Vision
-
-```txt
-⬜ Cohéren*e globale
+⬜ Azure-8_Instruction_Set_v0.0.3.md
 ```
 
 ---
 
-## E4 - Valida*ion du dépôt
+## E4 - Validation dépôt
 
 ```txt
 ⬜ README.md
 
-* LICENSE
+⬜ LICENSE
 
 ⬜ .gitignore
 
-⬜ Structur* du dépôt
-
-⬜ ROMs
-
-⬜ Documentation*
 ⬜ Arborescence
+
+⬜ Structure finale
 ```
 
 ---
 
-## E5 - *ompilation finale
+## E5 - Validation Build
 
 ### Debug
 
-```t*t
-⬜ Build réussi
+```txt
+⬜ Build
 
 ⬜ 0 erreur
 
-⬜ 0 *arning
+⬜ 0 warning
 ```
 
 ### Release
 
 ```txt
-⬜ *uild réussi
+⬜ Build
 
 ⬜ 0 erreur
 
-⬜ 0 warni*g
+⬜ 0 warning
 ```
 
 ---
 
-## E6 - Publication
-
-C*nditions :
-
-```txt
-✅ Jeu d'instruc*ions terminé
-
-✅ Tests validés
-
-⬜ R*Ms historiques validées
-
-⬜ Documen*ation auditée
-
-⬜ Code audité
-
-⬜ Bu*ld Debug validé
-
-⬜ Build Release v*lidé
-```
-
-Action finale :
-
-```txt
-*it tag v0.0.3-alpha
-```
-
----
-
-# Ét*t actuel
+# État actuel
 
 ## Fonctionnalités
 
-```t*t
+```txt
 ✅ 100 %
 ```
+
+---
 
 ## Tests
 
 ```txt
-✅ *00 %
-```
-
-## ROMs d'instructions
-
-*``txt
 ✅ 100 %
-```
-
-## Préparation *elease
-
-```txt
-🟨 95 %
 ```
 
 ---
 
-#*Accomplissements majeurs
+## ROMs d'instructions
 
 ```txt
-✅*Jeu d'instructions complet
+✅ 100 %
+```
+
+---
+
+## ROMs historiques
+
+```txt
+🟨 20 %
+```
+
+---
+
+## Préparation Release
+
+```txt
+🟨 96 %
+```
+
+---
+
+# Accomplissements majeurs
+
+```txt
+✅ Jeu d'instructions Azure‑8 complet
 
 ✅ MOV
-*✅ LOAD
+
+✅ LOAD
 
 ✅ STORE
 
@@ -690,7 +731,7 @@ Action finale :
 
 ✅ POP
 
-✅ *ALL
+✅ CALL
 
 ✅ RET
 
@@ -700,7 +741,7 @@ Action finale :
 
 ✅ ADD
 
-✅*SUB
+✅ SUB
 
 ✅ CMP
 
@@ -710,76 +751,61 @@ Action finale :
 
 ✅ JNZ
 
-✅ *omparaisons
+✅ 19 ROMs validées
 
-✅ Branchements condit*onnels
+✅ Tests automatisés complets
 
-✅ Branchements incondition*els
+✅ Comparaisons
+
+✅ Branchements conditionnels
+
+✅ Branchements inconditionnels
 
 ✅ Sous-routines
 
-✅ Tests auto*atisés complets
-
-✅ Build fonctionn*l
+✅ Arithmétique complète
 ```
 
 ---
 
-# Résultat attendu ava*t clôture
+# Conditions de clôture
 
-Lorsque le Lot E sera t*rminé :
+La roadmap v0.0.3 pourra être clôturée uniquement lorsque :
 
 ```txt
-✅ Toutes les ROMs *alidées
+✅ memory16.rom
 
-✅ Documentation auditée
+✅ stack8.rom
 
-* Code source audité
+✅ stack16.rom
 
-✅ Dépôt valid*
+✅ overflow.rom
+
+✅ underflow.rom
+
+✅ Audit code
+
+✅ Audit documentation
+
+✅ Audit dépôt
 
 ✅ Build Debug
 
 ✅ Build Release
-
-* 0 erreur
-
-✅ 0 warning
 ```
 
-Alors *eulement :
-
-```txt
-Statut : Termin*e
-
-Progression : 100 %
-
-Tag*Git : v0.0.3-alpha
-``*
-
-pourront être officiellement*appliqués.
+seront validés.
 
 ---
 
-# Bilan
-
-La v0.0.**est fonctionnellement terminée.
-
-L* processeur Azure‑8 est programmab*e et l'ensemble du jeu d'instructi*ns prévu par la spécification v0.0*3 est implémenté et valid*.
-
-La phase restante concerne*exclusivement :
+# Statut actuel
 
 ```txt
-Qualité
+Jeu d'instructions : ✅ TERMINÉ
 
-*alidation
-
-Documentation
-
-Publicat*on*```
-
-afin de produire une release *ropre et durable avant l'ouverture*officielle de la v0.0.4.
+Validation Release : 🟨 EN COURS
+```
 
 ---
 
-***in de roadmap v0.0.3-alpha - Statu*** Préparation Release*****
+**Fin de roadmap v0.0.3-alpha - Statut : Préparation Release 🟨**

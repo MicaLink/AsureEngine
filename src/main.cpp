@@ -8,7 +8,7 @@ int main()
     // Configuration
     //-------------------------------------------------
 
-    constexpr const char* ROM_PATH = "roms/jnz.rom";
+    constexpr const char* ROM_PATH = "roms/memory16.rom";
 
     //-------------------------------------------------
     // Init
@@ -30,77 +30,51 @@ int main()
     }
 
     //-------------------------------------------------
-    // Initialisation
+    // Préparation mémoire
     //-------------------------------------------------
 
-    emulator.GetCPU().ClearFlag(FLAG_ZERO);
+    emulator.GetMemory().Write8(0x1234, 0x42);
 
     //-------------------------------------------------
-    // Validation
+    // Affichage avant exécution
     //-------------------------------------------------
 
     printf("\n");
     printf("========================================\n");
-    printf("Azure-8 JNZ Validation\n");
+    printf("Azure-8 Memory16 Validation\n");
     printf("========================================\n");
     printf("\n");
 
-    printf(
-        "PC before execution = %04X\n",
-        emulator.GetCPU().GetPC());
+    printf("Memory[1234] before = %02X\n",
+        emulator.GetMemory().Read8(0x1234));
 
-    printf(
-        "SP before execution = %04X\n",
-        emulator.GetCPU().GetSP());
-
-    printf(
-        "FLAGS before execution = %02X\n",
-        emulator.GetCPU().GetFlags());
+    printf("Memory[5678] before = %02X\n",
+        emulator.GetMemory().Read8(0x5678));
 
     printf("\n");
+
+    //-------------------------------------------------
+    // Exécution
+    //-------------------------------------------------
 
     emulator.Run();
 
-    printf("\n");
-
-    printf(
-        "PC after execution = %04X\n",
-        emulator.GetCPU().GetPC());
-
-    printf(
-        "SP after execution = %04X\n",
-        emulator.GetCPU().GetSP());
-
-    printf(
-        "FLAGS after execution = %02X\n",
-        emulator.GetCPU().GetFlags());
+    //-------------------------------------------------
+    // Résultats
+    //-------------------------------------------------
 
     printf("\n");
 
-    printf("ZERO     = %s\n",
-        (emulator.GetCPU().GetFlags() & FLAG_ZERO)
-            ? "SET"
-            : "CLEAR");
+    printf("Memory[1234] after  = %02X\n",
+        emulator.GetMemory().Read8(0x1234));
 
-    printf("CARRY    = %s\n",
-        (emulator.GetCPU().GetFlags() & FLAG_CARRY)
-            ? "SET"
-            : "CLEAR");
-
-    printf("NEGATIVE = %s\n",
-        (emulator.GetCPU().GetFlags() & FLAG_NEGATIVE)
-            ? "SET"
-            : "CLEAR");
-
-    printf("OVERFLOW = %s\n",
-        (emulator.GetCPU().GetFlags() & FLAG_OVERFLOW)
-            ? "SET"
-            : "CLEAR");
+    printf("Memory[5678] after  = %02X\n",
+        emulator.GetMemory().Read8(0x5678));
 
     printf("\n");
 
     printf("========================================\n");
-    printf("JNZ ROM Validation Completed\n");
+    printf("Memory16 ROM Validation Completed\n");
     printf("========================================\n");
 
     return 0;
