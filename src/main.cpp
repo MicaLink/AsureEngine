@@ -8,7 +8,7 @@ int main()
     // Configuration
     //-------------------------------------------------
 
-    constexpr const char* ROM_PATH = "roms/jmp.rom";
+    constexpr const char* ROM_PATH = "roms/jz.rom";
 
     //-------------------------------------------------
     // Init
@@ -29,9 +29,19 @@ int main()
         return 1;
     }
 
+     //-------------------------------------------------
+    // Initialisation
+    //-------------------------------------------------
+
+    emulator.GetCPU().SetFlag(FLAG_ZERO);
+
+    //-------------------------------------------------
+    // Validation
+    //-------------------------------------------------
+
     printf("\n");
     printf("========================================\n");
-    printf("Azure-8 JMP Validation\n");
+    printf("Azure-8 JZ Validation\n");
     printf("========================================\n");
     printf("\n");
 
@@ -67,8 +77,30 @@ int main()
 
     printf("\n");
 
+    printf("ZERO     = %s\n",
+        (emulator.GetCPU().GetFlags() & FLAG_ZERO)
+            ? "SET"
+            : "CLEAR");
+
+    printf("CARRY    = %s\n",
+        (emulator.GetCPU().GetFlags() & FLAG_CARRY)
+            ? "SET"
+            : "CLEAR");
+
+    printf("NEGATIVE = %s\n",
+        (emulator.GetCPU().GetFlags() & FLAG_NEGATIVE)
+            ? "SET"
+            : "CLEAR");
+
+    printf("OVERFLOW = %s\n",
+        (emulator.GetCPU().GetFlags() & FLAG_OVERFLOW)
+            ? "SET"
+            : "CLEAR");
+
+    printf("\n");
+
     printf("========================================\n");
-    printf("JMP ROM Validation Completed\n");
+    printf("JZ ROM Validation Completed\n");
     printf("========================================\n");
 
     return 0;

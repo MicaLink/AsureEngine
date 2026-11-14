@@ -2,13 +2,13 @@
 
 > Version cible : **v0.0.3-alpha**
 >
-> Statut : **Développement avancé**
+> Statut : **Finalisation**
 >
 > Architecture : **Azure-8**
 >
-> Progression estimée : **93 %**
+> Progression estimée : **96 %**
 >
-> Priorité actuelle : **JZ (0x42)**
+> Priorité actuelle : **JNZ (0x43)**
 >
 > Lot actif : **Lot D - Comparaisons et branchements**
 
@@ -16,29 +16,31 @@
 
 # Vision de la version v0.0.3
 
-La version v0.0.3 transforme Azure‑8 en un processeur programmable complet capable de :
+La version v0.0.3 transforme Azure‑8 en un processeur programmable complet.
+
+Fonctionnalités désormais disponibles :
 
 ```txt
-Manipuler des données
+✅ Manipulation de données
 
-Accéder à la mémoire
+✅ Mémoire
 
-Gérer une pile
+✅ Pile
 
-Exécuter des sous-routines
+✅ Sous-routines
 
-Effectuer des calculs
+✅ Arithmétique
 
-Comparer des valeurs
+✅ Comparaisons
 
-Modifier le flux d'exécution
+✅ Branchements conditionnels
 ```
 
-L'objectif restant est la validation des derniers branchements conditionnels.
+Il ne reste plus qu'une seule instruction à valider avant la clôture du Lot D.
 
 ---
 
-# État actuel du processeur
+# Architecture actuelle
 
 ## Registres généraux
 
@@ -87,28 +89,28 @@ Bit 2 = NEGATIVE
 Bit 3 = OVERFLOW
 ```
 
-Implémentés :
+Définition :
 
-```txt
-✅ ZERO
+```cpp
+FLAG_ZERO     = (1 << 0);
 
-✅ CARRY
+FLAG_CARRY    = (1 << 1);
 
-✅ NEGATIVE
+FLAG_NEGATIVE = (1 << 2);
 
-✅ OVERFLOW (infrastructure)
+FLAG_OVERFLOW = (1 << 3);
 ```
 
 ---
 
-# Jeu d'instructions validé
+# Jeu d'instructions Azure‑8
 
 ## Contrôle CPU
 
 ```txt
-✅ NOP (00h)
+✅ NOP  (00h)
 
-✅ HLT (FFh)
+✅ HLT  (FFh)
 ```
 
 ---
@@ -165,6 +167,10 @@ Implémentés :
 
 ```txt
 ✅ JMP (41h)
+
+✅ JZ  (42h)
+
+⬜ JNZ (43h)
 ```
 
 ---
@@ -180,55 +186,39 @@ Implémentés :
 
 🟨 Lot D - Comparaisons et branchements
 
-⬜ Lot E - Documentation
+⬜ Lot E - Documentation finale
 
-⬜ Lot F - Finalisation v0.0.3
+⬜ Lot F - Clôture v0.0.3
 ```
 
 ---
 
 # Lot A - Données
 
-## MOV
+## Validation complète
 
 ```txt
-✅ Implémentation
+✅ MOV
 
-✅ TestMOV
+✅ LOAD
 
-✅ mov.rom
+✅ STORE
 ```
 
----
-
-## LOAD
+ROMs :
 
 ```txt
-✅ Implémentation
-
-✅ TestLOAD
+✅ mov.rom
 
 ✅ load.rom
-```
-
----
-
-## STORE
-
-```txt
-✅ Implémentation
-
-✅ TestSTORE
 
 ✅ store.rom
 ```
 
----
-
-## Statut
+Statut :
 
 ```txt
-✅ LOT A TERMINÉ
+✅ TERMINÉ
 ```
 
 ---
@@ -259,10 +249,24 @@ ROMs :
 ✅ ret.rom
 ```
 
+Validation obtenue :
+
+```txt
+✅ Pile 8 bits
+
+✅ Pile 16 bits
+
+✅ Sous-routines
+
+✅ Adresse de retour
+
+✅ Contrôle de flux
+```
+
 Statut :
 
 ```txt
-✅ LOT B TERMINÉ
+✅ TERMINÉ
 ```
 
 ---
@@ -293,10 +297,22 @@ ROMs :
 ✅ sub.rom
 ```
 
+Validation obtenue :
+
+```txt
+✅ ZERO
+
+✅ NEGATIVE
+
+✅ CARRY (ADD/SUB)
+
+✅ Infrastructure OVERFLOW
+```
+
 Statut :
 
 ```txt
-✅ LOT C TERMINÉ
+✅ TERMINÉ
 ```
 
 ---
@@ -321,20 +337,18 @@ Statut :
 ✅ cmp.rom
 
 ✅ Validation ROM
-
-✅ FLAG_ZERO
-
-✅ FLAG_NEGATIVE
-
-✅ FLAG_CARRY
 ```
 
-### Exemple validé
+Validation ROM :
 
 ```txt
-42 - 42 = 00
+CMP 42, 42
+
+↓
 
 FLAGS = 01h
+
+ZERO = SET
 ```
 
 Statut :
@@ -365,30 +379,18 @@ Statut :
 ✅ Validation ROM
 ```
 
-### Exemple validé
+Validation ROM :
 
 ```txt
+PC=0000
+
+↓
+
 JMP 0004h
 
 ↓
 
-PC = 0004h
-
-↓
-
-HLT
-```
-
-### Validation ROM
-
-Trace obtenue :
-
-```txt
-PC=0000 OPCODE=41
-
-↓
-
-PC=0004 OPCODE=FF
+PC=0004
 ```
 
 Statut :
@@ -407,12 +409,6 @@ Statut :
 42h
 ```
 
-### Description
-
-```asm
-JZ Adresse
-```
-
 ### Fonction
 
 ```txt
@@ -422,19 +418,37 @@ Saut si FLAG_ZERO = 1
 ### Validation
 
 ```txt
-⬜ Implémentation
+✅ Implémentation
 
-⬜ TestJZ
+✅ TestJZ
 
-⬜ jz.rom
+✅ jz.rom
 
-⬜ Validation ROM
+✅ Validation ROM
 ```
 
-### Statut
+Validation ROM :
 
 ```txt
-🟨 PRIORITÉ ACTUELLE
+ZERO = SET
+
+↓
+
+JZ 0004h
+
+↓
+
+PC = 0004h
+
+↓
+
+HLT
+```
+
+Statut :
+
+```txt
+✅ TERMINÉ
 ```
 
 ---
@@ -445,12 +459,6 @@ Saut si FLAG_ZERO = 1
 
 ```txt
 43h
-```
-
-### Description
-
-```asm
-JNZ Adresse
 ```
 
 ### Fonction
@@ -471,16 +479,22 @@ Saut si FLAG_ZERO = 0
 ⬜ Validation ROM
 ```
 
+### Statut
+
+```txt
+🟨 PRIORITÉ ACTUELLE
+```
+
 ---
 
-## Progression Lot D
+## Progression du Lot D
 
 ```txt
 ✅ CMP
 
 ✅ JMP
 
-⬜ JZ
+✅ JZ
 
 ⬜ JNZ
 ```
@@ -521,15 +535,15 @@ Saut si FLAG_ZERO = 0
 ✅ cmp.rom
 
 ✅ jmp.rom
+
+✅ jz.rom
 ```
 
 ---
 
-# ROMs à créer
+# ROMs restantes
 
 ```txt
-⬜ jz.rom
-
 ⬜ jnz.rom
 ```
 
@@ -563,15 +577,15 @@ Saut si FLAG_ZERO = 0
 ✅ TestCMP
 
 ✅ TestJMP
+
+✅ TestJZ
 ```
 
 ---
 
-# Tests automatisés à réaliser
+# Tests restants
 
 ```txt
-⬜ TestJZ
-
 ⬜ TestJNZ
 ```
 
@@ -606,23 +620,25 @@ Saut si FLAG_ZERO = 0
 
 ✅ JMP
 
-✅ 13 instructions validées
+✅ JZ
 
-✅ 13 tests validés
+✅ 14 instructions validées
 
-✅ 13 ROMs validées
+✅ 14 tests validés
 
-✅ Gestion mémoire
+✅ 14 ROMs validées
 
-✅ Gestion pile
+✅ Mémoire
+
+✅ Pile
 
 ✅ Sous-routines
 
 ✅ Arithmétique
 
-✅ Comparaison
+✅ Comparaisons
 
-✅ Branchements inconditionnels
+✅ Branchements conditionnels
 ```
 
 ---
@@ -644,7 +660,7 @@ SP           : 16 bits
 
 RAM          : 64 Ko
 
-Progression  : 93 %
+Progression  : 96 %
 ```
 
 ---
@@ -652,28 +668,26 @@ Progression  : 93 %
 # Priorité immédiate
 
 ```txt
-1. Implémenter JZ
+1. Implémenter JNZ
 
-2. Créer TestJZ
+2. Créer TestJNZ
 
-3. Créer jz.rom
+3. Valider TestJNZ
 
-4. Valider jz.rom
+4. Créer jnz.rom
 
-5. Implémenter JNZ
+5. Valider jnz.rom
 
-6. Créer TestJNZ
+6. Clôturer le Lot D
 
-7. Créer jnz.rom
-
-8. Valider jnz.rom
+7. Finaliser v0.0.3
 ```
 
 ---
 
-# Objectif de fin de version
+# Objectif de clôture v0.0.3
 
-Azure‑8 devra être capable d'exécuter :
+À la fin de la version :
 
 ```asm
 LOAD A, 1000h
@@ -697,7 +711,9 @@ End:
 HLT
 ```
 
-Ce scénario validera :
+devra s'exécuter correctement.
+
+Cette démonstration validera :
 
 ```txt
 ✅ Mémoire
@@ -706,9 +722,9 @@ Ce scénario validera :
 
 ✅ Comparaison
 
-✅ Saut conditionnel
+✅ Sauts conditionnels
 
-✅ Saut inconditionnel
+✅ Sauts inconditionnels
 
 ✅ Contrôle de flux complet
 ```

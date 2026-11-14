@@ -49,6 +49,7 @@ void TestSUB();
 
 void TestCMP();
 void TestJMP();
+void TestJZ();
 
 //-----------------------------------------------------
 // Main
@@ -117,6 +118,7 @@ int main()
 
     TestCMP();
     TestJMP();
+    TestJZ();
 
     printf("Instruction Tests Passed\n\n");
 
