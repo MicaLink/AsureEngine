@@ -1,66 +1,75 @@
 # AzureEngine Roadmap v0.0.3
 
-> Version cible : **v0.0.3-alpha**
+> Version : **v0.0.3-alpha**
 >
-> Statut : **Finalisation**
+> Statut : **Préparation Release**
 >
-> Architecture : **Azure-8**
+> Version précédente : **v0.0.2-alpha**
 >
-> Progression estimée : **96 %**
+> Architecture : **CPU 8 bits / Adressage mémoire 16 bits**
 >
-> Priorité actuelle : **JNZ (0x43)**
+> Progression : **95 %**
 >
-> Lot actif : **Lot D - Comparaisons et branchements**
+> État fonctionnel : **Terminé**
+>
+> État release : **En cours de validation**
+>
+> Objectif : **Préparer le tag Git v0.0.3-alpha**
 
 ---
 
-# Vision de la version v0.0.3
+# Présentation
 
-La version v0.0.3 transforme Azure‑8 en un processeur programmable complet.
+La version v0.0.3-alpha marque l'achèvement fonctionnel du premier processeur programmable Azure‑8.
 
-Fonctionnalités désormais disponibles :
+Tous les objectifs du jeu d'instructions ont été atteints et validés par tests automatisés et ROMs dédiées.
+
+Cependant, avant de publier officiellement la release et de créer le tag Git correspondant, une phase finale de validation doit être réalisée :
 
 ```txt
-✅ Manipulation de données
+Validation des ROMs héritées de la v0.0.2
 
-✅ Mémoire
+Audit complet du code source
 
-✅ Pile
+Audit complet de la documentation
 
-✅ Sous-routines
+Validation du dépôt
 
-✅ Arithmétique
+Validation Debug
 
-✅ Comparaisons
-
-✅ Branchements conditionnels
+Validation Release
 ```
-
-Il ne reste plus qu'une seule instruction à valider avant la clôture du Lot D.
 
 ---
 
-# Architecture actuelle
+# Objectifs atteints
 
-## Registres généraux
+## CPU
 
 ```txt
-A
-B
-C
-D
+✅ Architecture CPU opérationnelle
+
+✅ Fetch
+
+✅ Decode
+
+✅ Execute
+
+✅ Jeu d'instructions v0.0.3 complet
 ```
 
-Codage :
+---
+
+## Registres utilisateur
 
 ```txt
-00h = A
+✅ A
 
-01h = B
+✅ B
 
-02h = C
+✅ C
 
-03h = D
+✅ D
 ```
 
 ---
@@ -68,11 +77,45 @@ Codage :
 ## Registres système
 
 ```txt
-PC
+✅ PC
 
-SP
+✅ SP
 
-FLAGS
+✅ FLAGS
+```
+
+---
+
+## Mémoire
+
+```txt
+✅ RAM 64 Ko
+
+✅ Read8()
+
+✅ Write8()
+
+✅ Read16()
+
+✅ Write16()
+
+✅ Little Endian
+```
+
+---
+
+## Stack
+
+```txt
+✅ Push8()
+
+✅ Pop8()
+
+✅ Push16()
+
+✅ Pop16()
+
+✅ Gestion du Stack Pointer
 ```
 
 ---
@@ -80,37 +123,25 @@ FLAGS
 ## FLAGS
 
 ```txt
-Bit 0 = ZERO
+✅ FLAG_ZERO
 
-Bit 1 = CARRY
+✅ FLAG_CARRY
 
-Bit 2 = NEGATIVE
+✅ FLAG_NEGATIVE
 
-Bit 3 = OVERFLOW
-```
-
-Définition :
-
-```cpp
-FLAG_ZERO     = (1 << 0);
-
-FLAG_CARRY    = (1 << 1);
-
-FLAG_NEGATIVE = (1 << 2);
-
-FLAG_OVERFLOW = (1 << 3);
+✅ FLAG_OVERFLOW
 ```
 
 ---
 
-# Jeu d'instructions Azure‑8
+# Jeu d'instructions Azure‑8 v0.0.3
 
 ## Contrôle CPU
 
 ```txt
-✅ NOP  (00h)
+✅ NOP (00h)
 
-✅ HLT  (FFh)
+✅ HLT (FFh)
 ```
 
 ---
@@ -170,32 +201,12 @@ FLAG_OVERFLOW = (1 << 3);
 
 ✅ JZ  (42h)
 
-⬜ JNZ (43h)
+✅ JNZ (43h)
 ```
 
 ---
 
-# État des lots
-
-```txt
-✅ Lot A - Données
-
-✅ Lot B - Pile avancée
-
-✅ Lot C - Arithmétique
-
-🟨 Lot D - Comparaisons et branchements
-
-⬜ Lot E - Documentation finale
-
-⬜ Lot F - Clôture v0.0.3
-```
-
----
-
-# Lot A - Données
-
-## Validation complète
+# Lot A - Instructions de données
 
 ```txt
 ✅ MOV
@@ -205,7 +216,7 @@ FLAG_OVERFLOW = (1 << 3);
 ✅ STORE
 ```
 
-ROMs :
+Validation :
 
 ```txt
 ✅ mov.rom
@@ -225,8 +236,6 @@ Statut :
 
 # Lot B - Pile avancée
 
-## Validation complète
-
 ```txt
 ✅ PUSH
 
@@ -237,7 +246,7 @@ Statut :
 ✅ RET
 ```
 
-ROMs :
+Validation :
 
 ```txt
 ✅ push.rom
@@ -247,20 +256,6 @@ ROMs :
 ✅ call.rom
 
 ✅ ret.rom
-```
-
-Validation obtenue :
-
-```txt
-✅ Pile 8 bits
-
-✅ Pile 16 bits
-
-✅ Sous-routines
-
-✅ Adresse de retour
-
-✅ Contrôle de flux
 ```
 
 Statut :
@@ -273,8 +268,6 @@ Statut :
 
 # Lot C - Arithmétique
 
-## Validation complète
-
 ```txt
 ✅ INC
 
@@ -285,7 +278,7 @@ Statut :
 ✅ SUB
 ```
 
-ROMs :
+Validation :
 
 ```txt
 ✅ inc.rom
@@ -295,18 +288,6 @@ ROMs :
 ✅ add.rom
 
 ✅ sub.rom
-```
-
-Validation obtenue :
-
-```txt
-✅ ZERO
-
-✅ NEGATIVE
-
-✅ CARRY (ADD/SUB)
-
-✅ Infrastructure OVERFLOW
 ```
 
 Statut :
@@ -319,176 +300,6 @@ Statut :
 
 # Lot D - Comparaisons et branchements
 
-## CMP
-
-### Opcode
-
-```txt
-40h
-```
-
-### Validation
-
-```txt
-✅ Implémentation
-
-✅ TestCMP
-
-✅ cmp.rom
-
-✅ Validation ROM
-```
-
-Validation ROM :
-
-```txt
-CMP 42, 42
-
-↓
-
-FLAGS = 01h
-
-ZERO = SET
-```
-
-Statut :
-
-```txt
-✅ TERMINÉ
-```
-
----
-
-## JMP
-
-### Opcode
-
-```txt
-41h
-```
-
-### Validation
-
-```txt
-✅ Implémentation
-
-✅ TestJMP
-
-✅ jmp.rom
-
-✅ Validation ROM
-```
-
-Validation ROM :
-
-```txt
-PC=0000
-
-↓
-
-JMP 0004h
-
-↓
-
-PC=0004
-```
-
-Statut :
-
-```txt
-✅ TERMINÉ
-```
-
----
-
-## JZ
-
-### Opcode
-
-```txt
-42h
-```
-
-### Fonction
-
-```txt
-Saut si FLAG_ZERO = 1
-```
-
-### Validation
-
-```txt
-✅ Implémentation
-
-✅ TestJZ
-
-✅ jz.rom
-
-✅ Validation ROM
-```
-
-Validation ROM :
-
-```txt
-ZERO = SET
-
-↓
-
-JZ 0004h
-
-↓
-
-PC = 0004h
-
-↓
-
-HLT
-```
-
-Statut :
-
-```txt
-✅ TERMINÉ
-```
-
----
-
-## JNZ
-
-### Opcode
-
-```txt
-43h
-```
-
-### Fonction
-
-```txt
-Saut si FLAG_ZERO = 0
-```
-
-### Validation
-
-```txt
-⬜ Implémentation
-
-⬜ TestJNZ
-
-⬜ jnz.rom
-
-⬜ Validation ROM
-```
-
-### Statut
-
-```txt
-🟨 PRIORITÉ ACTUELLE
-```
-
----
-
-## Progression du Lot D
-
 ```txt
 ✅ CMP
 
@@ -496,12 +307,32 @@ Saut si FLAG_ZERO = 0
 
 ✅ JZ
 
-⬜ JNZ
+✅ JNZ
+```
+
+Validation :
+
+```txt
+✅ cmp.rom
+
+✅ jmp.rom
+
+✅ jz.rom
+
+✅ jnz.rom
+```
+
+Statut :
+
+```txt
+✅ TERMINÉ
 ```
 
 ---
 
 # ROMs validées
+
+## ROMs fondamentales
 
 ```txt
 ✅ nop.rom
@@ -509,7 +340,13 @@ Saut si FLAG_ZERO = 0
 ✅ halt.rom
 
 ✅ invalid.rom
+```
 
+---
+
+## ROMs d'instructions
+
+```txt
 ✅ mov.rom
 
 ✅ load.rom
@@ -537,19 +374,59 @@ Saut si FLAG_ZERO = 0
 ✅ jmp.rom
 
 ✅ jz.rom
+
+✅ jnz.rom
 ```
 
 ---
 
-# ROMs restantes
+# ROMs à valider avant publication
+
+Ces ROMs ont été créées durant la v0.0.2 mais n'ont jamais bénéficié d'une validation ROM documentée.
+
+## Lot E1 - ROMs d'infrastructure
 
 ```txt
-⬜ jnz.rom
+⬜ memory16.rom
+
+⬜ stack8.rom
+
+⬜ stack16.rom
+
+⬜ overflow.rom
+
+⬜ underflow.rom
+```
+
+Objectif :
+
+```txt
+Validation par exécution réelle
+
+Documentation des résultats
+
+Archivage des preuves
 ```
 
 ---
 
-# Tests automatisés validés
+# Tests automatisés
+
+## Infrastructure
+
+```txt
+✅ TestMemory
+
+✅ TestStack
+
+✅ TestFlags
+
+✅ TestCPU
+```
+
+---
+
+## Instructions
 
 ```txt
 ✅ TestMOV
@@ -579,24 +456,233 @@ Saut si FLAG_ZERO = 0
 ✅ TestJMP
 
 ✅ TestJZ
+
+✅ TestJNZ
+```
+
+Résultat :
+
+```txt
+AzureEngine Test Suite
+
+All tests passed successfully.
 ```
 
 ---
 
-# Tests restants
+# Lot E - Validation finale de release
+
+## E1 - Validation ROM historique
 
 ```txt
-⬜ TestJNZ
+⬜ memory16.rom
+
+⬜ stack8.rom
+
+⬜ stack16.rom
+
+⬜ overflow.rom
+
+⬜ underflow.rom
 ```
 
 ---
 
-# Accomplissements v0.0.3
+## E2 - Audit du code source
+
+### Azure8
 
 ```txt
+⬜ CPU.cpp
+
+⬜ CPU.h
+
+⬜ Memory.cpp
+
+⬜ Memory.h
+
+⬜ Emulator.cpp
+
+⬜ Emulator.h
+```
+
+### Tests
+
+```txt
+⬜ TestCPU.cpp
+
+⬜ TestFlags.cpp
+
+⬜ TestMemory.cpp
+
+⬜ TestStack.cpp
+
+⬜ Tous les TestInstruction*.cpp
+```
+
+Contrôles :
+
+```txt
+⬜ St*le
+
+⬜ Cohérence
+
+⬜ Commentaires
+
+⬜*Nommage
+
+⬜ Code mort
+
+⬜ Warnings
+`*`
+
+---
+
+## E3 - Audit de la docume*tation
+
+### Développement
+
+```txt
+* Architecture.md
+
+⬜ Build.md
+
+⬜ Co*ingStyle.md
+
+⬜ Contributing.md
+```*
+### Technique
+
+```txt
+⬜ Documenta*ion FLAGS.md
+
+⬜ Documentation SP.m*
+
+⬜ Documentation Stack.md
+```
+
+##* Spécifications
+
+```txt
+⬜ Azure-8_*nstruction_Set_v0.0.3.md
+
+⬜ Azure-*_Technical_Specification_v0.0.2.tx*
+```
+
+### Vision
+
+```txt
+⬜ Cohéren*e globale
+```
+
+---
+
+## E4 - Valida*ion du dépôt
+
+```txt
+⬜ README.md
+
+* LICENSE
+
+⬜ .gitignore
+
+⬜ Structur* du dépôt
+
+⬜ ROMs
+
+⬜ Documentation*
+⬜ Arborescence
+```
+
+---
+
+## E5 - *ompilation finale
+
+### Debug
+
+```t*t
+⬜ Build réussi
+
+⬜ 0 erreur
+
+⬜ 0 *arning
+```
+
+### Release
+
+```txt
+⬜ *uild réussi
+
+⬜ 0 erreur
+
+⬜ 0 warni*g
+```
+
+---
+
+## E6 - Publication
+
+C*nditions :
+
+```txt
+✅ Jeu d'instruc*ions terminé
+
+✅ Tests validés
+
+⬜ R*Ms historiques validées
+
+⬜ Documen*ation auditée
+
+⬜ Code audité
+
+⬜ Bu*ld Debug validé
+
+⬜ Build Release v*lidé
+```
+
+Action finale :
+
+```txt
+*it tag v0.0.3-alpha
+```
+
+---
+
+# Ét*t actuel
+
+## Fonctionnalités
+
+```t*t
+✅ 100 %
+```
+
+## Tests
+
+```txt
+✅ *00 %
+```
+
+## ROMs d'instructions
+
+*``txt
+✅ 100 %
+```
+
+## Préparation *elease
+
+```txt
+🟨 95 %
+```
+
+---
+
+#*Accomplissements majeurs
+
+```txt
+✅*Jeu d'instructions complet
+
 ✅ MOV
-
-✅ LOAD
+*✅ LOAD
 
 ✅ STORE
 
@@ -604,7 +690,7 @@ Saut si FLAG_ZERO = 0
 
 ✅ POP
 
-✅ CALL
+✅ *ALL
 
 ✅ RET
 
@@ -614,7 +700,7 @@ Saut si FLAG_ZERO = 0
 
 ✅ ADD
 
-✅ SUB
+✅*SUB
 
 ✅ CMP
 
@@ -622,113 +708,78 @@ Saut si FLAG_ZERO = 0
 
 ✅ JZ
 
-✅ 14 instructions validées
+✅ JNZ
 
-✅ 14 tests validés
+✅ *omparaisons
 
-✅ 14 ROMs validées
+✅ Branchements condit*onnels
 
-✅ Mémoire
-
-✅ Pile
+✅ Branchements incondition*els
 
 ✅ Sous-routines
 
-✅ Arithmétique
+✅ Tests auto*atisés complets
 
-✅ Comparaisons
-
-✅ Branchements conditionnels
+✅ Build fonctionn*l
 ```
 
 ---
 
-# État actuel
+# Résultat attendu ava*t clôture
+
+Lorsque le Lot E sera t*rminé :
 
 ```txt
-Projet       : AzureEngine
+✅ Toutes les ROMs *alidées
 
-Architecture : Azure-8
+✅ Documentation auditée
 
-Version      : v0.0.3-alpha
+* Code source audité
 
-CPU          : 8 bits
+✅ Dépôt valid*
 
-PC           : 16 bits
+✅ Build Debug
 
-SP           : 16 bits
+✅ Build Release
 
-RAM          : 64 Ko
+* 0 erreur
 
-Progression  : 96 %
+✅ 0 warning
 ```
 
----
-
-# Priorité immédiate
+Alors *eulement :
 
 ```txt
-1. Implémenter JNZ
+Statut : Termin*e
 
-2. Créer TestJNZ
+Progression : 100 %
 
-3. Valider TestJNZ
+Tag*Git : v0.0.3-alpha
+``*
 
-4. Créer jnz.rom
-
-5. Valider jnz.rom
-
-6. Clôturer le Lot D
-
-7. Finaliser v0.0.3
-```
+pourront être officiellement*appliqués.
 
 ---
 
-# Objectif de clôture v0.0.3
+# Bilan
 
-À la fin de la version :
+La v0.0.**est fonctionnellement terminée.
 
-```asm
-LOAD A, 1000h
+L* processeur Azure‑8 est programmab*e et l'ensemble du jeu d'instructi*ns prévu par la spécification v0.0*3 est implémenté et valid*.
 
-LOAD B, 1001h
-
-CMP A, B
-
-JZ Equal
-
-ADD A, B
-
-JMP End
-
-Equal:
-
-STORE A, 2000h
-
-End:
-
-HLT
-```
-
-devra s'exécuter correctement.
-
-Cette démonstration validera :
+La phase restante concerne*exclusivement :
 
 ```txt
-✅ Mémoire
+Qualité
 
-✅ Arithmétique
+*alidation
 
-✅ Comparaison
+Documentation
 
-✅ Sauts conditionnels
+Publicat*on*```
 
-✅ Sauts inconditionnels
-
-✅ Contrôle de flux complet
-```
+afin de produire une release *ropre et durable avant l'ouverture*officielle de la v0.0.4.
 
 ---
 
-**Fin de roadmap v0.0.3-alpha**
+***in de roadmap v0.0.3-alpha - Statu*** Préparation Release*****

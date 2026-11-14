@@ -28,6 +28,7 @@ namespace
     constexpr u8 OPCODE_CMP = 0x40;
     constexpr u8 OPCODE_JMP = 0x41;
     constexpr u8 OPCODE_JZ = 0x42;
+    constexpr u8 OPCODE_JNZ = 0x43;
 
     constexpr u8 OPCODE_HLT = 0xFF;
 
@@ -538,6 +539,19 @@ void CPU::Step(Memory& memory)
             const u16 address = static_cast<u16>(low | (high << 8));
 
             if (IsFlagSet(FLAG_ZERO))
+            {
+                PC = address;
+            }
+            break;
+        }
+        case OPCODE_JNZ:
+        {
+            const u8 low = FetchByte(memory);
+            const u8 high = FetchByte(memory);
+
+            const u16 address = static_cast<u16>(low | (high << 8));
+
+            if (!IsFlagSet(FLAG_ZERO))
             {
                 PC = address;
             }

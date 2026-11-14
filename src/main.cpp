@@ -8,7 +8,7 @@ int main()
     // Configuration
     //-------------------------------------------------
 
-    constexpr const char* ROM_PATH = "roms/jz.rom";
+    constexpr const char* ROM_PATH = "roms/jnz.rom";
 
     //-------------------------------------------------
     // Init
@@ -29,11 +29,11 @@ int main()
         return 1;
     }
 
-     //-------------------------------------------------
+    //-------------------------------------------------
     // Initialisation
     //-------------------------------------------------
 
-    emulator.GetCPU().SetFlag(FLAG_ZERO);
+    emulator.GetCPU().ClearFlag(FLAG_ZERO);
 
     //-------------------------------------------------
     // Validation
@@ -41,7 +41,7 @@ int main()
 
     printf("\n");
     printf("========================================\n");
-    printf("Azure-8 JZ Validation\n");
+    printf("Azure-8 JNZ Validation\n");
     printf("========================================\n");
     printf("\n");
 
@@ -100,7 +100,7 @@ int main()
     printf("\n");
 
     printf("========================================\n");
-    printf("JZ ROM Validation Completed\n");
+    printf("JNZ ROM Validation Completed\n");
     printf("========================================\n");
 
     return 0;

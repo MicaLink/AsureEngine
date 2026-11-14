@@ -98,6 +98,7 @@
                 "tests\\TestInstructionCMP.cpp",
                 "tests\\TestInstructionJMP.cpp",
                 "tests\\TestInstructionJZ.cpp",
+                "tests\\TestInstructionJNZ.cpp",
 
                 "src\\Azure8\\CPU.cpp",
                 "src\\Azure8\\Memory.cpp",
