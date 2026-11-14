@@ -8,7 +8,7 @@ int main()
     // Configuration
     //-------------------------------------------------
 
-    constexpr const char* ROM_PATH = "roms/cmp.rom";
+    constexpr const char* ROM_PATH = "roms/jmp.rom";
 
     //-------------------------------------------------
     // Init
@@ -29,30 +29,19 @@ int main()
         return 1;
     }
 
-   //-------------------------------------------------
-    // Initialisation
-    //-------------------------------------------------
-
-    emulator.GetCPU().GetRegister(0x00) = 42; // A
-    emulator.GetCPU().GetRegister(0x01) = 42; // B
-
-    //-------------------------------------------------
-    // Validation
-    //-------------------------------------------------
-
     printf("\n");
     printf("========================================\n");
-    printf("Azure-8 CMP Validation\n");
+    printf("Azure-8 JMP Validation\n");
     printf("========================================\n");
     printf("\n");
 
     printf(
-        "Register A before execution = %u\n",
-        emulator.GetCPU().GetRegister(0x00));
+        "PC before execution = %04X\n",
+        emulator.GetCPU().GetPC());
 
     printf(
-        "Register B before execution = %u\n",
-        emulator.GetCPU().GetRegister(0x01));
+        "SP before execution = %04X\n",
+        emulator.GetCPU().GetSP());
 
     printf(
         "FLAGS before execution = %02X\n",
@@ -65,12 +54,12 @@ int main()
     printf("\n");
 
     printf(
-        "Register A after execution = %u\n",
-        emulator.GetCPU().GetRegister(0x00));
+        "PC after execution = %04X\n",
+        emulator.GetCPU().GetPC());
 
     printf(
-        "Register B after execution = %u\n",
-        emulator.GetCPU().GetRegister(0x01));
+        "SP after execution = %04X\n",
+        emulator.GetCPU().GetSP());
 
     printf(
         "FLAGS after execution = %02X\n",
@@ -78,30 +67,8 @@ int main()
 
     printf("\n");
 
-    printf("ZERO     = %s\n",
-        (emulator.GetCPU().GetFlags() & FLAG_ZERO)
-            ? "SET"
-            : "CLEAR");
-
-    printf("CARRY    = %s\n",
-        (emulator.GetCPU().GetFlags() & FLAG_CARRY)
-            ? "SET"
-            : "CLEAR");
-
-    printf("NEGATIVE = %s\n",
-        (emulator.GetCPU().GetFlags() & FLAG_NEGATIVE)
-            ? "SET"
-            : "CLEAR");
-
-    printf("OVERFLOW = %s\n",
-        (emulator.GetCPU().GetFlags() & FLAG_OVERFLOW)
-            ? "SET"
-            : "CLEAR");
-
-    printf("\n");
-
     printf("========================================\n");
-    printf("CMP ROM Validation Completed\n");
+    printf("JMP ROM Validation Completed\n");
     printf("========================================\n");
 
     return 0;

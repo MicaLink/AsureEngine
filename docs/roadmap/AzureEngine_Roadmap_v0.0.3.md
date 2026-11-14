@@ -6,9 +6,9 @@
 >
 > Architecture : **Azure-8**
 >
-> Progression estimée : **90 %**
+> Progression estimée : **93 %**
 >
-> Priorité actuelle : **JMP (0x41)**
+> Priorité actuelle : **JZ (0x42)**
 >
 > Lot actif : **Lot D - Comparaisons et branchements**
 
@@ -16,25 +16,25 @@
 
 # Vision de la version v0.0.3
 
-La version v0.0.3 a pour objectif de transformer Azure‑8 en un processeur réellement programmable.
-
-À l'issue de cette version, Azure‑8 devra maîtriser :
+La version v0.0.3 transforme Azure‑8 en un processeur programmable complet capable de :
 
 ```txt
-Manipulation de données
+Manipuler des données
 
-Mémoire
+Accéder à la mémoire
 
-Pile
+Gérer une pile
 
-Sous-routines
+Exécuter des sous-routines
 
-Arithmétique
+Effectuer des calculs
 
-Comparaisons
+Comparer des valeurs
 
-Branchements
+Modifier le flux d'exécution
 ```
+
+L'objectif restant est la validation des derniers branchements conditionnels.
 
 ---
 
@@ -87,16 +87,16 @@ Bit 2 = NEGATIVE
 Bit 3 = OVERFLOW
 ```
 
-Définition actuelle :
+Implémentés :
 
-```cpp
-FLAG_ZERO     = (1 << 0);
+```txt
+✅ ZERO
 
-FLAG_CARRY    = (1 << 1);
+✅ CARRY
 
-FLAG_NEGATIVE = (1 << 2);
+✅ NEGATIVE
 
-FLAG_OVERFLOW = (1 << 3);
+✅ OVERFLOW (infrastructure)
 ```
 
 ---
@@ -106,9 +106,9 @@ FLAG_OVERFLOW = (1 << 3);
 ## Contrôle CPU
 
 ```txt
-✅ NOP  (00h)
+✅ NOP (00h)
 
-✅ HLT  (FFh)
+✅ HLT (FFh)
 ```
 
 ---
@@ -153,10 +153,18 @@ FLAG_OVERFLOW = (1 << 3);
 
 ---
 
-## Comparaison
+## Comparaisons
 
 ```txt
 ✅ CMP (40h)
+```
+
+---
+
+## Branchements
+
+```txt
+✅ JMP (41h)
 ```
 
 ---
@@ -227,75 +235,31 @@ FLAG_OVERFLOW = (1 << 3);
 
 # Lot B - Pile avancée
 
-## PUSH
+## Validation complète
 
 ```txt
-✅ Implémentation
+✅ PUSH
 
-✅ TestPUSH
+✅ POP
 
-✅ push.rom
+✅ CALL
+
+✅ RET
 ```
 
----
-
-## POP
+ROMs :
 
 ```txt
-✅ Implémentation
-
-✅ TestPOP
+✅ push.rom
 
 ✅ pop.rom
-```
-
----
-
-## CALL
-
-```txt
-✅ Implémentation
-
-✅ TestCALL
 
 ✅ call.rom
-```
-
----
-
-## RET
-
-```txt
-✅ Implémentation
-
-✅ TestRET
 
 ✅ ret.rom
 ```
 
----
-
-## Validation obtenue
-
-```txt
-✅ Push8()
-
-✅ Pop8()
-
-✅ Push16()
-
-✅ Pop16()
-
-✅ Sous-routines
-
-✅ Adresse de retour
-
-✅ Contrôle de flux
-```
-
----
-
-## Statut
+Statut :
 
 ```txt
 ✅ LOT B TERMINÉ
@@ -305,67 +269,31 @@ FLAG_OVERFLOW = (1 << 3);
 
 # Lot C - Arithmétique
 
-## INC
+## Validation complète
 
 ```txt
-✅ Implémentation
+✅ INC
 
-✅ TestINC
+✅ DEC
 
-✅ inc.rom
+✅ ADD
+
+✅ SUB
 ```
 
----
-
-## DEC
+ROMs :
 
 ```txt
-✅ Implémentation
-
-✅ TestDEC
+✅ inc.rom
 
 ✅ dec.rom
-```
-
----
-
-## ADD
-
-```txt
-✅ Implémentation
-
-✅ TestADD
 
 ✅ add.rom
-```
-
-Validation :
-
-```txt
-10 + 32 = 42
-```
-
----
-
-## SUB
-
-```txt
-✅ Implémentation
-
-✅ TestSUB
 
 ✅ sub.rom
 ```
 
-Validation :
-
-```txt
-50 - 8 = 42
-```
-
----
-
-## Statut
+Statut :
 
 ```txt
 ✅ LOT C TERMINÉ
@@ -386,50 +314,30 @@ Validation :
 ### Validation
 
 ```txt
-✅ Opcode
+✅ Implémentation
 
-✅ Décodage
+✅ TestCMP
 
-✅ Lecture des registres
+✅ cmp.rom
 
-✅ Comparaison
+✅ Validation ROM
 
 ✅ FLAG_ZERO
 
 ✅ FLAG_NEGATIVE
 
 ✅ FLAG_CARRY
-
-✅ TestCMP
-
-✅ cmp.rom
 ```
 
-### Validation ROM
+### Exemple validé
 
 ```txt
-A = 42
-
-B = 42
-
-↓
-
-CMP A, B
-
-↓
+42 - 42 = 00
 
 FLAGS = 01h
-
-ZERO     = SET
-
-CARRY    = CLEAR
-
-NEGATIVE = CLEAR
-
-OVERFLOW = CLEAR
 ```
 
-### Statut
+Statut :
 
 ```txt
 ✅ TERMINÉ
@@ -445,28 +353,48 @@ OVERFLOW = CLEAR
 41h
 ```
 
-### Description
-
-```asm
-JMP Adresse
-```
-
 ### Validation
 
 ```txt
-⬜ Implémentation
+✅ Implémentation
 
-⬜ TestJMP
+✅ TestJMP
 
-⬜ jmp.rom
+✅ jmp.rom
 
-⬜ Validation ROM
+✅ Validation ROM
 ```
 
-### Statut
+### Exemple validé
 
 ```txt
-🟨 PRIORITÉ ACTUELLE
+JMP 0004h
+
+↓
+
+PC = 0004h
+
+↓
+
+HLT
+```
+
+### Validation ROM
+
+Trace obtenue :
+
+```txt
+PC=0000 OPCODE=41
+
+↓
+
+PC=0004 OPCODE=FF
+```
+
+Statut :
+
+```txt
+✅ TERMINÉ
 ```
 
 ---
@@ -485,18 +413,28 @@ JMP Adresse
 JZ Adresse
 ```
 
+### Fonction
+
+```txt
+Saut si FLAG_ZERO = 1
+```
+
 ### Validation
 
 ```txt
 ⬜ Implémentation
-
-⬜ Lecture FLAG_ZERO
 
 ⬜ TestJZ
 
 ⬜ jz.rom
 
 ⬜ Validation ROM
+```
+
+### Statut
+
+```txt
+🟨 PRIORITÉ ACTUELLE
 ```
 
 ---
@@ -515,12 +453,16 @@ JZ Adresse
 JNZ Adresse
 ```
 
+### Fonction
+
+```txt
+Saut si FLAG_ZERO = 0
+```
+
 ### Validation
 
 ```txt
 ⬜ Implémentation
-
-⬜ Lecture FLAG_ZERO
 
 ⬜ TestJNZ
 
@@ -531,12 +473,12 @@ JNZ Adresse
 
 ---
 
-## Progression du Lot D
+## Progression Lot D
 
 ```txt
 ✅ CMP
 
-⬜ JMP
+✅ JMP
 
 ⬜ JZ
 
@@ -577,6 +519,8 @@ JNZ Adresse
 ✅ sub.rom
 
 ✅ cmp.rom
+
+✅ jmp.rom
 ```
 
 ---
@@ -584,8 +528,6 @@ JNZ Adresse
 # ROMs à créer
 
 ```txt
-⬜ jmp.rom
-
 ⬜ jz.rom
 
 ⬜ jnz.rom
@@ -619,6 +561,8 @@ JNZ Adresse
 ✅ TestSUB
 
 ✅ TestCMP
+
+✅ TestJMP
 ```
 
 ---
@@ -626,8 +570,6 @@ JNZ Adresse
 # Tests automatisés à réaliser
 
 ```txt
-⬜ TestJMP
-
 ⬜ TestJZ
 
 ⬜ TestJNZ
@@ -662,21 +604,25 @@ JNZ Adresse
 
 ✅ CMP
 
-✅ 12 instructions validées
+✅ JMP
 
-✅ 12 tests automatisés validés
+✅ 13 instructions validées
 
-✅ 12 ROMs validées
+✅ 13 tests validés
 
-✅ Mémoire
+✅ 13 ROMs validées
 
-✅ Pile
+✅ Gestion mémoire
+
+✅ Gestion pile
 
 ✅ Sous-routines
 
 ✅ Arithmétique
 
 ✅ Comparaison
+
+✅ Branchements inconditionnels
 ```
 
 ---
@@ -698,13 +644,7 @@ SP           : 16 bits
 
 RAM          : 64 Ko
 
-FLAGS        :
-    ZERO
-    CARRY
-    NEGATIVE
-    OVERFLOW
-
-Progression  : 90 %
+Progression  : 93 %
 ```
 
 ---
@@ -712,26 +652,28 @@ Progression  : 90 %
 # Priorité immédiate
 
 ```txt
-1. Implémenter JMP
+1. Implémenter JZ
 
-2. Créer TestJMP
+2. Créer TestJZ
 
-3. Créer jmp.rom
+3. Créer jz.rom
 
-4. Valider jmp.rom
+4. Valider jz.rom
 
-5. Implémenter JZ
+5. Implémenter JNZ
 
-6. Créer TestJZ
+6. Créer TestJNZ
 
-7. Créer jz.rom
+7. Créer jnz.rom
+
+8. Valider jnz.rom
 ```
 
 ---
 
 # Objectif de fin de version
 
-À la fin de la v0.0.3, Azure‑8 devra pouvoir exécuter :
+Azure‑8 devra être capable d'exécuter :
 
 ```asm
 LOAD A, 1000h
@@ -755,18 +697,20 @@ End:
 HLT
 ```
 
-Cette démonstration validera simultanément :
+Ce scénario validera :
 
 ```txt
-Mémoire
+✅ Mémoire
 
-Arithmétique
+✅ Arithmétique
 
-Comparaison
+✅ Comparaison
 
-Branchement conditionnel
+✅ Saut conditionnel
 
-Contrôle de flux
+✅ Saut inconditionnel
+
+✅ Contrôle de flux complet
 ```
 
 ---

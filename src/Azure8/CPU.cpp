@@ -26,6 +26,7 @@ namespace
     constexpr u8 OPCODE_SUB = 0x33;
 
     constexpr u8 OPCODE_CMP = 0x40;
+    constexpr u8 OPCODE_JMP = 0x41;
 
     constexpr u8 OPCODE_HLT = 0xFF;
 
@@ -516,6 +517,16 @@ void CPU::Step(Memory& memory)
             UpdateZeroFlag(result);
             UpdateNegativeFlag(result);
             printf("CMP : %u - %u = %02X FLAGS=%02X\n", value1, value2, result, FLAGS);
+            break;
+        }
+        case OPCODE_JMP:
+        {
+            const u8 low = FetchByte(memory);
+            const u8 high = FetchByte(memory);
+
+            const u16 address = static_cast<u16>(low | (high << 8));
+
+            PC = address;
             break;
         }
         default:
